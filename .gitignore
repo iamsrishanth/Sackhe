@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build
+dist/
+
+# Logs & audits
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lighthouse-*.html
+lighthouse-*.json
+lighthouse-summary.json
+
+# Local test scripts & temporary screenshots
+phone_*.jpg
+menu_alignment_check.png
+capture_mobile.js
+run_lighthouse.mjs
+update_html.mjs
+verify_seamless.js
+
+# OS files
+.DS_Store
+Thumbs.db

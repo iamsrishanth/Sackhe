@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sackhe Technologies - Sustainable Waste Management Solutions</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.">
+  <meta name="keywords" content="waste management, sustainable solutions, incinerators, menstrual waste, solid waste, environmental technology, Sackhe Technologies">
+  <link rel="icon" type="image/webp" href="sackhelogo.webp">
+  <link rel="apple-touch-icon" href="sackhelogo.webp">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="#/" class="logo" aria-label="Sackhe Technologies Home">
+        <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="logo-img">
+      </a>
+      
+      <!-- Nav items -->
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#/" class="nav-link">Home</a>
+        <a href="#/about" class="nav-link">About</a>
+        <a href="#/products" class="nav-link">Products</a>
+        <a href="#/services" class="nav-link">Services</a>
+        <a href="#/initiatives" class="nav-link">Initiatives</a>
+        <a href="#/contact" class="nav-link nav-contact-pill">Contact</a>
+
+        <div class="nav-social-group">
+          <a href="https://www.linkedin.com/company/sackhetechnologies-pvtltd/" target="_blank" class="nav-social-btn" title="LinkedIn" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="https://www.instagram.com/_sackhe_?igsh=NG9qYTN6emJxbmV6&utm_source=qr" target="_blank" class="nav-social-btn" title="Instagram" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+        </div>
+
+        <div id="user-auth-btn">
+          <!-- Auth action loaded dynamically -->
+        </div>
+      </nav>
+      
+      <!-- Hamburger Menu (Mobile) -->
+      <div class="menu-toggle" id="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main id="app-view">
+    <!-- View content is injected here dynamically -->
+  </main>
+
+  <!-- Toast notification outlet -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Sign In Modal -->
+  <div id="auth-overlay" class="auth-overlay" onclick="if(event.target === this) toggleAuthModal(false)">
+    <div class="auth-modal-card">
+      <div class="auth-modal-top-bar"></div>
+      <button class="auth-close-btn" onclick="toggleAuthModal(false)" aria-label="Close modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Purple G Avatar Circle -->
+      <div class="auth-avatar-circle">
+        <span class="auth-avatar-letter">G</span>
+      </div>
+
+      <h2 class="auth-modal-heading">Sign In to Sackhe</h2>
+      <p class="auth-modal-subtext">
+        Sign in with your Google Account to access all services and submit inquiries.
+      </p>
+
+      <button type="button" class="google-signin-btn" id="google-signin-action" onclick="handleGoogleSignIn()">
+        <svg class="google-icon-svg" width="20" height="20" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#/" class="footer-logo" aria-label="Sackhe Technologies Home">
+            <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="footer-logo-img">
+          </a>
+          <p class="footer-desc">Leading the way in sustainable waste management solutions for a cleaner, healthier future.</p>
+          <div class="footer-socials">
+            <a href="https://www.linkedin.com/company/sackhetechnologies-pvtltd/" target="_blank" class="footer-social-link" aria-label="LinkedIn" title="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href="https://www.instagram.com/_sackhe_?igsh=NG9qYTN6emJxbmV6&utm_source=qr" target="_blank" class="footer-social-link" aria-label="Instagram" title="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3 class="footer-col-title">Navigation</h3>
+          <div class="footer-links">
+            <a href="#/" class="footer-link">Home</a>
+            <a href="#/about" class="footer-link">About Us</a>
+            <a href="#/products" class="footer-link">Our Catalog</a>
+            <a href="#/services" class="footer-link">Services</a>
+          </div>
+        </div>
+        
+        <div class="footer-col">
+          <h3 class="footer-col-title">Resources</h3>
+          <div class="footer-links">
+            <a href="#/initiatives" class="footer-link">Social Impact</a>
+            <a href="#/contact" class="footer-link">Talk to Experts</a>
+            <a href="#/products" class="footer-link">Specifications</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3 class="footer-col-title">Our Presence</h3>
+          <div class="footer-links">
+            <span class="footer-link" style="pointer-events: none; opacity: 0.8;">Telangana, India</span>
+            <a href="mailto:info@sackhetechnologies.com" class="footer-link">info@sackhetechnologies.com</a>
+            <a href="tel:+917337238466" class="footer-link">+91 73372 38466</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 Sackhe Technologies Pvt Ltd. All rights reserved.</p>
+        <span class="footer-tagline">THE PATH TO ZERO WASTE</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= TEMPLATES FOR ROUTING ================= -->
+
+  <!-- Home Page Template -->
+  <template id="page-home">
+    <!-- Hero Header section -->
+    <section class="hero-section container" style="text-align: center; max-width: 840px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-top: 3.5rem; padding-bottom: 1.5rem;">
+      <div class="hero-subtitle" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.16em; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 1.25rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        THE PATH TO ZERO WASTE
+      </div>
+      <h1 class="hero-title">
+        Redefining the<br><span class="text-gradient">Cycle of Nature</span>
+      </h1>
+      <p class="hero-desc" style="font-size: 1.15rem; line-height: 1.75; max-width: 620px; margin: 0 auto 2rem; color: var(--text-secondary); hyphens: none; text-wrap: balance; word-break: keep-all;">
+        Sackhe Technologies is leading the transition to safe, clean, and sustainable waste lifecycle management through advanced emission-controlled incineration systems.
+      </p>
+      <div class="hero-actions" style="display: flex; justify-content: center; gap: 1rem; align-items: center;">
+        <a href="#/products" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Explore Solutions</a>
+        <a href="#/contact" class="btn btn-secondary" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Talk to Experts</a>
+      </div>
+      <div class="scroll-hint">
+        <span></span>
+        Scroll to Discover
+      </div>
+    </section>
+
+    <!-- Pitch section -->
+    <section class="section-padding container">
+      <div class="innovation-grid">
+        <div class="glass-card">
+          <span class="badge">INNOVATION</span>
+          <h2 class="section-title text-gradient">What Makes It Better</h2>
+          <p class="section-desc" style="font-size: 1.1rem; line-height: 1.8; margin-top: 1rem;">
+            Our proprietary thermal emission control cycle ensures 100% smoke-free operation. Every component of our waste disposal and recycling ecosystem is engineered to support community hygiene while maintaining a zero-carbon footprint profile.
+          </p>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div class="pad-render-container" style="width: 280px; height: 280px;">
+            <div class="pad-render" style="background: none; border-radius: 24px; border: 1px solid var(--border-glass-hover); overflow: hidden; animation: none; transform: none;">
+              <img src="innovation_tech.jpg" alt="Sustainable Holographic Leaf Mesh Network" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div class="pad-glow" style="width: 320px; height: 320px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Supported By section -->
+    <section class="supporters-section">
+      <div class="container">
+        <h3 class="supporters-heading">SUPPORTED BY</h3>
+        <div class="supporters-grid">
+          <div class="supporter-card">
+            <div class="supporter-logo">
+              <img src="kg_reddy.webp" alt="KG Reddy College of Engineering & Technology" loading="lazy" decoding="async">
+            </div>
+            <span class="supporter-name">KG REDDY<br>COLLEGE OF<br>ENGINEERING &<br>TECHNOLOGY</span>
+            <div class="supporter-socials">
+              <a href="https://www.linkedin.com/school/kg-reddy-college-of-engineering-and-technology/?originalSubdomain=in" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="KG Reddy LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a href="https://www.instagram.com/kgrcet/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="KG Reddy Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="supporter-card">
+            <div class="supporter-logo">
+              <img src="srix.webp" alt="SRIX Innovation Cell" loading="lazy" decoding="async">
+            </div>
+            <span class="supporter-name">SRIX<br>INNOVATION<br>CELL</span>
+            <div class="supporter-socials">
+              <a href="https://www.linkedin.com/company/srixinnovationexchange/?originalSubdomain=in" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="SRIX LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a href="https://www.instagram.com/srixwarangal/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="SRIX Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="supporter-card">
+            <div class="supporter-logo">
+              <img src="kase.webp" alt="KASE" loading="lazy" decoding="async">
+            </div>
+            <span class="supporter-name">KASE</span>
+            <div class="supporter-socials">
+              <a href="https://www.linkedin.com/company/kase-accelerator/" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="KASE LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a href="https://www.instagram.com/kase.accelerator/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="KASE Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products catalog snippet -->
+    <section class="section-padding container">
+      <div class="section-header">
+        <span class="badge">Ecosystem</span>
+        <h2 class="section-title">Our Products</h2>
+        <p class="section-desc">Sustainable hardware and material innovations resolving community waste challenges.</p>
+        <a href="#/products" class="btn btn-secondary" style="margin-top: 1.5rem;">Explore Full Catalog</a>
+      </div>
+      
+      <div class="products-grid">
+        <!-- Incinerator -->
+        <div class="glass-card product-card">
+          <div class="product-card-img-wrapper">
+            <span class="product-status status-available">Available</span>
+            <img src="home_view2.webp" alt="Smokeless Cycle Menstrual Waste Incinerator" loading="lazy" decoding="async" class="product-card-img">
+          </div>
+          <div class="product-card-body">
+            <h3 class="product-card-title">Non-Toxic Emission Cycle – Menstrual Waste Incinerator</h3>
+            <p class="product-card-price">₹64,949 /-</p>
+            <p class="product-card-desc">Sustainable sanitary waste disposal solution designed for safe and hygienic management of menstrual waste.</p>
+            <div class="product-card-sectors">
+              <span class="sector-tag">Schools</span>
+              <span class="sector-tag">Hospitals</span>
+              <span class="sector-tag">Corporate Offices</span>
+            </div>
+            <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+          </div>
+        </div>
+        
+        <!-- Solid Waste -->
+        <div class="glass-card product-card">
+          <div class="product-card-img-wrapper">
+            <span class="product-status status-soon">Pre-order</span>
+            <img src="solid_waste_system.webp" alt="Solid Waste Management System" loading="lazy" decoding="async" class="product-card-img">
+          </div>
+          <div class="product-card-body">
+            <h3 class="product-card-title">Solid Waste Management System</h3>
+            <p class="product-card-price">Custom Quote</p>
+            <p class="product-card-desc">Comprehensive end-to-end solution for organized waste handling and processing.</p>
+            <div class="product-card-sectors">
+              <span class="sector-tag">Municipalities</span>
+              <span class="sector-tag">Campuses</span>
+              <span class="sector-tag">Apartments</span>
+            </div>
+            <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+          </div>
+        </div>
+
+        <!-- Eco Pads -->
+        <div class="glass-card product-card">
+          <div class="product-card-img-wrapper">
+            <span class="product-status status-innovation">Eco Innovation</span>
+            <img src="premium_pad.webp" alt="Eco-Friendly Biodegradable Sanitary Pads" loading="lazy" decoding="async" class="product-card-img">
+          </div>
+          <div class="product-card-body">
+            <h3 class="product-card-title">Eco-Friendly Biodegradable Pads</h3>
+            <p class="product-card-price">Pre-ordering</p>
+            <p class="product-card-desc">Biodegradable and sustainable sanitary pads prioritizing comfort and the environment.</p>
+            <div class="product-card-sectors">
+              <span class="sector-tag">Organic Cotton</span>
+              <span class="sector-tag">Zero Plastics</span>
+              <span class="sector-tag">Rural Health</span>
+            </div>
+            <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pitch section 3 -->
+    <section class="section-padding container" style="text-align: center;">
+      <div class="glass-card cta-block">
+        <h2 class="cta-title">Zero Waste. Future Ready.</h2>
+        <p class="cta-desc">Join Sackhe Technologies in implementing emission-controlled solutions across communities.</p>
+        <div class="cta-actions">
+          <a href="#/products" class="btn btn-primary">Explore Solutions</a>
+          <a href="#/contact" class="btn btn-secondary">Talk to Experts</a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- About Page Template -->
+  <template id="page-about">
+    <section class="section-padding container">
+      <div class="section-header" style="max-width: 800px; margin-bottom: 6rem;">
+        <span class="badge">Who We Are</span>
+        <h1 class="hero-title text-gradient">About Us</h1>
+        <p class="section-desc" style="font-size: 1.2rem; line-height: 1.8; margin-top: 1.5rem;">
+          Leading the revolution in sustainable waste management through innovation and commitment to environmental protection.
+        </p>
+      </div>
+
+      <!-- Core Story Grid -->
+      <div class="innovation-grid" style="margin-bottom: 8rem;">
+        <div>
+          <span class="badge">Founded Dec 2023</span>
+          <h2 class="section-title" style="font-size: 2.2rem; margin-top: 0.5rem; margin-bottom: 1.5rem;">THE PATH TO ZERO WASTE.</h2>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+            Sackhe Technologies was founded in December 2023. Before building anything, the team researched real-time napkin disposal. They found that menstrual waste was being burned openly, buried carelessly, or mixed with household trash. No safe, affordable solution existed for sanitary napkin disposal. Communities, schools, and women had no good option.
+          </p>
+          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem;">
+            Developed the <strong>Smokeless Cycle Menstrual Waste Incinerator</strong> – a clean, smoke-free prototype built with support from <strong>KG Reddy College of Engineering & Technology</strong> and tested at <strong>KASE Innovation Cell</strong>. Funded under the <strong>NIDHI-Prayas program</strong> through <strong>SRIX Innovation Cell</strong>. Developed a full-fledged <strong>Solid Waste Management Product</strong> for municipalities, industries, and large institutions.
+          </p>
+          <p style="color: var(--text-secondary); line-height: 1.8;">
+            First system deployed and operational at <strong>Telangana Social Welfare Residential Girls school Narsingi</strong>, inaugurated by Hon'ble MLA Shri T. Prakash Goud (Rajendranagar) in the presence of T. Krishna Mohan (Commissioner, Narsingi Municipality) and Dr. W. G. Prasanna Kumar (Senior Scientist, Telangana Pollution Control Board).
+          </p>
+        </div>
+        <div class="glass-card" style="border-color: var(--border-glass-hover); box-shadow: 0 10px 40px var(--secondary-glow);">
+          <div style="margin-bottom: 2rem;">
+            <h4 style="color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em;">Our Mission</h4>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">To provide eco-friendly incineration solutions that protect community health and the environment.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em;">Our Vision</h4>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">To become India's most trusted name in sustainable waste management.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Who We Serve -->
+      <div style="margin-bottom: 8rem;">
+        <div class="section-header">
+          <span class="badge">Impact Areas</span>
+          <h2 class="section-title">Who We Serve</h2>
+          <p class="section-desc">Our solutions are designed to meet the diverse needs of various sectors, contributing to a more sustainable future for all.</p>
+        </div>
+        
+        <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 3rem;">
+          
+          <!-- Girls Schools & Colleges -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="girls_schools.webp" alt="Girls Schools & Colleges" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Girls Schools & Colleges</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Safe, smoke-free disposal solutions for students to preserve privacy and sanitation.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Local Communities -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="local_communities.webp" alt="Local Communities" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 38%; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Local Communities</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Accessible waste management tools designed to eliminate open landfill pollution.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Municipal Authorities -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="municipal_authorities.webp" alt="Municipal Authorities" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center center; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Municipal Authorities</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Partnering with municipal units to scale local solid waste processing operations.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environmental Ecosystems -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="environmental_ecosystems.webp" alt="Environmental Ecosystems" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 4%; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Environmental Ecosystems</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Reducing active microplastics leakage into soil and natural river courses.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Public Health -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="public_health.webp" alt="Public Health" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 30%; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Public Health</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Stopping toxic pathogens and biological hazards resulting from exposed waste.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Future Generations -->
+          <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-color: var(--border-glass);">
+            <div style="height: 240px; overflow: hidden; position: relative;">
+              <img src="future_generations.webp" alt="Future Generations" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 30%; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+            <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Future Generations</h4>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">Paving the way for sustainable circular systems for the next generations.</p>
+              </div>
+              <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Core Values -->
+      <div style="margin-bottom: 8rem;">
+        <div class="section-header">
+          <span class="badge">Philosophy</span>
+          <h2 class="section-title">Our Values</h2>
+          <p class="section-desc">The core principles guiding our product development and client relations.</p>
+        </div>
+        
+        <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+          <!-- Innovation -->
+          <div class="glass-card value-card">
+            <div class="value-image-container">
+              <img src="value_innovation.jpg" alt="Innovation" loading="lazy" decoding="async" class="value-image">
+            </div>
+            <h3 class="value-title">Innovation</h3>
+            <p class="value-desc">Pioneering sustainable solutions for complex environmental challenges</p>
+          </div>
+          
+          <!-- Sustainability -->
+          <div class="glass-card value-card">
+            <div class="value-image-container">
+              <img src="value_sustainability.jpg" alt="Sustainability" loading="lazy" decoding="async" class="value-image">
+            </div>
+            <h3 class="value-title">Sustainability</h3>
+            <p class="value-desc">Committed to protecting our planet for future generations</p>
+          </div>
+
+          <!-- Excellence -->
+          <div class="glass-card value-card">
+            <div class="value-image-container">
+              <img src="value_excellence.jpg" alt="Excellence" loading="lazy" decoding="async" class="value-image">
+            </div>
+            <h3 class="value-title">Excellence</h3>
+            <p class="value-desc">Delivering the highest quality products and services</p>
+          </div>
+
+          <!-- Integrity -->
+          <div class="glass-card value-card">
+            <div class="value-image-container">
+              <img src="value_integrity.jpg" alt="Integrity" loading="lazy" decoding="async" class="value-image">
+            </div>
+            <h3 class="value-title">Integrity</h3>
+            <p class="value-desc">Building trust through transparent and ethical practices</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline Journey -->
+      <div style="margin-bottom: 8rem;">
+        <div class="section-header">
+          <span class="badge">Evolution</span>
+          <h2 class="section-title">Our Journey</h2>
+          <p class="section-desc">Key milestones in our pursuit of clean environmental technology standards.</p>
+        </div>
+        
+        <div class="timeline-container">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Dec 2023</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Company Founded</h3>
+              <p class="timeline-desc">Sackhe Technologies was founded with the tagline "THE PATH TO ZERO WASTE".</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Dec 2023</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">First Product</h3>
+              <p class="timeline-desc">Smokeless Incinerator prototype developed with support from KG Reddy College of Engineering & Technology and tested at KASE Innovation Cell.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Jan 2024</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Seed Support</h3>
+              <p class="timeline-desc">Received support from KGRCET to scale prototype development and technical validation.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Jun 2024</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">NIDHI-Prayas Grant</h3>
+              <p class="timeline-desc">Secured funding under DST's NIDHI-Prayas program through Srix Innovation Cell.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Jan 2025</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Eco-Pad Product Line</h3>
+              <p class="timeline-desc">Launched development of 100% biodegradable sanitary pad made from Organic cotton.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Nov 2025</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Solid Waste Management System</h3>
+              <p class="timeline-desc">Built and began testing the comprehensive system for municipalities.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Nov 2025</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Deployment at Narsingi</h3>
+              <p class="timeline-desc">First system deployed at Telangana Social Welfare Residential Girls School, Narsingi.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">Present</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Scaling & Impact</h3>
+              <p class="timeline-desc">Deploying pilots across Hyderabad institutions, working towards national rollout and international eco-certification.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Innovators Team -->
+      <div>
+        <div class="section-header">
+          <span class="badge">Team</span>
+          <h2 class="section-title">Meet the Innovators</h2>
+          <p class="section-desc">The leadership team guiding the development and delivery of our products.</p>
+        </div>
+        
+        <div class="team-grid">
+          <div class="team-card glass-card">
+            <div class="team-avatar">
+              <img src="sandhya.webp" alt="Kolisetti Sandhya" loading="lazy" decoding="async" style="object-position: center 35%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">KS</div>
+            </div>
+            <h3 class="team-name">Kolisetti Sandhya</h4>
+            <p class="team-role">Managing Director & CMO</p>
+            <div class="team-socials">
+              <a href="https://www.linkedin.com/in/tuti-sandhya-179ab4a2" target="_blank" class="team-social-link">LinkedIn</a>
+              <a href="https://www.instagram.com/sandhyatuti?igsh=dnV6dDhtbzlzMzNj" target="_blank" class="team-social-link">Instagram</a>
+            </div>
+          </div>
+
+          <div class="team-card glass-card">
+            <div class="team-avatar">
+              <img src="varshitha.webp" alt="Venumula Varsitha Reddy" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">VR</div>
+            </div>
+            <h3 class="team-name">Venumula Varsitha Reddy</h4>
+            <p class="team-role">Director & CEO</p>
+            <div class="team-socials">
+              <a href="https://www.linkedin.com/in/varsitha-reddy" target="_blank" class="team-social-link">LinkedIn</a>
+              <a href="https://www.instagram.com/varsitha__reddy?igsh=MW95cjc1YXIyMXoydA==" target="_blank" class="team-social-link">Instagram</a>
+            </div>
+          </div>
+
+          <div class="team-card glass-card">
+            <div class="team-avatar">
+              <img src="rakesh.webp" alt="Appala Rakesh Goud" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">RG</div>
+            </div>
+            <h3 class="team-name">Appala Rakesh Goud</h4>
+            <p class="team-role">Executive Director & COO</p>
+            <div class="team-socials">
+              <a href="https://www.linkedin.com/in/rakesh-goud-appala-153641284" target="_blank" class="team-social-link">LinkedIn</a>
+              <a href="https://www.instagram.com/lucky_rs_390?igsh=bnEzY250aTE5dzg4" target="_blank" class="team-social-link">Instagram</a>
+            </div>
+          </div>
+
+          <div class="team-card glass-card">
+            <div class="team-avatar">
+              <img src="jahnavi.webp" alt="Vanekari Jahnavi" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">VJ</div>
+            </div>
+            <h3 class="team-name">Vanekari Jahnavi</h4>
+            <p class="team-role">Director & CFO</p>
+            <div class="team-socials">
+              <a href="https://www.linkedin.com/in/v-jahnavi-284259226" target="_blank" class="team-social-link">LinkedIn</a>
+              <a href="https://www.instagram.com/jaanu_216263?igsh=OXI0bThvNHRmdDI3" target="_blank" class="team-social-link">Instagram</a>
+            </div>
+          </div>
+
+          <div class="team-card glass-card">
+            <div class="team-avatar">
+              <img src="kedar.webp" alt="Sai Venkata Satya Kedar Illa" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">SK</div>
+            </div>
+            <h3 class="team-name">Sai Venkata Satya Kedar Illa</h4>
+            <p class="team-role">Director</p>
+            <div class="team-socials">
+              <a href="https://www.linkedin.com/in/satya-illa" target="_blank" class="team-social-link">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Products Page Template -->
+  <template id="page-products">
+    <section class="section-padding container">
+      <div class="section-header" style="max-width: 800px; margin-bottom: 6rem;">
+        <span class="badge">Catalog</span>
+        <h1 class="hero-title text-gradient">The Catalog Engineering Purity</h1>
+        <p class="section-desc" style="font-size: 1.2rem; line-height: 1.8; margin-top: 1.5rem;">
+          Our ecosystem of products is built to ensure zero-waste lifecycles for institutions, cities, and the planet.
+        </p>
+      </div>
+
+      <!-- Main product cards details -->
+      <div style="display: flex; flex-direction: column; gap: 4rem;">
+        
+        <!-- Incinerator -->
+        <div class="glass-card product-split-card" style="border-color: var(--border-glass-hover)">
+          <div class="product-info-col">
+            <span class="product-status status-available">Available</span>
+            <h2 class="section-title product-title">Smokeless Cycle – Menstrual Waste Incinerator</h2>
+            <p class="product-subtitle">Emission Controlled. Safe. Dignified.</p>
+            <p class="product-price">₹64,949 /-</p>
+            <p class="product-description">
+              The Smokeless Cycle is an innovative, emission-controlled sanitary waste incinerator designed specifically for menstrual hygiene waste disposal. It provides a clean, odorless, and dignified solution for schools, hospitals, offices, and public spaces — eliminating the risk of improper waste dumping.
+            </p>
+            <h3 class="product-section-label">Target Sectors</h4>
+            <div class="sector-tags">
+              <span class="sector-tag">Schools & Colleges</span>
+              <span class="sector-tag">Hospitals</span>
+              <span class="sector-tag">Corporate Offices</span>
+              <span class="sector-tag">Public Restrooms</span>
+              <span class="sector-tag">Hostels</span>
+              <span class="sector-tag">Malls</span>
+            </div>
+            <div class="product-actions-group">
+              <a href="#/contact" class="btn btn-primary">Order Now</a>
+              <a href="#/contact" class="btn btn-secondary">DM for More Details</a>
+              <a href="#/contact" class="btn btn-secondary">Full Specifications</a>
+            </div>
+          </div>
+          <div class="product-image-col">
+            <div class="product-render-container">
+              <div class="product-render-box">
+                <img src="home_view2.webp" alt="Smokeless Cycle Menstrual Waste Incinerator" loading="lazy" decoding="async" class="product-showcase-img">
+              </div>
+              <div class="product-render-glow"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Solid Waste -->
+        <div class="glass-card product-split-card">
+          <div class="product-info-col">
+            <span class="product-status status-soon">Launching Soon (Pre-order)</span>
+            <h2 class="section-title product-title">Solid Waste Management System</h2>
+            <p class="product-subtitle">Smart. Scalable. Sustainable.</p>
+            <p class="product-price">Custom Quote</p>
+            <p class="product-description">
+              A comprehensive, modular solid waste management system designed to handle mixed municipal and institutional waste. Equipped with automated segregation, composting integration, and real-time monitoring, this system transforms waste into resources.
+            </p>
+            <h3 class="product-section-label">Target Sectors</h4>
+            <div class="sector-tags">
+              <span class="sector-tag">Municipalities</span>
+              <span class="sector-tag">Apartment Complexes</span>
+              <span class="sector-tag">Campuses</span>
+              <span class="sector-tag">Industrial Areas</span>
+              <span class="sector-tag">Commercial Buildings</span>
+            </div>
+            <div class="product-actions-group">
+              <a href="#/contact" class="btn btn-primary">Pre-order Now</a>
+              <a href="#/contact" class="btn btn-secondary">DM for More Details</a>
+              <a href="#/contact" class="btn btn-secondary">Full Specifications</a>
+            </div>
+          </div>
+          <div class="product-image-col">
+            <div class="product-render-container">
+              <div class="product-render-box">
+                <img src="solid_waste_system.webp" alt="Solid Waste Management System" loading="lazy" decoding="async" class="product-showcase-img">
+              </div>
+              <div class="product-render-glow"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eco Pads -->
+        <div class="glass-card product-split-card" style="border-color: var(--border-glass-hover)">
+          <div class="product-info-col">
+            <span class="product-status status-innovation">Eco Innovation (Pre-order)</span>
+            <h2 class="section-title product-title">Eco-Friendly Biodegradable Sanitary Pad</h2>
+            <p class="product-subtitle">Pure. Sustainable. Zero-Waste.</p>
+            <p class="product-price">Pre-ordering</p>
+            <p class="product-description">
+              Our next-generation sanitary pad is crafted from 100% natural, biodegradable materials including cotton. Designed for comfort and sustainability, it decomposes naturally in 8–10 months — not 500–800 years like conventional plastic-based pads.
+            </p>
+            <h3 class="product-section-label">Target Sectors</h4>
+            <div class="sector-tags">
+              <span class="sector-tag">School Girls</span>
+              <span class="sector-tag">Women in Rural Areas</span>
+              <span class="sector-tag">Eco-Conscious Consumers</span>
+              <span class="sector-tag">NGOs</span>
+              <span class="sector-tag">Institutions</span>
+            </div>
+            <div class="product-actions-group">
+              <a href="#/contact" class="btn btn-primary">Pre-order Now</a>
+              <a href="#/contact" class="btn btn-secondary">DM for More Details</a>
+              <a href="#/contact" class="btn btn-secondary">Full Specifications</a>
+            </div>
+          </div>
+          <div class="product-image-col">
+            <div class="product-render-container">
+              <div class="product-render-box">
+                <img src="premium_pad.webp" alt="Eco-Friendly Biodegradable Sanitary Pad" loading="lazy" decoding="async" class="product-showcase-img">
+              </div>
+              <div class="product-render-glow"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- Action -->
+      <div class="section-padding" style="text-align: center;">
+        <div class="glass-card cta-block">
+          <h2 class="cta-title">Ready to Go Zero-Waste?</h2>
+          <p class="cta-desc">Talk to our team to get a customized solution for your institution.</p>
+          <a href="#/contact" class="btn btn-primary">Book For Your Customization</a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Services Page Template -->
+  <template id="page-services">
+    <section class="section-padding container">
+      <div class="section-header" style="max-width: 800px; margin-bottom: 6rem;">
+        <span class="badge">Support</span>
+        <h1 class="hero-title text-gradient">Our Professional Services (Excellence in Action)</h1>
+        <p class="section-desc" style="font-size: 1.2rem; line-height: 1.8; margin-top: 1.5rem;">
+          Comprehensive support and strategic advisory to ensure the longevity and efficiency of your waste management systems.
+        </p>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="products-grid" style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2.5rem; margin-bottom: 8rem;">
+        
+        <!-- Maintenance Services -->
+        <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-color: var(--border-glass);">
+          <div style="height: 260px; overflow: hidden; position: relative;">
+            <div class="card-floating-badge purple-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            </div>
+            <img src="service_maintenance.jpg" alt="Maintenance Services" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center center; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <div style="padding: 2.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 class="product-title" style="margin-top: 0; margin-bottom: 1rem; font-size: 1.4rem;">Maintenance Services</h3>
+              <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Reliable and efficient maintenance solution to ensure smooth and hygiene waste management operation.
+              </p>
+              <ul style="list-style-type: none; padding-left: 0; margin-bottom: 2.5rem;">
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Regular inspections
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Preventive maintenance
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Repair services to extend lifecycle
+                </li>
+              </ul>
+            </div>
+            <a href="#/contact" class="btn btn-primary" style="width: 100%;">Get Started</a>
+          </div>
+        </div>
+
+        <!-- Waste Management Advisory -->
+        <div class="glass-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; border-color: var(--border-glass-hover);">
+          <div style="height: 220px; overflow: hidden; position: relative;">
+            <div class="card-floating-badge green-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            </div>
+            <img src="service_advisory.jpg" alt="Waste Management Advisory" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; transition: var(--transition-smooth);" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <div style="padding: 2.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 class="product-title" style="margin-top: 0; margin-bottom: 1rem; font-size: 1.4rem;">Waste Management Advisory</h3>
+              <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Expert guidance and sustainable strategies to help organizations optimize waste management and achieve compliance.
+              </p>
+              <ul style="list-style-type: none; padding-left: 0; margin-bottom: 2.5rem;">
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Strategic planning
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Effective waste system implementation
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.92rem; color: var(--text-secondary);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Guidance for optimization
+                </li>
+              </ul>
+            </div>
+            <a href="#/contact" class="btn btn-primary" style="width: 100%;">Get Started</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ground Level Impact / Awareness Gallery -->
+      <div style="margin-bottom: 8rem;">
+        <div class="section-header">
+          <span class="badge">Engagement</span>
+          <h2 class="section-title">Community Impact Awareness Sessions</h2>
+          <p class="section-desc">Glimpses of our ground-level initiatives and educational sessions conducted across various institutions.</p>
+        </div>
+
+        <div class="awareness-gallery-grid">
+          
+          <!-- Card 1: Direct School Student Outreach & Napkin Distribution -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_pad_distribution.jpg" alt="School Student Napkin Distribution" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 45%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Direct Student Outreach & Pad Distribution</h3>
+              <p class="awareness-desc">
+                Sackhe team distributing 100% biodegradable sanitary napkins directly to school girls while teaching hygienic usage, personal health, and zero-waste disposal.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: Educator & Staff Awareness Program -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_teachers_session.jpg" alt="Teachers & Staff Awareness Session" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 68%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Educator & School Staff Awareness Program</h3>
+              <p class="awareness-desc">
+                Collaborative hygiene awareness workshop with school headmistresses, educators, and staff to build ongoing institutional support and eradicate menstrual taboos.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: Classroom Interactive Drive -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_team_classroom.jpg" alt="The Path to Zero Waste Classroom Session" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 45%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">"The Path to Zero Waste" Interactive Drive</h3>
+              <p class="awareness-desc">
+                Engaging classroom sessions educating young students on environmental degradation from plastic pads and presenting eco-friendly sustainable alternatives.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 4: Narsingi Municipality Resource Park -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_narsingi_waste_park.jpg" alt="Solid Waste Management Resource Park Narsingi" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 35%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Narsingi Municipality Resource Park Field Program</h3>
+              <p class="awareness-desc">
+                On-site operational assessment and solid waste management initiative at Narsingi Municipality Solid Waste Management Resource Park in Ranga Reddy District.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 5: Gandipet Welfare Society / Narsingi Municipality Solid Waste Project -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_gandipet_narsingi_mural.jpg" alt="Gandipet Welfare Society Solid Waste Management Initiative" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 40%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Gandipet & Narsingi Solid Waste Awareness Campaign</h3>
+              <p class="awareness-desc">
+                Community-wide solid waste education drive with Gandipet Welfare Society and Narsingi Municipality focusing on source segregation and sustainable recycling.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 6: Grassroots Leadership & Advocacy -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_session_leads.jpg" alt="Youth Leadership & Community Champions" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 50%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Youth Leadership & Community Champions</h3>
+              <p class="awareness-desc">
+                Sackhe initiative leads guiding grassroots community dialogues to destigmatize menstrual health and champion sustainable sanitation technologies.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 7: Kanakamamidi High School Session -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="kanakamamidi_highres.jpg" alt="Zilla Parishad High School, Kanakamamidi" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 30%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Zilla Parishad High School, Kanakamamidi</h3>
+              <p class="awareness-desc">
+                Educational session highlighting safe napkin disposal and local health consequences. Deployed at Mandal Moinabad, District Ranga Reddy, Telangana.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 8: Village & Rural Community Awareness Drive -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_rural_women_group.jpg" alt="Village & Rural Community Awareness Drive" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 60%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Village & Rural Community Awareness Drive</h3>
+              <p class="awareness-desc">
+                Direct outreach to rural women, distributing biodegradable sanitary napkins and conducting personal health dialogues to replace unsafe traditional practices.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 9: Doorstep Education & Napkin Handover -->
+          <div class="glass-card awareness-card">
+            <div class="awareness-img-wrapper">
+              <img src="awareness_doorstep_distribution.jpg" alt="Doorstep Education & Napkin Handover" loading="lazy" decoding="async" class="awareness-img" style="object-position: center 55%;">
+            </div>
+            <div class="awareness-content">
+              <h3 class="awareness-title">Doorstep Education & Napkin Handover</h3>
+              <p class="awareness-desc">
+                One-on-one personal interactions with village families, offering guidance on sustainable hygiene habits and eco-friendly sanitary alternatives.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="text-align: center;">
+        <div class="glass-card cta-block">
+          <h2 class="cta-title">Ready for Excellence?</h2>
+          <p class="cta-desc">Our experts are ready to optimize your waste management systems for maximum efficiency.</p>
+          <a href="#/contact" class="btn btn-primary">Book For Your Customization</a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Initiatives Page Template -->
+  <template id="page-initiatives">
+    <section class="section-padding container">
+      <div class="section-header" style="max-width: 800px; margin-bottom: 6rem;">
+        <span class="badge">Social Action</span>
+        <h1 class="hero-title text-gradient">Social Impact: Initiatives for Sustainable Change</h1>
+        <p class="section-desc" style="font-size: 1.2rem; line-height: 1.8; margin-top: 1.5rem;">
+          Empowering communities through education, awareness, and groundbreaking solutions for women's health.
+        </p>
+      </div>
+
+      <!-- Initiatives Bento Box -->
+      <div class="bento-initiatives-grid">
+        
+        <!-- Card 1: Cycle of Change (Flagship Program - 2 Columns) -->
+        <div class="bento-card bento-card-featured">
+          <div>
+            <div class="bento-card-header">
+              <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--secondary); border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.06em; margin: 0;">Flagship Program</span>
+              <div class="bento-icon-pill green">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 6v6l4 2"></path></svg>
+              </div>
+            </div>
+            <h3 class="bento-title green" style="font-size: 1.6rem; margin-bottom: 0.85rem;">Cycle of Change</h3>
+            <p class="bento-desc" style="font-size: 1.02rem; line-height: 1.75; max-width: 90%;">
+              Our comprehensive menstrual education initiative dedicated to promoting awareness, breaking social taboos, and establishing hygienic sanitation facilities across communities and schools.
+            </p>
+          </div>
+          <div style="margin-top: 1.75rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--secondary); box-shadow: 0 0 10px var(--secondary-glow); animation: pulse-glow 2s infinite;"></span>
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em;">Active Nationwide</span>
+          </div>
+        </div>
+
+        <!-- Card 2: EmpowerHer (1 Column) -->
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-header">
+              <div class="bento-icon-pill green">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </div>
+            </div>
+            <h3 class="bento-title green">EmpowerHer</h3>
+            <p class="bento-desc">
+              Empowering women through sustainable menstrual health solutions and educational awareness drives.
+            </p>
+          </div>
+          <div style="margin-top: 1.5rem; font-size: 0.82rem; font-weight: 600; color: var(--secondary); display: flex; align-items: center; gap: 0.35rem;">
+            <span>Community Upliftment</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Her Dreams (1 Column) -->
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-header">
+              <div class="bento-icon-pill purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+              </div>
+            </div>
+            <h3 class="bento-title purple">Her Dreams</h3>
+            <p class="bento-desc">
+              Supporting girl education by removing attendance barriers related to menstrual health and hygiene.
+            </p>
+          </div>
+          <div style="margin-top: 1.5rem; font-size: 0.82rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 0.35rem;">
+            <span>Education First</span>
+          </div>
+        </div>
+
+        <!-- Card 4: SelfShine (1 Column) -->
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-header">
+              <div class="bento-icon-pill purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+            </div>
+            <h3 class="bento-title purple">SelfShine</h3>
+            <p class="bento-desc">
+              Promoting self-love, confidence, and positive mental health awareness among young women.
+            </p>
+          </div>
+          <div style="margin-top: 1.5rem; font-size: 0.82rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 0.35rem;">
+            <span>Wellness & Confidence</span>
+          </div>
+        </div>
+
+        <!-- Card 5: GirlUp (1 Column) -->
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-header">
+              <div class="bento-icon-pill green">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+            </div>
+            <h3 class="bento-title green">GirlUp</h3>
+            <p class="bento-desc">
+              Building collective action and community resilience through collaborative women leadership initiatives.
+            </p>
+          </div>
+          <div style="margin-top: 1.5rem; font-size: 0.82rem; font-weight: 600; color: var(--secondary); display: flex; align-items: center; gap: 0.35rem;">
+            <span>Leadership & Action</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Progress Indicators Stats -->
+      <div style="margin-bottom: 8rem;">
+        <h3 style="text-align: center; font-size: 1.8rem; margin-bottom: 1.5rem;">Quantifiable Progress</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Women Empowered</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Institutions</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Communities</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Lives Impacted</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Showcase of Cycle of Change -->
+      <div class="cycle-feature-banner" style="margin-bottom: 8rem;">
+        <div class="cycle-banner-content">
+          <h2 class="cycle-banner-title">Cycle of <span class="cycle-title-highlight">Change</span></h2>
+          <p class="cycle-banner-description">
+            Our flagship initiative addresses the critical need for education, infrastructure, and cultural change around menstruation.
+          </p>
+          <ul class="cycle-banner-bullets">
+            <li class="cycle-bullet-item">
+              <span class="cycle-bullet-dot"></span>
+              <span>Comprehensive health education programs</span>
+            </li>
+            <li class="cycle-bullet-item">
+              <span class="cycle-bullet-dot"></span>
+              <span>Eco-friendly incinerator installations</span>
+            </li>
+            <li class="cycle-bullet-item">
+              <span class="cycle-bullet-dot"></span>
+              <span>Taboo-breaking awareness campaigns</span>
+            </li>
+            <li class="cycle-bullet-item">
+              <span class="cycle-bullet-dot"></span>
+              <span>Educator & healthcare worker training</span>
+            </li>
+          </ul>
+        </div>
+        <div class="cycle-banner-image-container">
+          <img src="initiatives_detail.webp" alt="Cycle of Change Community & Educators" loading="lazy" decoding="async" class="cycle-banner-img">
+          <div class="cycle-banner-gradient-overlay"></div>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div style="text-align: center;">
+        <div class="glass-card cta-block">
+          <h2 class="cta-title">Build a World of Dignity.</h2>
+          <p class="cta-desc">Partner with us to create lasting social impact in your community.</p>
+          <a href="#/contact" class="btn btn-primary">Become a Partner</a>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- Contact Page Template -->
+  <template id="page-contact">
+    <section class="contact-page-wrapper">
+      <div class="container contact-container">
+        <div class="contact-layout-grid">
+          
+          <!-- Left Column: Send us a Message -->
+          <div class="contact-form-block">
+            <h1 class="contact-main-heading">Send us a Message</h1>
+            <p class="contact-sub-heading">Fill in your inquiry details below and our team will get in touch with you.</p>
+
+            <form id="contact-inquiry-form" class="contact-inquiry-form">
+              <div class="form-inputs-row">
+                <div class="form-input-field">
+                  <label for="contact-name" class="contact-field-label">Full Name <span class="asterisk-required">*</span></label>
+                  <input type="text" id="contact-name" class="contact-text-input" placeholder="Your full name" required>
+                </div>
+                <div class="form-input-field">
+                  <label for="contact-org" class="contact-field-label">Organization / Institute</label>
+                  <input type="text" id="contact-org" class="contact-text-input" placeholder="Organization name">
+                </div>
+              </div>
+
+              <div class="form-input-field">
+                <label for="contact-phone" class="contact-field-label">Phone Number <span class="asterisk-required">*</span></label>
+                <input type="tel" id="contact-phone" class="contact-text-input" placeholder="+91 98765 43210" required>
+              </div>
+
+              <div class="form-input-field">
+                <label for="contact-message" class="contact-field-label">Message <span class="asterisk-required">*</span></label>
+                <textarea id="contact-message" class="contact-text-input contact-textarea-input" placeholder="Tell us about your requirements or questions..." rows="5" required></textarea>
+              </div>
+
+              <button type="submit" class="contact-submit-button" id="submit-contact-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="send-message-icon">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+                <span>Send Message</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Get in Touch -->
+          <div class="contact-info-block">
+            <h2 class="contact-main-heading">Get in Touch</h2>
+            <p class="contact-info-description">
+              We're here to help you find the perfect waste management solution for your organization. Reach out to our team of experts for personalized guidance and support.
+            </p>
+
+            <div class="contact-info-cards-stack">
+              <!-- Phone Card -->
+              <div class="contact-card-box card-purple-background">
+                <div class="contact-card-icon-round bg-purple-gradient">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <div class="contact-card-body">
+                  <div class="contact-card-label">Phone</div>
+                  <a href="tel:+917337238466" class="contact-card-link phone-color">+91 73372 38466</a>
+                </div>
+              </div>
+
+              <!-- Email Card -->
+              <div class="contact-card-box card-blue-background">
+                <div class="contact-card-icon-round bg-blue-gradient">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <div class="contact-card-body">
+                  <div class="contact-card-label">Email</div>
+                  <a href="mailto:info@sackhetechnologies.com" class="contact-card-link email-color">info@sackhetechnologies.com</a>
+                </div>
+              </div>
+
+              <!-- Location Card -->
+              <div class="contact-card-box card-purple-background">
+                <div class="contact-card-icon-round bg-purple-gradient icon-align-top">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="contact-card-body">
+                  <div class="contact-card-label">Location</div>
+                  <div class="contact-card-location-address">
+                    House No. 1-6-546, Near Sv Prime, Ramalayam, Chaithanyapuri Colony, K.v.rangareddy, Saroornagar, Telangana, India
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <!-- App logic entry -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
