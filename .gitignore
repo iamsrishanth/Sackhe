@@ -25,3 +25,5 @@ verify_seamless.js
 # OS files
 .DS_Store
 Thumbs.db
+.vercel
+.env*
