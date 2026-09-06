@@ -63,20 +63,20 @@ Solutions target girls schools & colleges, local communities, municipal authorit
 
 ## Contact
 
-- Email: info@sackhetechnologies.com
-- Phone: +91 73372 38466
+- Email: [info@sackhetechnologies.com](mailto:info@sackhetechnologies.com)
+- Phone: [+91 73372 38466](tel:+917337238466)
 - Location: House No. 1-6-546, Near SV Prime, Ramalayam, Chaithanyapuri Colony, K.V. Rangareddy, Saroornagar, Telangana, India
-- LinkedIn: https://www.linkedin.com/company/sackhetechnologies-pvtltd/
-- Instagram: https://www.instagram.com/_sackhe_
+- LinkedIn: [Sackhe Technologies on LinkedIn](https://www.linkedin.com/company/sackhetechnologies-pvtltd/)
+- Instagram: [@_sackhe_ on Instagram](https://www.instagram.com/_sackhe_)
 
 ## Important URLS
 
-- Website: https://sackhe-technologies-five.vercel.app/
-- Home: https://sackhe-technologies-five.vercel.app/#/
-- About / Company story: https://sackhe-technologies-five.vercel.app/#/about
-- Products catalog: https://sackhe-technologies-five.vercel.app/#/products
-- Services: https://sackhe-technologies-five.vercel.app/#/services
-- Social impact & initiatives: https://sackhe-technologies-five.vercel.app/#/initiatives
-- Contact / inquiries: https://sackhe-technologies-five.vercel.app/#/contact
+- Website: [https://sackhe.srishanth.com/](https://sackhe.srishanth.com/)
+- Home: [https://sackhe.srishanth.com/#/](https://sackhe.srishanth.com/#/)
+- About / Company story: [https://sackhe.srishanth.com/#/about](https://sackhe.srishanth.com/#/about)
+- Products catalog: [https://sackhe.srishanth.com/#/products](https://sackhe.srishanth.com/#/products)
+- Services: [https://sackhe.srishanth.com/#/services](https://sackhe.srishanth.com/#/services)
+- Social impact & initiatives: [https://sackhe.srishanth.com/#/initiatives](https://sackhe.srishanth.com/#/initiatives)
+- Contact / inquiries: [https://sackhe.srishanth.com/#/contact](https://sackhe.srishanth.com/#/contact)
 
 _This website is a single-page application (SPA) using hash-based routing — all major pages are reachable from the routes listed above._
