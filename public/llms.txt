@@ -1,14 +1,82 @@
 # Sackhe Technologies
 
-> Sustainable Waste Management Solutions
+> Sustainable waste management solutions — emission-controlled incinerators, solid waste management systems, and eco-friendly biodegradable sanitary pads. "The Path to Zero Waste."
 
-Sackhe Technologies is a leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.
-
-## Core Offerings
-- Non-Toxic Emission Cycle Menstrual Waste Incinerators
-- Solid Waste Management Systems
-- Eco-Friendly Biodegradable Sanitary Pads
-- Maintenance & Advisory Services
+Sackhe Technologies Pvt Ltd is a Hyderabad-based (Telangana, India) sustainable waste management company founded in December 2023. The company designs, manufactures, and deploys emission-controlled incineration systems and waste lifecycle solutions for schools, hospitals, municipalities, corporate offices, and communities. Products are built on a proprietary thermal emission control cycle that operates 100% smoke-free with a zero-carbon footprint profile. Sackhe Technologies was incubated with support from KG Reddy College of Engineering & Technology, tested at KASE Innovation Cell, and funded under the DST NIDHI-Prayas program through SRIX Innovation Cell.
 
 ## Mission
-Redefining the cycle of nature through zero-carbon footprint waste management and community hygiene empowerment.
+
+To provide eco-friendly incineration solutions that protect community health and the environment. The company redefines the cycle of nature through zero-carbon-footprint waste management and community hygiene empowerment.
+
+## Vision
+
+To become India's most trusted name in sustainable waste management.
+
+## Products
+
+### Non-Toxic Emission Cycle – Menstrual Waste Incinerator (Smokeless Cycle)
+Price: ₹64,949. Available now. An emission-controlled sanitary waste incinerator for menstrual hygiene waste disposal — clean, odorless, and dignified. Target sectors: schools & colleges, hospitals, corporate offices, public restrooms, hostels, malls.
+
+### Solid Waste Management System
+Custom quote. Pre-order (launching soon). A modular solid waste management system for mixed municipal and institutional waste with automated segregation, composting integration, and real-time monitoring. Target sectors: municipalities, apartment complexes, campuses, industrial areas, commercial buildings.
+
+### Eco-Friendly Biodegradable Sanitary Pad
+Pre-ordering. A 100% biodegradable sanitary pad made from natural materials including organic cotton. Decomposes naturally in 8–10 months (versus 500–800 years for plastic-based pads). Target sectors: school girls, women in rural areas, eco-conscious consumers, NGOs, institutions.
+
+## Services
+
+- **Maintenance Services** — regular inspections, preventive maintenance, and repair services to extend system lifecycle.
+- **Waste Management Advisory** — strategic planning, waste system implementation, and optimization guidance for compliance.
+
+## Social Impact & Initiatives
+
+Flagship: **Cycle of Change** — a menstrual education initiative promoting awareness, breaking social taboos, and establishing hygienic sanitation facilities across communities and schools (active nationwide). Programs include EmpowerHer (women's sustainable menstrual health), Her Dreams (girl education via menstrual health support), SelfShine (wellness and confidence for young women), and GirlUp (women's leadership and collective action).
+
+Awareness and field programs include direct student outreach and pad distribution, educator and staff awareness sessions, "The Path to Zero Waste" classroom drives, the Narsingi Municipality Resource Park field program, Gandipet & Narsingi solid waste awareness campaigns, youth leadership and community champion dialogues, Zilla Parishad High School Kanakamamidi sessions, and rural village and doorstep education drives.
+
+### Quantifiable Progress
+- 500+ Women Empowered
+- 50+ Institutions
+- 25+ Communities
+- 1000+ Lives Impacted
+
+## Company History & Milestones
+
+- **Dec 2023** — Company founded; smokeless incinerator prototype developed with KG Reddy College of Engineering & Technology, tested at KASE Innovation Cell.
+- **Jan 2024** — Seed support from KGRCET for prototype scaling and technical validation.
+- **Jun 2024** — NIDHI-Prayas grant (DST) secured through Srix Innovation Cell.
+- **Jan 2025** — Eco-pad product line launched (100% biodegradable organic-cotton sanitary pad).
+- **Nov 2025** — Solid Waste Management System built and tested; first system deployed at Telangana Social Welfare Residential Girls School, Narsingi (inaugurated by MLA Shri T. Prakash Goud, Rajendranagar, in the presence of T. Krishna Mohan, Commissioner Narsingi Municipality, and Dr. W. G. Prasanna Kumar, Senior Scientist, Telangana Pollution Control Board).
+- **Present** — Scaling pilots across Hyderabad institutions; working toward national rollout and international eco-certification.
+
+## Leadership Team
+
+- Kolisetti Sandhya — Managing Director & CMO
+- Venumula Varsitha Reddy — Director & CEO
+- Appala Rakesh Goud — Executive Director & COO
+- Vanekari Jahnavi — Director & CFO
+- Sai Venkata Satya Kedar Illa — Director
+
+## How We Serve
+
+Solutions target girls schools & colleges, local communities, municipal authorities, environmental ecosystems, public health, and future generations — reducing open landfill pollution, microplastics leakage into soil and water, and toxic pathogens from exposed waste.
+
+## Contact
+
+- Email: info@sackhetechnologies.com
+- Phone: +91 73372 38466
+- Location: House No. 1-6-546, Near SV Prime, Ramalayam, Chaithanyapuri Colony, K.V. Rangareddy, Saroornagar, Telangana, India
+- LinkedIn: https://www.linkedin.com/company/sackhetechnologies-pvtltd/
+- Instagram: https://www.instagram.com/_sackhe_
+
+## Important URLS
+
+- Website: https://sackhe-technologies-five.vercel.app/
+- Home: https://sackhe-technologies-five.vercel.app/#/
+- About / Company story: https://sackhe-technologies-five.vercel.app/#/about
+- Products catalog: https://sackhe-technologies-five.vercel.app/#/products
+- Services: https://sackhe-technologies-five.vercel.app/#/services
+- Social impact & initiatives: https://sackhe-technologies-five.vercel.app/#/initiatives
+- Contact / inquiries: https://sackhe-technologies-five.vercel.app/#/contact
+
+_This website is a single-page application (SPA) using hash-based routing — all major pages are reachable from the routes listed above._
