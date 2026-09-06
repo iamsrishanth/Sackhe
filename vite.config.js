@@ -6,6 +6,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    cssCodeSplit: true,
+    minify: 'esbuild',
+    assetsInlineLimit: 8192,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')

@@ -119,6 +119,8 @@ function handleGoogleSignIn() {
 window.handleGoogleSignIn = handleGoogleSignIn;
 
 // SPA Router
+let initialRouteChecked = false;
+
 function router() {
   let hash = window.location.hash;
   
@@ -157,6 +159,15 @@ function router() {
     menuToggle.classList.remove('open');
   }
 
+  // If initial load is home and pre-rendered view already exists in DOM
+  if (!initialRouteChecked) {
+    initialRouteChecked = true;
+    if (routePath === '/' && container.querySelector('[data-route="/"]')) {
+      setupHomePage();
+      return;
+    }
+  }
+
   // Render transition orchestrator
   const renderNewPage = () => {
     container.innerHTML = '';
@@ -164,6 +175,7 @@ function router() {
     
     const wrapper = document.createElement('div');
     wrapper.className = 'view-enter';
+    wrapper.setAttribute('data-route', routePath);
     wrapper.appendChild(clone);
     container.appendChild(wrapper);
     
@@ -188,7 +200,7 @@ function router() {
   if (currentView) {
     // Fade out / exit animation first
     currentView.className = 'view-exit';
-    setTimeout(renderNewPage, 300); // Wait for 300ms exit transition
+    setTimeout(renderNewPage, 200); // Wait for 200ms exit transition
   } else {
     // Immediate render on initial load
     renderNewPage();
@@ -351,3 +363,24 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// Progressive Web Font Enhancement (loads on first user interaction or idle after initial render)
+(() => {
+  let fontsLoaded = false;
+  const loadFonts = () => {
+    if (fontsLoaded) return;
+    fontsLoaded = true;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700&display=swap';
+    document.head.appendChild(link);
+    ['scroll', 'touchstart', 'pointerdown', 'mousemove', 'keydown'].forEach(e => {
+      window.removeEventListener(e, loadFonts);
+    });
+  };
+  ['scroll', 'touchstart', 'pointerdown', 'mousemove', 'keydown'].forEach(e => {
+    window.addEventListener(e, loadFonts, { once: true, passive: true });
+  });
+  // Fallback after initial page is stable
+  setTimeout(loadFonts, 4500);
+})();

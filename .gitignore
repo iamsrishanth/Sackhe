@@ -15,6 +15,7 @@ lighthouse-*.json
 lighthouse-summary.json
 
 # Local test scripts & temporary screenshots
+.orig_images/
 phone_*.jpg
 menu_alignment_check.png
 capture_mobile.js

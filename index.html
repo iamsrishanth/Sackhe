@@ -20,7 +20,7 @@
   <header class="header">
     <div class="container nav-container">
       <a href="#/" class="logo" aria-label="Sackhe Technologies Home">
-        <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="logo-img">
+        <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="logo-img" width="96" height="48" fetchpriority="high">
       </a>
       
       <!-- Nav items -->
@@ -57,7 +57,184 @@
 
   <!-- Main View Container -->
   <main id="app-view">
-    <!-- View content is injected here dynamically -->
+    <div class="view-content" data-route="/">
+      <!-- Hero Header section -->
+      <section class="hero-section container" style="text-align: center; max-width: 840px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-top: 3.5rem; padding-bottom: 1.5rem;">
+        <div class="hero-subtitle" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.16em; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 1.25rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          THE PATH TO ZERO WASTE
+        </div>
+        <h1 class="hero-title">
+          Redefining the<br><span class="text-gradient">Cycle of Nature</span>
+        </h1>
+        <p class="hero-desc" style="font-size: 1.15rem; line-height: 1.75; max-width: 620px; margin: 0 auto 2rem; color: var(--text-secondary); hyphens: none; text-wrap: balance; word-break: keep-all;">
+          Sackhe Technologies is leading the transition to safe, clean, and sustainable waste lifecycle management through advanced emission-controlled incineration systems.
+        </p>
+        <div class="hero-actions" style="display: flex; justify-content: center; gap: 1rem; align-items: center;">
+          <a href="#/products" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Explore Solutions</a>
+          <a href="#/contact" class="btn btn-secondary" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Talk to Experts</a>
+        </div>
+        <div class="scroll-hint">
+          <span></span>
+          Scroll to Discover
+        </div>
+      </section>
+
+      <!-- Pitch section -->
+      <section class="section-padding container">
+        <div class="innovation-grid">
+          <div class="glass-card">
+            <span class="badge">INNOVATION</span>
+            <h2 class="section-title text-gradient">What Makes It Better</h2>
+            <p class="section-desc" style="font-size: 1.1rem; line-height: 1.8; margin-top: 1rem;">
+              Our proprietary thermal emission control cycle ensures 100% smoke-free operation. Every component of our waste disposal and recycling ecosystem is engineered to support community hygiene while maintaining a zero-carbon footprint profile.
+            </p>
+          </div>
+          <div style="display: flex; justify-content: center;">
+            <div class="pad-render-container" style="width: 280px; height: 280px;">
+              <div class="pad-render" style="background: none; border-radius: 24px; border: 1px solid var(--border-glass-hover); overflow: hidden; animation: none; transform: none;">
+                <img src="innovation_tech.webp" alt="Sustainable Holographic Leaf Mesh Network" loading="lazy" decoding="async" width="280" height="280" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div class="pad-glow" style="width: 320px; height: 320px;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Supported By section -->
+      <section class="supporters-section">
+        <div class="container">
+          <h3 class="supporters-heading">SUPPORTED BY</h3>
+          <div class="supporters-grid">
+            <div class="supporter-card">
+              <div class="supporter-logo">
+                <img src="kg_reddy.webp" alt="KG Reddy College of Engineering & Technology" width="119" height="119" loading="lazy" decoding="async">
+              </div>
+              <span class="supporter-name">KG REDDY<br>COLLEGE OF<br>ENGINEERING &<br>TECHNOLOGY</span>
+              <div class="supporter-socials">
+                <a href="https://www.linkedin.com/school/kg-reddy-college-of-engineering-and-technology/?originalSubdomain=in" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="KG Reddy LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="https://www.instagram.com/kgrcet/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="KG Reddy Instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="supporter-card">
+              <div class="supporter-logo">
+                <img src="srix.webp" alt="SRIX Innovation Cell" width="119" height="119" loading="lazy" decoding="async">
+              </div>
+              <span class="supporter-name">SRIX<br>INNOVATION<br>CELL</span>
+              <div class="supporter-socials">
+                <a href="https://www.linkedin.com/company/srixinnovationexchange/?originalSubdomain=in" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="SRIX LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="https://www.instagram.com/srixwarangal/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="SRIX Instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="supporter-card">
+              <div class="supporter-logo">
+                <img src="kase.webp" alt="KASE" width="119" height="119" loading="lazy" decoding="async">
+              </div>
+              <span class="supporter-name">KASE</span>
+              <div class="supporter-socials">
+                <a href="https://www.linkedin.com/company/kase-accelerator/" target="_blank" class="supporter-social-link" title="LinkedIn" aria-label="KASE LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="https://www.instagram.com/kase.accelerator/" target="_blank" class="supporter-social-link" title="Instagram" aria-label="KASE Instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products catalog snippet -->
+      <section class="section-padding container">
+        <div class="section-header">
+          <span class="badge">Ecosystem</span>
+          <h2 class="section-title">Our Products</h2>
+          <p class="section-desc">Sustainable hardware and material innovations resolving community waste challenges.</p>
+          <a href="#/products" class="btn btn-secondary" style="margin-top: 1.5rem;">Explore Full Catalog</a>
+        </div>
+        
+        <div class="products-grid">
+          <!-- Incinerator -->
+          <div class="glass-card product-card">
+            <div class="product-card-img-wrapper">
+              <span class="product-status status-available">Available</span>
+              <img src="home_view2.webp" alt="Smokeless Cycle Menstrual Waste Incinerator" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
+            </div>
+            <div class="product-card-body">
+              <h3 class="product-card-title">Non-Toxic Emission Cycle – Menstrual Waste Incinerator</h3>
+              <p class="product-card-price">₹64,949 /-</p>
+              <p class="product-card-desc">Sustainable sanitary waste disposal solution designed for safe and hygienic management of menstrual waste.</p>
+              <div class="product-card-sectors">
+                <span class="sector-tag">Schools</span>
+                <span class="sector-tag">Hospitals</span>
+                <span class="sector-tag">Corporate Offices</span>
+              </div>
+              <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+            </div>
+          </div>
+          
+          <!-- Solid Waste -->
+          <div class="glass-card product-card">
+            <div class="product-card-img-wrapper">
+              <span class="product-status status-soon">Pre-order</span>
+              <img src="solid_waste_system.webp" alt="Solid Waste Management System" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
+            </div>
+            <div class="product-card-body">
+              <h3 class="product-card-title">Solid Waste Management System</h3>
+              <p class="product-card-price">Custom Quote</p>
+              <p class="product-card-desc">Comprehensive end-to-end solution for organized waste handling and processing.</p>
+              <div class="product-card-sectors">
+                <span class="sector-tag">Municipalities</span>
+                <span class="sector-tag">Campuses</span>
+                <span class="sector-tag">Apartments</span>
+              </div>
+              <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+            </div>
+          </div>
+
+          <!-- Eco Pads -->
+          <div class="glass-card product-card">
+            <div class="product-card-img-wrapper">
+              <span class="product-status status-innovation">Eco Innovation</span>
+              <img src="premium_pad.webp" alt="Eco-Friendly Biodegradable Sanitary Pads" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
+            </div>
+            <div class="product-card-body">
+              <h3 class="product-card-title">Eco-Friendly Biodegradable Pads</h3>
+              <p class="product-card-price">Pre-ordering</p>
+              <p class="product-card-desc">Biodegradable and sustainable sanitary pads prioritizing comfort and the environment.</p>
+              <div class="product-card-sectors">
+                <span class="sector-tag">Organic Cotton</span>
+                <span class="sector-tag">Zero Plastics</span>
+                <span class="sector-tag">Rural Health</span>
+              </div>
+              <a href="#/products" class="btn btn-secondary product-card-btn">Learn More</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pitch section 3 -->
+      <section class="section-padding container" style="text-align: center;">
+        <div class="glass-card cta-block">
+          <h2 class="cta-title">Zero Waste. Future Ready.</h2>
+          <p class="cta-desc">Join Sackhe Technologies in implementing emission-controlled solutions across communities.</p>
+          <div class="cta-actions">
+            <a href="#/products" class="btn btn-primary">Explore Solutions</a>
+            <a href="#/contact" class="btn btn-secondary">Talk to Experts</a>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- Toast notification outlet -->
@@ -102,7 +279,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="#/" class="footer-logo" aria-label="Sackhe Technologies Home">
-            <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="footer-logo-img">
+            <img src="sackhelogo.webp" alt="Sackhe Technologies Pvt Ltd" class="footer-logo-img" width="104" height="52" loading="lazy" decoding="async">
           </a>
           <p class="footer-desc">Leading the way in sustainable waste management solutions for a cleaner, healthier future.</p>
           <div class="footer-socials">
@@ -190,7 +367,7 @@
         <div style="display: flex; justify-content: center;">
           <div class="pad-render-container" style="width: 280px; height: 280px;">
             <div class="pad-render" style="background: none; border-radius: 24px; border: 1px solid var(--border-glass-hover); overflow: hidden; animation: none; transform: none;">
-              <img src="innovation_tech.jpg" alt="Sustainable Holographic Leaf Mesh Network" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
+              <img src="innovation_tech.webp" alt="Sustainable Holographic Leaf Mesh Network" loading="lazy" decoding="async" width="280" height="280" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="pad-glow" style="width: 320px; height: 320px;"></div>
           </div>
@@ -205,7 +382,7 @@
         <div class="supporters-grid">
           <div class="supporter-card">
             <div class="supporter-logo">
-              <img src="kg_reddy.webp" alt="KG Reddy College of Engineering & Technology" loading="lazy" decoding="async">
+              <img src="kg_reddy.webp" alt="KG Reddy College of Engineering & Technology" width="119" height="119" loading="lazy" decoding="async">
             </div>
             <span class="supporter-name">KG REDDY<br>COLLEGE OF<br>ENGINEERING &<br>TECHNOLOGY</span>
             <div class="supporter-socials">
@@ -220,7 +397,7 @@
 
           <div class="supporter-card">
             <div class="supporter-logo">
-              <img src="srix.webp" alt="SRIX Innovation Cell" loading="lazy" decoding="async">
+              <img src="srix.webp" alt="SRIX Innovation Cell" width="119" height="119" loading="lazy" decoding="async">
             </div>
             <span class="supporter-name">SRIX<br>INNOVATION<br>CELL</span>
             <div class="supporter-socials">
@@ -235,7 +412,7 @@
 
           <div class="supporter-card">
             <div class="supporter-logo">
-              <img src="kase.webp" alt="KASE" loading="lazy" decoding="async">
+              <img src="kase.webp" alt="KASE" width="119" height="119" loading="lazy" decoding="async">
             </div>
             <span class="supporter-name">KASE</span>
             <div class="supporter-socials">
@@ -265,7 +442,7 @@
         <div class="glass-card product-card">
           <div class="product-card-img-wrapper">
             <span class="product-status status-available">Available</span>
-            <img src="home_view2.webp" alt="Smokeless Cycle Menstrual Waste Incinerator" loading="lazy" decoding="async" class="product-card-img">
+            <img src="home_view2.webp" alt="Smokeless Cycle Menstrual Waste Incinerator" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
           </div>
           <div class="product-card-body">
             <h3 class="product-card-title">Non-Toxic Emission Cycle – Menstrual Waste Incinerator</h3>
@@ -284,7 +461,7 @@
         <div class="glass-card product-card">
           <div class="product-card-img-wrapper">
             <span class="product-status status-soon">Pre-order</span>
-            <img src="solid_waste_system.webp" alt="Solid Waste Management System" loading="lazy" decoding="async" class="product-card-img">
+            <img src="solid_waste_system.webp" alt="Solid Waste Management System" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
           </div>
           <div class="product-card-body">
             <h3 class="product-card-title">Solid Waste Management System</h3>
@@ -303,7 +480,7 @@
         <div class="glass-card product-card">
           <div class="product-card-img-wrapper">
             <span class="product-status status-innovation">Eco Innovation</span>
-            <img src="premium_pad.webp" alt="Eco-Friendly Biodegradable Sanitary Pads" loading="lazy" decoding="async" class="product-card-img">
+            <img src="premium_pad.webp" alt="Eco-Friendly Biodegradable Sanitary Pads" width="340" height="220" loading="lazy" decoding="async" class="product-card-img">
           </div>
           <div class="product-card-body">
             <h3 class="product-card-title">Eco-Friendly Biodegradable Pads</h3>
