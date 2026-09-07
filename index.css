@@ -2415,6 +2415,10 @@ h6 {
     border-left-color: var(--secondary);
   }
 
+  .toast-error {
+    border-left-color: #ef4444;
+  }
+
   @keyframes toast-slide-in {
     to {
       transform: translateY(0);

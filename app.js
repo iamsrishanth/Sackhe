@@ -1,20 +1,75 @@
 // Sackhe Technologies - SPA Router & App Logic
 
+// Initial Users Store (Admin vs Normal User)
+const INITIAL_USERS = [
+  {
+    name: 'Admin User',
+    email: 'admin@sackhe.com',
+    role: 'admin',
+    org: 'Sackhe Technologies',
+    phone: '+91 73372 38466'
+  },
+  {
+    name: 'Standard User',
+    email: 'user@example.com',
+    role: 'user',
+    org: 'Institutional Partner',
+    phone: '+91 98765 43210'
+  }
+];
+
+function getUsers() {
+  try {
+    const raw = localStorage.getItem('sackhe_users');
+    if (!raw) {
+      localStorage.setItem('sackhe_users', JSON.stringify(INITIAL_USERS));
+      return INITIAL_USERS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_USERS;
+  } catch (e) {
+    return INITIAL_USERS;
+  }
+}
+
+function saveUsers(users) {
+  try {
+    localStorage.setItem('sackhe_users', JSON.stringify(users));
+  } catch (e) {}
+}
+
+function findUserByEmail(email) {
+  if (!email) return null;
+  const users = getUsers();
+  return users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
+}
+
 // Initial Auth State Helper Functions
 function getCurrentUser() {
   try {
     const raw = localStorage.getItem('sackhe_auth_user');
     if (!raw) return null;
+    let parsed = null;
     if (raw.startsWith('{')) {
-      return JSON.parse(raw);
+      parsed = JSON.parse(raw);
     }
-    const isAdmin = raw.toLowerCase().includes('admin');
+    if (parsed && parsed.email) {
+      // Re-verify against user store so stored role strictly reflects authoritative role
+      const matched = findUserByEmail(parsed.email);
+      if (matched) {
+        return { ...parsed, role: matched.role };
+      }
+      return parsed;
+    }
+    // Fallback if stored as simple email/string
+    const matched = findUserByEmail(raw);
+    if (matched) return matched;
     return {
-      name: isAdmin ? 'Admin User' : raw,
-      email: raw.includes('@') ? raw : (isAdmin ? 'admin@sackhe.com' : 'user@example.com'),
-      role: isAdmin ? 'admin' : 'user',
-      org: isAdmin ? 'Sackhe Technologies' : 'Institutional Partner',
-      phone: '+91 73372 38466'
+      name: raw.includes('@') ? raw.split('@')[0] : raw,
+      email: raw.includes('@') ? raw : `${raw}@example.com`,
+      role: 'user',
+      org: 'Institutional Partner',
+      phone: ''
     };
   } catch (e) {
     return null;
@@ -308,11 +363,14 @@ function showToast(message, type = 'default') {
   if (!container) return;
 
   const toast = document.createElement('div');
-  toast.className = `toast ${type === 'success' ? 'toast-success' : ''}`;
+  const typeClass = type === 'success' ? 'toast-success' : (type === 'error' ? 'toast-error' : '');
+  toast.className = `toast ${typeClass}`.trim();
   
   const icon = type === 'success' 
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`
-    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+    : (type === 'error'
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`);
 
   toast.innerHTML = `${icon}<span>${message}</span>`;
   container.appendChild(toast);
@@ -364,10 +422,15 @@ function updateAuthUI() {
   const user = getCurrentUser();
   const userButton = document.getElementById('user-auth-btn');
   const adminNav = document.getElementById('nav-admin-link');
+  const footerAdmin = document.getElementById('footer-admin-link');
 
-  // Always keep admin navbar pill visible
+  // Show admin links ONLY for authenticated users with role === 'admin'
+  const isAdmin = Boolean(user && user.role === 'admin');
   if (adminNav) {
-    adminNav.style.display = 'inline-flex';
+    adminNav.style.display = isAdmin ? 'inline-flex' : 'none';
+  }
+  if (footerAdmin) {
+    footerAdmin.style.display = isAdmin ? 'inline-block' : 'none';
   }
 
   if (!userButton) return;
@@ -417,17 +480,32 @@ function handleGoogleSignIn() {
   }
 
   setTimeout(() => {
-    const googleUser = {
-      name: 'Google User',
-      email: 'user@gmail.com',
-      role: 'user',
-      org: 'Institutional Partner',
-      phone: '+91 98765 43210'
-    };
+    let googleUser = findUserByEmail('user@gmail.com');
+    if (!googleUser) {
+      googleUser = {
+        name: 'Google User',
+        email: 'user@gmail.com',
+        role: 'user',
+        org: 'Institutional Partner',
+        phone: '+91 98765 43210'
+      };
+      const allUsers = getUsers();
+      allUsers.push(googleUser);
+      saveUsers(allUsers);
+    }
     setCurrentUser(googleUser);
     toggleAuthModal(false);
     showToast('Signed in successfully with Google!', 'success');
     
+    // Role-based redirect
+    if (googleUser.role === 'admin') {
+      window.location.hash = '#/admin';
+    } else {
+      if (window.location.hash === '#/admin') {
+        window.location.hash = '#/';
+      }
+    }
+
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = `
@@ -460,29 +538,22 @@ function router() {
   const user = getCurrentUser();
   const queryParams = new URLSearchParams(queryString || '');
 
-  // Seamless Access Handlers (Ensure Admin and Profile always open)
+  // Authorization and Authentication route guards
   if (route.requiresAdmin) {
     if (!user || user.role !== 'admin') {
-      const adminUser = {
-        name: 'Admin User',
-        email: 'admin@sackhe.com',
-        role: 'admin',
-        org: 'Sackhe Technologies',
-        phone: '+91 73372 38466'
-      };
-      setCurrentUser(adminUser);
+      showToast('Access denied. Administrator privileges required.', 'error');
+      window.location.hash = '#/';
+      return;
     }
   }
 
-  if (route.requiresAuth && !user) {
-    const defaultUser = {
-      name: 'Admin User',
-      email: 'admin@sackhe.com',
-      role: 'admin',
-      org: 'Sackhe Technologies',
-      phone: '+91 73372 38466'
-    };
-    setCurrentUser(defaultUser);
+  if (route.requiresAuth) {
+    if (!user) {
+      showToast('Please sign in to access this page.', 'default');
+      toggleAuthModal(true);
+      window.location.hash = '#/';
+      return;
+    }
   }
 
   const template = document.getElementById(route.templateId);
@@ -1001,10 +1072,10 @@ function setupProfilePage() {
   const ordersTableBody = document.getElementById('user-orders-table-body');
   if (ordersTableBody) {
     const allOrders = getOrders();
-    // Show orders matching user's email, or all orders if admin/demo
+    // Show orders matching user's email, or all orders if admin
     const displayOrders = user.role === 'admin' 
       ? allOrders 
-      : allOrders.filter(o => o.email.toLowerCase() === user.email.toLowerCase() || o.email === 'admin@sackhe.com');
+      : allOrders.filter(o => o.email.toLowerCase() === user.email.toLowerCase());
 
     if (displayOrders.length === 0) {
       ordersTableBody.innerHTML = `
@@ -1345,23 +1416,35 @@ window.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('login-email')?.value.trim();
       if (!email) return;
 
-      const isAdmin = email.toLowerCase().includes('admin');
-      const user = {
-        name: isAdmin ? 'Admin User' : email.split('@')[0].toUpperCase(),
-        email: email,
-        role: isAdmin ? 'admin' : 'user',
-        org: isAdmin ? 'Sackhe Technologies' : 'Institutional Partner',
-        phone: '+91 73372 38466'
-      };
+      // Look up authenticated user from user store or determine role
+      let user = findUserByEmail(email);
+      if (!user) {
+        // Fallback for new sign-in
+        user = {
+          name: email.split('@')[0].toUpperCase(),
+          email: email,
+          role: 'user',
+          org: 'Institutional Partner',
+          phone: '+91 73372 38466'
+        };
+        const allUsers = getUsers();
+        allUsers.push(user);
+        saveUsers(allUsers);
+      }
 
       setCurrentUser(user);
       toggleAuthModal(false);
       showToast(`Welcome back, ${user.name}!`, 'success');
 
-      if (isAdmin) {
+      // Role-based redirection:
+      // 1. Authorized admin -> Open ONLY the Admin Dashboard (#/admin)
+      // 2. Normal user -> Keep on existing website experience (do NOT open Admin Dashboard)
+      if (user.role === 'admin') {
         window.location.hash = '#/admin';
       } else {
-        window.location.hash = '#/profile';
+        if (window.location.hash === '#/admin') {
+          window.location.hash = '#/';
+        }
       }
     });
   }
@@ -1375,19 +1458,32 @@ window.addEventListener('DOMContentLoaded', () => {
       const org = document.getElementById('register-org')?.value.trim();
       if (!email) return;
 
-      const isAdmin = email.toLowerCase().includes('admin');
-      const user = {
-        name: name || 'Valued Partner',
-        email: email,
-        role: isAdmin ? 'admin' : 'user',
-        org: org || 'Institutional Partner',
-        phone: '+91 73372 38466'
-      };
+      let user = findUserByEmail(email);
+      if (!user) {
+        user = {
+          name: name || 'Valued Partner',
+          email: email,
+          role: 'user',
+          org: org || 'Institutional Partner',
+          phone: '+91 73372 38466'
+        };
+        const allUsers = getUsers();
+        allUsers.push(user);
+        saveUsers(allUsers);
+      }
 
       setCurrentUser(user);
       toggleAuthModal(false);
       showToast('Account registered successfully!', 'success');
-      window.location.hash = '#/profile';
+
+      // Role-based redirection
+      if (user.role === 'admin') {
+        window.location.hash = '#/admin';
+      } else {
+        if (window.location.hash === '#/admin') {
+          window.location.hash = '#/';
+        }
+      }
     });
   }
 
