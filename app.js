@@ -344,17 +344,64 @@ function renderCartDrawer() {
 window.updateCartItemQty = updateCartItemQty;
 window.removeCartItem = removeCartItem;
 
-// Routing Map
+// Routing Map with Full Dynamic SEO Metadata
 const routes = {
-  '/': { templateId: 'page-home', title: 'Home - Sackhe Technologies' },
-  '/about': { templateId: 'page-about', title: 'About Us - Sackhe Technologies' },
-  '/products': { templateId: 'page-products', title: 'Products - Sackhe Technologies' },
-  '/services': { templateId: 'page-services', title: 'Services - Sackhe Technologies' },
-  '/initiatives': { templateId: 'page-initiatives', title: 'Initiatives - Sackhe Technologies' },
-  '/contact': { templateId: 'page-contact', title: 'Contact Us - Sackhe Technologies' },
-  '/checkout': { templateId: 'page-checkout', title: 'Procurement & Checkout - Sackhe Technologies' },
-  '/profile': { templateId: 'page-profile', title: 'My Account & History - Sackhe Technologies', requiresAuth: true },
-  '/admin': { templateId: 'page-admin', title: 'Admin Operations Console - Sackhe Technologies', requiresAdmin: true }
+  '/': {
+    templateId: 'page-home',
+    title: 'Sackhe Technologies - Sustainable Waste Management Solutions',
+    description: 'Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.',
+    canonical: 'https://sackhetechnologies.com/'
+  },
+  '/about': {
+    templateId: 'page-about',
+    title: 'About Us - Sackhe Technologies',
+    description: 'Discover the team, mission, and environmental engineering vision powering Sackhe Technologies in zero-waste sustainability.',
+    canonical: 'https://sackhetechnologies.com/#/about'
+  },
+  '/products': {
+    templateId: 'page-products',
+    title: 'Products & Hardware Catalog - Sackhe Technologies',
+    description: 'Explore our zero-waste institutional hardware catalog: smokeless incinerators, automated sanitary dispensers, and biodegradable consumables.',
+    canonical: 'https://sackhetechnologies.com/#/products'
+  },
+  '/services': {
+    templateId: 'page-services',
+    title: 'Services & Operations - Sackhe Technologies',
+    description: 'End-to-end sustainable operations, institutional waste audits, continuous servicing agreements, and community awareness campaigns.',
+    canonical: 'https://sackhetechnologies.com/#/services'
+  },
+  '/initiatives': {
+    templateId: 'page-initiatives',
+    title: 'Social Impact & Initiatives - Sackhe Technologies',
+    description: 'Empowering communities through sustainable menstrual hygiene initiatives, rural school installations, and environmental stewardship.',
+    canonical: 'https://sackhetechnologies.com/#/initiatives'
+  },
+  '/contact': {
+    templateId: 'page-contact',
+    title: 'Contact Us - Sackhe Technologies',
+    description: 'Connect with Sackhe Technologies environmental experts for institutional procurement, pilot deployments, and advisory.',
+    canonical: 'https://sackhetechnologies.com/#/contact'
+  },
+  '/checkout': {
+    templateId: 'page-checkout',
+    title: 'Procurement & Checkout - Sackhe Technologies',
+    description: 'Complete institutional requisition and procurement orders securely with Sackhe Technologies.',
+    canonical: 'https://sackhetechnologies.com/#/checkout'
+  },
+  '/profile': {
+    templateId: 'page-profile',
+    title: 'My Account & History - Sackhe Technologies',
+    description: 'Manage your organizational credentials, monitor recent orders, and oversee active deployments.',
+    canonical: 'https://sackhetechnologies.com/#/profile',
+    requiresAuth: true
+  },
+  '/admin': {
+    templateId: 'page-admin',
+    title: 'Admin Operations Console - Sackhe Technologies',
+    description: 'Oversee hardware procurements, process institutional orders, and review customer contact inquiries.',
+    canonical: 'https://sackhetechnologies.com/#/admin',
+    requiresAdmin: true
+  }
 };
 
 // Toast Notification System
@@ -565,6 +612,29 @@ function router() {
   }
   
   document.title = route.title;
+  
+  // Dynamic Route-Specific SEO
+  if (route.description) {
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', route.description);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', route.description);
+    const twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', route.description);
+  }
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', route.title);
+  const twTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twTitle) twTitle.setAttribute('content', route.title);
+
+  if (route.canonical) {
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.setAttribute('href', route.canonical);
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', route.canonical);
+    const twUrl = document.querySelector('meta[name="twitter:url"]');
+    if (twUrl) twUrl.setAttribute('content', route.canonical);
+  }
   
   // Update nav active link
   document.querySelectorAll('.nav-link').forEach(link => {
