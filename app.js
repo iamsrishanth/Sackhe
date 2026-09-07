@@ -400,6 +400,12 @@ function router() {
   };
 
   const currentView = container.firstElementChild;
+  if (currentView && currentView.getAttribute('data-route') === '/contact' && routePath === '/contact') {
+    const selectedProduct = queryParams.get('product') || '';
+    setupContactPage(selectedProduct);
+    return;
+  }
+
   if (currentView) {
     currentView.className = 'view-exit';
     setTimeout(renderNewPage, 180);
@@ -443,9 +449,16 @@ function setupProductsPage() {
     const titleEl = card.querySelector('.product-title');
     if (!titleEl) return;
     const prodName = titleEl.textContent.trim();
-    const actionLinks = card.querySelectorAll('.product-actions-group a');
+    const targetHash = `#/contact?product=${encodeURIComponent(prodName)}`;
+    
+    const actionLinks = card.querySelectorAll('.product-actions-group a, a.btn');
     actionLinks.forEach(link => {
-      link.href = `#/contact?product=${encodeURIComponent(prodName)}`;
+      link.href = targetHash;
+      link.setAttribute('data-product', prodName);
+      link.onclick = (e) => {
+        e.preventDefault();
+        window.location.hash = targetHash;
+      };
     });
   });
 }
@@ -480,7 +493,7 @@ function setupInitiativesPage() {
 }
 
 function setupContactPage(selectedProduct = '') {
-  // If not passed directly, parse from hash query string
+  // If not passed directly, parse from hash query string or search params
   if (!selectedProduct) {
     const fullHash = (window.location.hash || '').substring(1);
     const [, queryString] = fullHash.split('?');
@@ -488,6 +501,10 @@ function setupContactPage(selectedProduct = '') {
       const params = new URLSearchParams(queryString);
       selectedProduct = params.get('product') || params.get('item') || '';
     }
+  }
+  if (!selectedProduct && window.location.search) {
+    const searchParams = new URLSearchParams(window.location.search);
+    selectedProduct = searchParams.get('product') || searchParams.get('item') || '';
   }
 
   const contactForm = document.getElementById('contact-inquiry-form');
@@ -498,10 +515,13 @@ function setupContactPage(selectedProduct = '') {
   if (selectedProduct) {
     if (productInput) {
       productInput.value = selectedProduct;
+      productInput.classList.add('product-selected-highlight');
     }
-    if (messageInput && !messageInput.value) {
+    if (messageInput) {
       messageInput.value = `I am interested in ordering / inquiring about the "${selectedProduct}". Please provide detailed pricing, availability, and delivery timelines.`;
     }
+  } else if (productInput) {
+    productInput.classList.remove('product-selected-highlight');
   }
 
   if (!contactForm) return;
