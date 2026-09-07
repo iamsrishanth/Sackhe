@@ -1981,6 +1981,13 @@ h6 {
     background-color: #ffffff;
   }
 
+  .contact-text-input.product-selected-highlight {
+    border-color: #9333ea;
+    background-color: #fdf4ff;
+    font-weight: 600;
+    color: #581c87;
+  }
+
   .contact-textarea-input {
     resize: vertical;
     min-height: 140px;
