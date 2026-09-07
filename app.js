@@ -1,7 +1,138 @@
 // Sackhe Technologies - SPA Router & App Logic
 
-// Initial Auth State
-let currentUser = localStorage.getItem('sackhe_auth_user') || null;
+// Initial Auth State Helper Functions
+function getCurrentUser() {
+  try {
+    const raw = localStorage.getItem('sackhe_auth_user');
+    if (!raw) return null;
+    if (raw.startsWith('{')) {
+      return JSON.parse(raw);
+    }
+    const isAdmin = raw.toLowerCase().includes('admin');
+    return {
+      name: isAdmin ? 'Admin User' : raw,
+      email: raw.includes('@') ? raw : (isAdmin ? 'admin@sackhe.com' : 'user@example.com'),
+      role: isAdmin ? 'admin' : 'user',
+      org: isAdmin ? 'Sackhe Technologies' : 'Institutional Partner',
+      phone: '+91 73372 38466'
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function setCurrentUser(user) {
+  if (!user) {
+    localStorage.removeItem('sackhe_auth_user');
+  } else {
+    localStorage.setItem('sackhe_auth_user', JSON.stringify(user));
+  }
+  updateAuthUI();
+}
+
+// Initial Mock Data Sources
+const INITIAL_ORDERS = [
+  {
+    _id: 'ord-883921',
+    email: 'kavitha.reddy@hyderabadinstitutes.edu.in',
+    client_name: 'Kavitha Reddy (Principal)',
+    product_name: 'Dual-Chamber Eco Incinerator 1500W',
+    quantity: 2,
+    total_price: 129898,
+    user_bank_name: 'HDFC Bank - Current A/C',
+    transaction_ref: 'HDFC9088310023X',
+    status: 'pending',
+    created_at: new Date(Date.now() - 3600000 * 24 * 2).toISOString()
+  },
+  {
+    _id: 'ord-774019',
+    email: 'procurement@telanganahospital.gov.in',
+    client_name: 'Dr. R. V. Rao',
+    product_name: 'Biodegradable Sanitary Pads - 500pk Institutional Box',
+    quantity: 10,
+    total_price: 34500,
+    user_bank_name: 'State Bank of India',
+    transaction_ref: 'SBIIN7811902401',
+    status: 'verified',
+    created_at: new Date(Date.now() - 3600000 * 24 * 5).toISOString()
+  },
+  {
+    _id: 'ord-665201',
+    email: 'admin@sackhe.com',
+    client_name: 'Sackhe Operations Pilot',
+    product_name: 'Smart Automated Dispenser Model S-2',
+    quantity: 1,
+    total_price: 18500,
+    user_bank_name: 'ICICI Bank Corporate',
+    transaction_ref: 'ICIC00018829910',
+    status: 'verified',
+    created_at: new Date(Date.now() - 3600000 * 24 * 9).toISOString()
+  }
+];
+
+const INITIAL_LEADS = [
+  {
+    _id: 'lead-101',
+    name: 'Suresh Kumar',
+    email: 'suresh.k@greenindiafoundation.org',
+    phone: '+91 98490 11223',
+    organization: 'Green India Foundation',
+    message: 'We are interested in installing 12 emission-controlled incinerators across rural government residential colleges.',
+    created_at: new Date(Date.now() - 3600000 * 18).toISOString()
+  },
+  {
+    _id: 'lead-102',
+    name: 'Priya Sharma',
+    email: 'priya.s@delhiedu.org',
+    phone: '+91 98111 44556',
+    organization: 'Delhi Model Schools Network',
+    message: 'Seeking a formal quote for menstrual hygiene waste management demo & continuous servicing agreement.',
+    created_at: new Date(Date.now() - 3600000 * 42).toISOString()
+  },
+  {
+    _id: 'lead-103',
+    name: 'Ananya Deshmukh',
+    email: 'ananya@csr-reliance.com',
+    phone: '+91 97234 56789',
+    organization: 'Reliance Foundation CSR',
+    message: 'Looking to partner under the "Cycle of Change" initiative to sponsor 25 community dispensers in Telangana.',
+    created_at: new Date(Date.now() - 3600000 * 72).toISOString()
+  }
+];
+
+function getOrders() {
+  try {
+    const data = localStorage.getItem('sackhe_orders');
+    if (!data) {
+      localStorage.setItem('sackhe_orders', JSON.stringify(INITIAL_ORDERS));
+      return INITIAL_ORDERS;
+    }
+    return JSON.parse(data);
+  } catch (e) {
+    return INITIAL_ORDERS;
+  }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem('sackhe_orders', JSON.stringify(orders));
+}
+
+function getLeads() {
+  try {
+    const data = localStorage.getItem('sackhe_leads');
+    if (!data) {
+      localStorage.setItem('sackhe_leads', JSON.stringify(INITIAL_LEADS));
+      return INITIAL_LEADS;
+    }
+    return JSON.parse(data);
+  } catch (e) {
+    return INITIAL_LEADS;
+  }
+}
+
+function saveLeads(leads) {
+  localStorage.setItem('sackhe_leads', JSON.stringify(leads));
+}
 
 // Routing Map
 const routes = {
@@ -10,10 +141,12 @@ const routes = {
   '/products': { templateId: 'page-products', title: 'Products - Sackhe Technologies' },
   '/services': { templateId: 'page-services', title: 'Services - Sackhe Technologies' },
   '/initiatives': { templateId: 'page-initiatives', title: 'Initiatives - Sackhe Technologies' },
-  '/contact': { templateId: 'page-contact', title: 'Contact Us - Sackhe Technologies' }
+  '/contact': { templateId: 'page-contact', title: 'Contact Us - Sackhe Technologies' },
+  '/profile': { templateId: 'page-profile', title: 'My Account & History - Sackhe Technologies', requiresAuth: true },
+  '/admin': { templateId: 'page-admin', title: 'Admin Operations Console - Sackhe Technologies', requiresAdmin: true }
 };
 
-// Toast notification system
+// Toast Notification System
 function showToast(message, type = 'default') {
   const container = document.getElementById('toast-container');
   if (!container) return;
@@ -21,7 +154,6 @@ function showToast(message, type = 'default') {
   const toast = document.createElement('div');
   toast.className = `toast ${type === 'success' ? 'toast-success' : ''}`;
   
-  // Icon based on type
   const icon = type === 'success' 
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`
     : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
@@ -29,11 +161,10 @@ function showToast(message, type = 'default') {
   toast.innerHTML = `${icon}<span>${message}</span>`;
   container.appendChild(toast);
 
-  // Auto remove toast
   setTimeout(() => {
     toast.style.animation = 'toast-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
     setTimeout(() => toast.remove(), 400);
-  }, 3000);
+  }, 3200);
 }
 
 // Open/Close Auth Modal
@@ -51,15 +182,55 @@ function toggleAuthModal(show) {
 }
 window.toggleAuthModal = toggleAuthModal;
 
-// Update Auth UI elements
+// Auth Tab Switching
+function switchAuthTab(tab) {
+  const signinBtn = document.getElementById('tab-btn-signin');
+  const regBtn = document.getElementById('tab-btn-register');
+  const signinPane = document.getElementById('auth-signin-pane');
+  const regPane = document.getElementById('auth-register-pane');
+  
+  if (tab === 'signin') {
+    signinBtn?.classList.add('active');
+    regBtn?.classList.remove('active');
+    if (signinPane) signinPane.style.display = 'block';
+    if (regPane) regPane.style.display = 'none';
+  } else {
+    regBtn?.classList.add('active');
+    signinBtn?.classList.remove('active');
+    if (signinPane) signinPane.style.display = 'none';
+    if (regPane) regPane.style.display = 'block';
+  }
+}
+window.switchAuthTab = switchAuthTab;
+
+// Update Auth UI Elements
 function updateAuthUI() {
+  const user = getCurrentUser();
   const userButton = document.getElementById('user-auth-btn');
+  const adminNav = document.getElementById('nav-admin-link');
+
+  // Toggle admin navbar pill
+  if (adminNav) {
+    if (user && user.role === 'admin') {
+      adminNav.style.display = 'inline-flex';
+    } else {
+      adminNav.style.display = 'none';
+    }
+  }
+
   if (!userButton) return;
 
-  if (currentUser) {
+  if (user) {
+    const initials = user.name
+      ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+      : 'U';
+
     userButton.innerHTML = `
-      <div class="user-profile-nav" style="display: flex; align-items: center; gap: 0.6rem;">
-        <span style="font-size: 0.88rem; font-weight: 600; color: #111827;">${currentUser}</span>
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <a href="#/profile" class="user-avatar-badge" title="View Profile">
+          <span class="user-avatar-circle">${initials}</span>
+          <span class="user-nav-name">${user.name}</span>
+        </a>
         <button id="signout-trigger" class="btn-signout" title="Sign Out">Sign Out</button>
       </div>
     `;
@@ -69,10 +240,9 @@ function updateAuthUI() {
     if (signOutBtn) {
       signOutBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        currentUser = null;
-        localStorage.removeItem('sackhe_auth_user');
-        updateAuthUI();
+        setCurrentUser(null);
         showToast('Successfully signed out.', 'default');
+        window.location.hash = '#/';
       });
     }
   } else {
@@ -95,10 +265,14 @@ function handleGoogleSignIn() {
   }
 
   setTimeout(() => {
-    currentUser = 'Google User';
-    localStorage.setItem('sackhe_auth_user', currentUser);
-    
-    updateAuthUI();
+    const googleUser = {
+      name: 'Google User',
+      email: 'user@gmail.com',
+      role: 'user',
+      org: 'Institutional Partner',
+      phone: '+91 98765 43210'
+    };
+    setCurrentUser(googleUser);
     toggleAuthModal(false);
     showToast('Signed in successfully with Google!', 'success');
     
@@ -114,7 +288,7 @@ function handleGoogleSignIn() {
         <span>Sign in with Google</span>
       `;
     }
-  }, 1000);
+  }, 900);
 }
 window.handleGoogleSignIn = handleGoogleSignIn;
 
@@ -124,26 +298,47 @@ let initialRouteChecked = false;
 function router() {
   let hash = window.location.hash;
   
-  // Normalize empty or landing routes
   if (!hash || hash === '#') {
     hash = '#/';
   }
   
-  const routePath = hash.substring(1); // removes '#'
-  const route = routes[routePath] || routes['/']; // fallback to home
-  
+  const routePath = hash.substring(1);
+  const route = routes[routePath] || routes['/'];
+  const user = getCurrentUser();
+
+  // Route Guards
+  if (route.requiresAuth && !user) {
+    toggleAuthModal(true);
+    showToast('Please sign in to access your profile account.', 'default');
+    window.location.hash = '#/';
+    return;
+  }
+
+  if (route.requiresAdmin) {
+    if (!user) {
+      toggleAuthModal(true);
+      showToast('Admin access required. Please sign in as admin.', 'default');
+      window.location.hash = '#/';
+      return;
+    }
+    if (user.role !== 'admin') {
+      showToast('Access denied. Administrator privileges required.', 'default');
+      window.location.hash = '#/';
+      return;
+    }
+  }
+
   const template = document.getElementById(route.templateId);
   const container = document.getElementById('app-view');
   
   if (!template || !container) {
-    console.error('Template or target container not found');
+    console.error('Template or target container not found for', route.templateId);
     return;
   }
   
-  // Set title
   document.title = route.title;
   
-  // Update header active state
+  // Update nav active link
   document.querySelectorAll('.nav-link').forEach(link => {
     link.classList.remove('active');
     if (link.getAttribute('href') === hash) {
@@ -151,7 +346,7 @@ function router() {
     }
   });
   
-  // Close mobile drawer on route change
+  // Close mobile drawer
   const navMenu = document.getElementById('nav-menu');
   const menuToggle = document.getElementById('menu-toggle');
   if (navMenu && menuToggle) {
@@ -159,7 +354,7 @@ function router() {
     menuToggle.classList.remove('open');
   }
 
-  // If initial load is home and pre-rendered view already exists in DOM
+  // Pre-rendered home optimization
   if (!initialRouteChecked) {
     initialRouteChecked = true;
     if (routePath === '/' && container.querySelector('[data-route="/"]')) {
@@ -179,10 +374,9 @@ function router() {
     wrapper.appendChild(clone);
     container.appendChild(wrapper);
     
-    // Scroll to top
     window.scrollTo(0, 0);
     
-    // Trigger page-specific logic
+    // Page handlers
     if (routePath === '/') {
       setupHomePage();
     } else if (routePath === '/about') {
@@ -193,27 +387,28 @@ function router() {
       setupInitiativesPage();
     } else if (routePath === '/contact') {
       setupContactPage();
+    } else if (routePath === '/profile') {
+      setupProfilePage();
+    } else if (routePath === '/admin') {
+      setupAdminPage();
     }
   };
 
   const currentView = container.firstElementChild;
   if (currentView) {
-    // Fade out / exit animation first
     currentView.className = 'view-exit';
-    setTimeout(renderNewPage, 200); // Wait for 200ms exit transition
+    setTimeout(renderNewPage, 180);
   } else {
-    // Immediate render on initial load
     renderNewPage();
   }
 }
 
 // Page Specific Handlers
 function setupHomePage() {
-  // Add quick specification click bindings if needed
+  // Quick specification click bindings if needed
 }
 
 function setupAboutPage() {
-  // Timeline animations on scroll (IntersectionObserver)
   const timelineItems = document.querySelectorAll('.timeline-item');
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries, observer) => {
@@ -237,11 +432,10 @@ function setupAboutPage() {
 }
 
 function setupServicesPage() {
-  // Add animation details or support triggers
+  // Support triggers
 }
 
 function setupInitiativesPage() {
-  // Dynamic stats counting effect
   const statNumbers = document.querySelectorAll('.stat-number');
   
   statNumbers.forEach(stat => {
@@ -250,8 +444,8 @@ function setupInitiativesPage() {
     const hasPlus = text.includes('+');
     
     let current = 0;
-    const duration = 1500; // ms
-    const stepTime = 30; // ms
+    const duration = 1500;
+    const stepTime = 30;
     const increment = Math.ceil(target / (duration / stepTime));
     
     const counter = setInterval(() => {
@@ -276,6 +470,11 @@ function setupContactPage() {
     const submitBtn = contactForm.querySelector('.contact-submit-button');
     const originalContent = submitBtn ? submitBtn.innerHTML : 'Send Message';
     
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const phoneInput = document.getElementById('contact-phone');
+    const messageInput = document.getElementById('contact-message');
+    
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
@@ -288,26 +487,406 @@ function setupContactPage() {
     }
 
     setTimeout(() => {
-      showToast('Thank you! Your message has been sent successfully. Our team will get in touch with you shortly.', 'success');
+      // Store lead in admin leads list
+      const leads = getLeads();
+      const newLead = {
+        _id: 'lead-' + Date.now().toString().slice(-4),
+        name: nameInput?.value || 'Interested Client',
+        email: emailInput?.value || 'client@example.com',
+        phone: phoneInput?.value || '+91 73372 38466',
+        organization: 'Direct Contact Portal',
+        message: messageInput?.value || 'Inquiry regarding Sackhe waste solutions.',
+        created_at: new Date().toISOString()
+      };
+      leads.unshift(newLead);
+      saveLeads(leads);
+
+      showToast('Thank you! Your message has been sent successfully. Our team will get in touch shortly.', 'success');
       contactForm.reset();
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalContent;
       }
-    }, 1000);
+    }, 900);
   });
 }
 
-// Theme toggle logic (Force Light Mode)
-function initTheme() {
-  document.documentElement.classList.remove('dark-mode');
-  localStorage.removeItem('sackhe_theme');
+// Profile Page Handler
+function setupProfilePage() {
+  const user = getCurrentUser();
+  if (!user) return;
+
+  // Identity Elements
+  const nameEl = document.getElementById('profile-user-name');
+  const emailEl = document.getElementById('profile-user-email');
+  const avatarEl = document.getElementById('profile-avatar-icon');
+  const orgEl = document.getElementById('profile-org-val');
+  const phoneEl = document.getElementById('profile-phone-val');
+  const roleBadgeContainer = document.getElementById('profile-role-badge-container');
+  const adminQuicklink = document.getElementById('admin-quicklink-card');
+
+  if (nameEl) nameEl.textContent = user.name;
+  if (emailEl) emailEl.textContent = user.email;
+  if (orgEl) orgEl.textContent = user.org || 'Institutional Partner';
+  if (phoneEl) phoneEl.textContent = user.phone || '+91 73372 38466';
+
+  const initials = user.name
+    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+    : 'U';
+  if (avatarEl) avatarEl.textContent = initials;
+
+  if (roleBadgeContainer) {
+    if (user.role === 'admin') {
+      roleBadgeContainer.innerHTML = `
+        <span class="profile-role-pill profile-role-admin">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Administrator
+        </span>
+      `;
+      if (adminQuicklink) adminQuicklink.style.display = 'block';
+    } else {
+      roleBadgeContainer.innerHTML = `
+        <span class="profile-role-pill profile-role-user">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          Partner Client
+        </span>
+      `;
+      if (adminQuicklink) adminQuicklink.style.display = 'none';
+    }
+  }
+
+  // Render Orders Table
+  const ordersTableBody = document.getElementById('user-orders-table-body');
+  if (ordersTableBody) {
+    const allOrders = getOrders();
+    // Show orders matching user's email, or all orders if admin/demo
+    const displayOrders = user.role === 'admin' 
+      ? allOrders 
+      : allOrders.filter(o => o.email.toLowerCase() === user.email.toLowerCase() || o.email === 'admin@sackhe.com');
+
+    if (displayOrders.length === 0) {
+      ordersTableBody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
+            No procurement orders found. Explore our <a href="#/products" style="color: var(--primary); font-weight: 700;">Products catalog</a> to make an initial requisition.
+          </td>
+        </tr>
+      `;
+    } else {
+      ordersTableBody.innerHTML = displayOrders.map(ord => `
+        <tr>
+          <td><span class="order-id-pill">${ord._id.toUpperCase()}</span></td>
+          <td>
+            <div style="font-weight: 700; color: var(--text-primary);">${ord.product_name}</div>
+            <div style="font-size: 0.76rem; color: var(--text-secondary);">${new Date(ord.created_at).toLocaleDateString()}</div>
+          </td>
+          <td style="font-weight: 700;">${ord.quantity} units</td>
+          <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price).toLocaleString()}</td>
+          <td>
+            <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
+              ${ord.status.toUpperCase()}
+            </span>
+          </td>
+          <td style="font-size: 0.8rem; font-family: monospace; color: var(--text-secondary);">
+            ${ord.transaction_ref || 'TRX-ONLINE'}
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  // Profile Edit Modal bindings
+  const editOverlay = document.getElementById('profile-edit-overlay');
+  const openEditBtn = document.getElementById('open-edit-profile-btn');
+  const closeEditBtn = document.getElementById('close-profile-modal');
+  const editForm = document.getElementById('profile-edit-form');
+  const editNameInput = document.getElementById('edit-profile-name');
+  const editOrgInput = document.getElementById('edit-profile-org');
+  const editPhoneInput = document.getElementById('edit-profile-phone');
+
+  if (openEditBtn && editOverlay) {
+    openEditBtn.addEventListener('click', () => {
+      if (editNameInput) editNameInput.value = user.name || '';
+      if (editOrgInput) editOrgInput.value = user.org || '';
+      if (editPhoneInput) editPhoneInput.value = user.phone || '';
+      editOverlay.classList.add('active');
+    });
+  }
+
+  if (closeEditBtn && editOverlay) {
+    closeEditBtn.addEventListener('click', () => {
+      editOverlay.classList.remove('active');
+    });
+  }
+
+  if (editForm && editOverlay) {
+    editForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const updatedUser = {
+        ...user,
+        name: editNameInput?.value.trim() || user.name,
+        org: editOrgInput?.value.trim() || user.org,
+        phone: editPhoneInput?.value.trim() || user.phone
+      };
+      setCurrentUser(updatedUser);
+      editOverlay.classList.remove('active');
+      showToast('Profile information updated successfully!', 'success');
+      setupProfilePage();
+    });
+  }
+
+  // Sign out button
+  const signOutBtn = document.getElementById('profile-signout-btn');
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', () => {
+      setCurrentUser(null);
+      showToast('Successfully signed out.', 'default');
+      window.location.hash = '#/';
+    });
+  }
+}
+
+// Admin Page Handler
+function setupAdminPage() {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'admin') return;
+
+  // Tabs
+  const tabs = document.querySelectorAll('.admin-nav-tab');
+  const ordersTab = document.getElementById('admin-tab-content-orders');
+  const leadsTab = document.getElementById('admin-tab-content-leads');
+  const settingsTab = document.getElementById('admin-tab-content-settings');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-admin-tab');
+
+      if (ordersTab) ordersTab.style.display = target === 'orders' ? 'block' : 'none';
+      if (leadsTab) leadsTab.style.display = target === 'leads' ? 'block' : 'none';
+      if (settingsTab) settingsTab.style.display = target === 'settings' ? 'block' : 'none';
+    });
+  });
+
+  // Refresh KPI and counters
+  function refreshKPIs() {
+    const orders = getOrders();
+    const leads = getLeads();
+
+    const verifiedOrders = orders.filter(o => o.status === 'verified');
+    const pendingOrders = orders.filter(o => o.status === 'pending');
+    const totalRev = verifiedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
+
+    const revEl = document.getElementById('admin-stat-revenue');
+    const ordersEl = document.getElementById('admin-stat-orders');
+    const leadsEl = document.getElementById('admin-stat-leads');
+    const ordersCountEl = document.getElementById('admin-orders-count');
+    const leadsCountEl = document.getElementById('admin-leads-count');
+
+    if (revEl) revEl.textContent = `₹${totalRev.toLocaleString()}`;
+    if (ordersEl) ordersEl.textContent = `${orders.length} Orders`;
+    if (leadsEl) leadsEl.textContent = `${leads.length} Inquiries`;
+    if (ordersCountEl) ordersCountEl.textContent = orders.length;
+    if (leadsCountEl) leadsCountEl.textContent = leads.length;
+  }
+
+  // Render Orders Table
+  let currentOrderFilter = 'all';
+
+  function renderAdminOrders() {
+    const ordersTableBody = document.getElementById('admin-orders-table-body');
+    if (!ordersTableBody) return;
+
+    const orders = getOrders();
+    const filtered = currentOrderFilter === 'all'
+      ? orders
+      : orders.filter(o => o.status === currentOrderFilter);
+
+    if (filtered.length === 0) {
+      ordersTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
+            No purchase records found matching filter "${currentOrderFilter}".
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    ordersTableBody.innerHTML = filtered.map(ord => `
+      <tr>
+        <td><span class="order-id-pill">${ord._id.toUpperCase()}</span></td>
+        <td>
+          <div style="font-weight: 700; color: var(--text-primary);">${ord.client_name || ord.email}</div>
+          <div style="font-size: 0.76rem; color: var(--text-secondary);">${ord.email}</div>
+        </td>
+        <td style="font-size: 0.88rem; max-width: 220px;">${ord.product_name}</td>
+        <td style="font-weight: 700;">${ord.quantity}</td>
+        <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price).toLocaleString()}</td>
+        <td>
+          <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
+            ${ord.status.toUpperCase()}
+          </span>
+        </td>
+        <td>
+          <div style="font-size: 0.8rem; font-weight: 600;">${ord.user_bank_name}</div>
+          <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">${ord.transaction_ref || 'N/A'}</div>
+        </td>
+        <td>
+          ${ord.status === 'pending' ? `
+            <div style="display: flex; gap: 0.4rem;">
+              <button class="btn-action-verify" data-order-action="verify" data-order-id="${ord._id}" title="Approve & Verify">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Verify
+              </button>
+              <button class="btn-action-reject" data-order-action="reject" data-order-id="${ord._id}" title="Reject Transaction">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                Reject
+              </button>
+            </div>
+          ` : `
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Action Locked</span>
+          `}
+        </td>
+      </tr>
+    `).join('');
+
+    // Bind action buttons
+    ordersTableBody.querySelectorAll('[data-order-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-order-action');
+        const id = btn.getAttribute('data-order-id');
+        const all = getOrders();
+        const target = all.find(o => o._id === id);
+        if (target) {
+          target.status = action === 'verify' ? 'verified' : 'rejected';
+          saveOrders(all);
+          showToast(`Order ${id.toUpperCase()} marked as ${target.status}!`, 'success');
+          refreshKPIs();
+          renderAdminOrders();
+        }
+      });
+    });
+  }
+
+  // Filter Buttons
+  document.querySelectorAll('.order-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.order-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentOrderFilter = btn.getAttribute('data-order-filter');
+      renderAdminOrders();
+    });
+  });
+
+  // Render Leads
+  function renderAdminLeads(query = '') {
+    const leadsContainer = document.getElementById('admin-leads-list');
+    if (!leadsContainer) return;
+
+    const leads = getLeads();
+    const q = query.toLowerCase().trim();
+    const filtered = q
+      ? leads.filter(l => 
+          l.name.toLowerCase().includes(q) || 
+          l.email.toLowerCase().includes(q) || 
+          (l.organization && l.organization.toLowerCase().includes(q)) ||
+          l.message.toLowerCase().includes(q)
+        )
+      : leads;
+
+    if (filtered.length === 0) {
+      leadsContainer.innerHTML = `
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary); background: rgba(0,0,0,0.01); border-radius: var(--radius-lg);">
+          No customer inquiries matching "${query}".
+        </div>
+      `;
+      return;
+    }
+
+    leadsContainer.innerHTML = filtered.map(l => `
+      <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 0.75rem; background: rgba(255,255,255,0.7);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 0.75rem;">
+          <div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">${l.name}</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">${l.email} &bull; ${l.phone || 'No phone'}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="badge" style="background: rgba(147, 51, 234, 0.1); color: var(--primary); margin: 0; font-size: 0.75rem;">
+              ${l.organization || 'Individual'}
+            </span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">${new Date(l.created_at).toLocaleDateString()}</span>
+          </div>
+        </div>
+        <div style="font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
+          ${l.message}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Lead search listener
+  const leadSearchInput = document.getElementById('admin-lead-search');
+  if (leadSearchInput) {
+    leadSearchInput.addEventListener('input', (e) => {
+      renderAdminLeads(e.target.value);
+    });
+  }
+
+  // Export CSV
+  const exportBtn = document.getElementById('admin-export-leads-btn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const leads = getLeads();
+      if (leads.length === 0) {
+        showToast('No inquiries available to export.', 'default');
+        return;
+      }
+      let csvContent = 'data:text/csv;charset=utf-8,ID,Name,Email,Phone,Organization,Date,Message\n';
+      leads.forEach(l => {
+        const row = [
+          `"${l._id}"`,
+          `"${l.name.replace(/"/g, '""')}"`,
+          `"${l.email.replace(/"/g, '""')}"`,
+          `"${l.phone || ''}"`,
+          `"${(l.organization || '').replace(/"/g, '""')}"`,
+          `"${new Date(l.created_at).toLocaleDateString()}"`,
+          `"${l.message.replace(/"/g, '""').replace(/\n/g, ' ')}"`
+        ].join(',');
+        csvContent += row + '\n';
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `sackhe_leads_export_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Exported customer inquiries to CSV!', 'success');
+    });
+  }
+
+  // Settings form
+  const settingsForm = document.getElementById('admin-settings-form');
+  if (settingsForm) {
+    settingsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast('System and pricing configurations updated successfully!', 'success');
+    });
+  }
+
+  refreshKPIs();
+  renderAdminOrders();
+  renderAdminLeads();
 }
 
 // Global Event Listeners
 window.addEventListener('DOMContentLoaded', () => {
-  // Theme init
-  initTheme();
+  // Force Light Mode
+  document.documentElement.classList.remove('dark-mode');
+  localStorage.removeItem('sackhe_theme');
 
   // Route matching
   router();
@@ -315,7 +894,61 @@ window.addEventListener('DOMContentLoaded', () => {
   
   // Auth system init
   updateAuthUI();
-  
+
+  // Wire up Auth Modal Forms
+  const loginForm = document.getElementById('auth-login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email')?.value.trim();
+      if (!email) return;
+
+      const isAdmin = email.toLowerCase().includes('admin');
+      const user = {
+        name: isAdmin ? 'Admin User' : email.split('@')[0].toUpperCase(),
+        email: email,
+        role: isAdmin ? 'admin' : 'user',
+        org: isAdmin ? 'Sackhe Technologies' : 'Institutional Partner',
+        phone: '+91 73372 38466'
+      };
+
+      setCurrentUser(user);
+      toggleAuthModal(false);
+      showToast(`Welcome back, ${user.name}!`, 'success');
+
+      if (isAdmin) {
+        window.location.hash = '#/admin';
+      } else {
+        window.location.hash = '#/profile';
+      }
+    });
+  }
+
+  const registerForm = document.getElementById('auth-register-form');
+  if (registerForm) {
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('register-name')?.value.trim();
+      const email = document.getElementById('register-email')?.value.trim();
+      const org = document.getElementById('register-org')?.value.trim();
+      if (!email) return;
+
+      const isAdmin = email.toLowerCase().includes('admin');
+      const user = {
+        name: name || 'Valued Partner',
+        email: email,
+        role: isAdmin ? 'admin' : 'user',
+        org: org || 'Institutional Partner',
+        phone: '+91 73372 38466'
+      };
+
+      setCurrentUser(user);
+      toggleAuthModal(false);
+      showToast('Account registered successfully!', 'success');
+      window.location.hash = '#/profile';
+    });
+  }
+
   // Mobile nav toggler
   const menuToggle = document.getElementById('menu-toggle');
   const navMenu = document.getElementById('nav-menu');
@@ -326,7 +959,6 @@ window.addEventListener('DOMContentLoaded', () => {
       navMenu.classList.toggle('open');
     });
 
-    // Close on click outside
     document.addEventListener('click', (e) => {
       if (navMenu.classList.contains('open') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
         menuToggle.classList.remove('open');
@@ -334,7 +966,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close on escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && navMenu.classList.contains('open')) {
         menuToggle.classList.remove('open');
@@ -342,7 +973,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Close on clicking any nav link inside drawer
     navMenu.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
         menuToggle.classList.remove('open');
@@ -364,7 +994,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Progressive Web Font Enhancement (loads on first user interaction or idle after initial render)
+// Progressive Web Font Enhancement
 (() => {
   let fontsLoaded = false;
   const loadFonts = () => {
@@ -381,6 +1011,5 @@ window.addEventListener('DOMContentLoaded', () => {
   ['scroll', 'touchstart', 'pointerdown', 'mousemove', 'keydown'].forEach(e => {
     window.addEventListener(e, loadFonts, { once: true, passive: true });
   });
-  // Fallback after initial page is stable
   setTimeout(loadFonts, 4500);
 })();
