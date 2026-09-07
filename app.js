@@ -134,6 +134,161 @@ function saveLeads(leads) {
   localStorage.setItem('sackhe_leads', JSON.stringify(leads));
 }
 
+// E-Commerce Cart State System
+function getCart() {
+  try {
+    const data = localStorage.getItem('sackhe_cart');
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem('sackhe_cart', JSON.stringify(cart));
+  updateCartUI();
+}
+
+function addToCart(product, qty = 1, openDrawer = true) {
+  const cart = getCart();
+  const existing = cart.find(item => item.id === product.id);
+  if (existing) {
+    existing.quantity += qty;
+  } else {
+    cart.push({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.image || 'home_view2.webp',
+      quantity: qty
+    });
+  }
+  saveCart(cart);
+  showToast(`Added ${qty} × "${product.title}" to cart!`, 'success');
+  if (openDrawer) {
+    toggleCartDrawer(true);
+  }
+}
+
+function updateCartItemQty(productId, delta) {
+  const cart = getCart();
+  const index = cart.findIndex(item => item.id === productId);
+  if (index > -1) {
+    cart[index].quantity += delta;
+    if (cart[index].quantity <= 0) {
+      cart.splice(index, 1);
+    }
+    saveCart(cart);
+  }
+}
+
+function removeCartItem(productId) {
+  const cart = getCart().filter(item => item.id !== productId);
+  saveCart(cart);
+}
+
+function clearCart() {
+  saveCart([]);
+}
+
+function toggleCartDrawer(open = true) {
+  const overlay = document.getElementById('cart-drawer-overlay');
+  if (!overlay) return;
+  if (open) {
+    overlay.classList.add('active');
+    renderCartDrawer();
+  } else {
+    overlay.classList.remove('active');
+  }
+}
+window.toggleCartDrawer = toggleCartDrawer;
+
+function updateCartUI() {
+  const cart = getCart();
+  const totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const badge = document.getElementById('cart-counter-badge');
+  if (badge) {
+    badge.textContent = totalCount;
+    badge.classList.remove('cart-badge-pop');
+    void badge.offsetWidth;
+    badge.classList.add('cart-badge-pop');
+  }
+
+  const drawerCount = document.getElementById('cart-drawer-items-count');
+  if (drawerCount) {
+    drawerCount.textContent = `${totalCount} Item${totalCount === 1 ? '' : 's'}`;
+  }
+
+  const overlay = document.getElementById('cart-drawer-overlay');
+  if (overlay && overlay.classList.contains('active')) {
+    renderCartDrawer();
+  }
+}
+
+function renderCartDrawer() {
+  const cart = getCart();
+  const body = document.getElementById('cart-drawer-body');
+  const subtotalEl = document.getElementById('cart-drawer-subtotal');
+  const totalEl = document.getElementById('cart-drawer-total');
+  const footer = document.getElementById('cart-drawer-footer');
+
+  if (!body) return;
+
+  if (cart.length === 0) {
+    body.innerHTML = `
+      <div class="cart-empty-state">
+        <div class="cart-empty-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </div>
+        <h4 class="cart-empty-title">Your Cart is Empty</h4>
+        <p class="cart-empty-desc">Explore our zero-waste institutional hardware catalog to add items for procurement.</p>
+        <button class="btn btn-primary" onclick="toggleCartDrawer(false); window.location.hash='#/products';" style="font-size: 0.88rem; padding: 0.65rem 1.25rem;">Explore Catalog</button>
+      </div>
+    `;
+    if (footer) footer.style.display = 'none';
+    return;
+  }
+
+  if (footer) footer.style.display = 'block';
+
+  let subtotal = 0;
+  cart.forEach(item => {
+    subtotal += (item.price || 0) * (item.quantity || 1);
+  });
+
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (totalEl) totalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+
+  body.innerHTML = cart.map(item => `
+    <div class="cart-item-row" data-product-id="${item.id}">
+      <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+      <div class="cart-item-info">
+        <div>
+          <div class="cart-item-title">${item.title}</div>
+          <div class="cart-item-unit-price font-mono">₹${(item.price || 0).toLocaleString('en-IN')} / unit</div>
+        </div>
+        <div class="cart-item-bottom-bar">
+          <div class="cart-qty-inline">
+            <button class="cart-qty-btn" onclick="updateCartItemQty('${item.id}', -1)" aria-label="Decrease">&minus;</button>
+            <span class="cart-qty-val font-mono">${item.quantity}</span>
+            <button class="cart-qty-btn" onclick="updateCartItemQty('${item.id}', 1)" aria-label="Increase">+</button>
+          </div>
+          <div class="cart-item-subtotal font-mono">₹${((item.price || 0) * item.quantity).toLocaleString('en-IN')}</div>
+          <button class="cart-item-remove-btn" onclick="removeCartItem('${item.id}')" title="Remove item" aria-label="Remove item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+window.updateCartItemQty = updateCartItemQty;
+window.removeCartItem = removeCartItem;
+
 // Routing Map
 const routes = {
   '/': { templateId: 'page-home', title: 'Home - Sackhe Technologies' },
@@ -142,6 +297,7 @@ const routes = {
   '/services': { templateId: 'page-services', title: 'Services - Sackhe Technologies' },
   '/initiatives': { templateId: 'page-initiatives', title: 'Initiatives - Sackhe Technologies' },
   '/contact': { templateId: 'page-contact', title: 'Contact Us - Sackhe Technologies' },
+  '/checkout': { templateId: 'page-checkout', title: 'Procurement & Checkout - Sackhe Technologies' },
   '/profile': { templateId: 'page-profile', title: 'My Account & History - Sackhe Technologies', requiresAuth: true },
   '/admin': { templateId: 'page-admin', title: 'Admin Operations Console - Sackhe Technologies', requiresAdmin: true }
 };
@@ -392,6 +548,8 @@ function router() {
     } else if (routePath === '/contact') {
       const selectedProduct = queryParams.get('product') || '';
       setupContactPage(selectedProduct);
+    } else if (routePath === '/checkout') {
+      setupCheckoutPage();
     } else if (routePath === '/profile') {
       setupProfilePage();
     } else if (routePath === '/admin') {
@@ -443,7 +601,69 @@ function setupAboutPage() {
 }
 
 function setupProductsPage() {
-  // Ensure every product card's Order Now button directs to contact with the product parameter
+  // Wire quantity buttons on products page
+  document.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.onclick = () => {
+      const targetId = btn.getAttribute('data-target');
+      const action = btn.getAttribute('data-qty-action');
+      const input = document.getElementById(targetId);
+      if (!input) return;
+      let val = parseInt(input.value, 10) || 1;
+      const min = parseInt(input.min, 10) || 1;
+      const max = parseInt(input.max, 10) || 500;
+      const step = (targetId === 'qty-pads' ? 5 : 1);
+      if (action === 'inc' && val < max) {
+        val += step;
+      } else if (action === 'dec' && val > min) {
+        val -= step;
+        if (val < min) val = min;
+      }
+      input.value = val;
+    };
+  });
+
+  // Wire Add to Cart buttons
+  document.querySelectorAll('.product-add-cart-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const id = btn.getAttribute('data-product-id');
+      const title = btn.getAttribute('data-product-title');
+      const price = parseInt(btn.getAttribute('data-product-price'), 10) || 0;
+      const image = btn.getAttribute('data-product-img') || 'home_view2.webp';
+      
+      let qty = 1;
+      if (id === 'incinerator') {
+        qty = parseInt(document.getElementById('qty-incinerator')?.value, 10) || 1;
+      } else if (id === 'sanitary-pad') {
+        qty = parseInt(document.getElementById('qty-pads')?.value, 10) || 5;
+      }
+      
+      addToCart({ id, title, price, image }, qty, true);
+    };
+  });
+
+  // Wire Buy Now buttons
+  document.querySelectorAll('.product-buy-now-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const id = btn.getAttribute('data-product-id');
+      const title = btn.getAttribute('data-product-title');
+      const price = parseInt(btn.getAttribute('data-product-price'), 10) || 0;
+      const image = btn.getAttribute('data-product-img') || 'home_view2.webp';
+      
+      let qty = 1;
+      if (id === 'incinerator') {
+        qty = parseInt(document.getElementById('qty-incinerator')?.value, 10) || 1;
+      } else if (id === 'sanitary-pad') {
+        qty = parseInt(document.getElementById('qty-pads')?.value, 10) || 5;
+      }
+      
+      addToCart({ id, title, price, image }, qty, false);
+      window.location.hash = '#/checkout';
+    };
+  });
+
+  // Ensure contact inquiry links carry product param
   const cards = document.querySelectorAll('.product-split-card');
   cards.forEach(card => {
     const titleEl = card.querySelector('.product-title');
@@ -451,8 +671,8 @@ function setupProductsPage() {
     const prodName = titleEl.textContent.trim();
     const targetHash = `#/contact?product=${encodeURIComponent(prodName)}`;
     
-    const actionLinks = card.querySelectorAll('.product-actions-group a, a.btn');
-    actionLinks.forEach(link => {
+    const contactLinks = card.querySelectorAll('a[href*="#/contact"]');
+    contactLinks.forEach(link => {
       link.href = targetHash;
       link.setAttribute('data-product', prodName);
       link.onclick = (e) => {
@@ -576,6 +796,161 @@ function setupContactPage(selectedProduct = '') {
       }
     }, 900);
   });
+}
+
+// Checkout & Procurement Page Handler
+function setupCheckoutPage() {
+  const cart = getCart();
+  const checkoutItemsContainer = document.getElementById('checkout-items-list');
+  const subtotalEl = document.getElementById('checkout-subtotal-val');
+  const totalEl = document.getElementById('checkout-total-val');
+  const placeOrderBtn = document.getElementById('checkout-place-order-btn');
+
+  // Pre-fill user information if logged in
+  const currentUser = getCurrentUser();
+  if (currentUser) {
+    const nameInput = document.getElementById('checkout-name');
+    const emailInput = document.getElementById('checkout-email');
+    const phoneInput = document.getElementById('checkout-phone');
+    const orgInput = document.getElementById('checkout-org');
+    if (nameInput && !nameInput.value) nameInput.value = currentUser.name || '';
+    if (emailInput && !emailInput.value) emailInput.value = currentUser.email || '';
+    if (phoneInput && !phoneInput.value) phoneInput.value = currentUser.phone || '';
+    if (orgInput && !orgInput.value) orgInput.value = currentUser.org || '';
+  }
+
+  // If cart is empty
+  if (cart.length === 0) {
+    if (checkoutItemsContainer) {
+      checkoutItemsContainer.innerHTML = `
+        <div style="text-align: center; padding: 2.5rem 1rem;">
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.25rem;">Your procurement cart is currently empty.</p>
+          <a href="#/products" class="btn btn-primary" style="display: inline-flex; font-size: 0.88rem;">Explore Catalog & Add Items</a>
+        </div>
+      `;
+    }
+    if (subtotalEl) subtotalEl.textContent = '₹0';
+    if (totalEl) totalEl.textContent = '₹0';
+    if (placeOrderBtn) {
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.style.opacity = '0.5';
+    }
+    return;
+  }
+
+  // Calculate totals
+  let subtotal = 0;
+  cart.forEach(item => {
+    subtotal += (item.price || 0) * (item.quantity || 1);
+  });
+
+  if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+  if (totalEl) totalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+
+  // Render items
+  if (checkoutItemsContainer) {
+    checkoutItemsContainer.innerHTML = cart.map(item => `
+      <div class="checkout-item-row">
+        <img src="${item.image}" alt="${item.title}" class="checkout-item-thumb">
+        <div class="checkout-item-details">
+          <div class="checkout-item-name">${item.title}</div>
+          <div class="checkout-item-qty font-mono">Qty: ${item.quantity} × ₹${(item.price || 0).toLocaleString('en-IN')}</div>
+        </div>
+        <div class="checkout-item-price font-mono">₹${((item.price || 0) * item.quantity).toLocaleString('en-IN')}</div>
+      </div>
+    `).join('');
+  }
+
+  // Wire Payment Tabs
+  let activePaymentTab = 'upi';
+  const paymentTabButtons = document.querySelectorAll('.payment-tab-btn');
+  paymentTabButtons.forEach(btn => {
+    btn.onclick = () => {
+      paymentTabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activePaymentTab = btn.getAttribute('data-payment-tab');
+
+      const upiPanel = document.getElementById('payment-content-upi');
+      const bankPanel = document.getElementById('payment-content-bank');
+      const poPanel = document.getElementById('payment-content-po');
+
+      if (upiPanel) upiPanel.style.display = activePaymentTab === 'upi' ? 'block' : 'none';
+      if (bankPanel) bankPanel.style.display = activePaymentTab === 'bank' ? 'block' : 'none';
+      if (poPanel) poPanel.style.display = activePaymentTab === 'po' ? 'block' : 'none';
+    };
+  });
+
+  // Handle Order Placement
+  if (placeOrderBtn) {
+    placeOrderBtn.disabled = false;
+    placeOrderBtn.style.opacity = '1';
+
+    placeOrderBtn.onclick = () => {
+      const name = document.getElementById('checkout-name')?.value.trim();
+      const org = document.getElementById('checkout-org')?.value.trim();
+      const email = document.getElementById('checkout-email')?.value.trim();
+      const phone = document.getElementById('checkout-phone')?.value.trim();
+      const address = document.getElementById('checkout-address')?.value.trim();
+      const city = document.getElementById('checkout-city')?.value.trim();
+      const pincode = document.getElementById('checkout-pincode')?.value.trim();
+      const notes = document.getElementById('checkout-notes')?.value.trim();
+
+      if (!name || !org || !email || !phone || !address || !city || !pincode) {
+        showToast('Please fill in all required delivery and contact fields.', 'default');
+        return;
+      }
+
+      let paymentRef = '';
+      if (activePaymentTab === 'upi') {
+        paymentRef = document.getElementById('checkout-upi-utr')?.value.trim() || 'UPI-REF-' + Date.now().toString().slice(-6);
+      } else if (activePaymentTab === 'bank') {
+        const remitter = document.getElementById('checkout-remitter-bank')?.value.trim() || 'NEFT';
+        const utr = document.getElementById('checkout-bank-utr')?.value.trim() || Date.now().toString().slice(-6);
+        paymentRef = `${remitter} / UTR: ${utr}`;
+      } else if (activePaymentTab === 'po') {
+        paymentRef = 'PO Ref: ' + (document.getElementById('checkout-po-number')?.value.trim() || 'SANCTION-REQUEST');
+      }
+
+      // Generate order
+      const orderRef = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+      const orders = getOrders();
+      const newOrder = {
+        _id: 'ord-' + Date.now().toString().slice(-4),
+        product_name: cart.map(i => `${i.quantity}× ${i.title}`).join(', '),
+        quantity: cart.reduce((sum, i) => sum + i.quantity, 0),
+        amount: subtotal,
+        totalPrice: subtotal,
+        status: 'Pending Verification',
+        payment_status: activePaymentTab === 'po' ? 'PO Issued' : 'Under Review',
+        payment_method: activePaymentTab.toUpperCase(),
+        paymentRef: paymentRef,
+        customer_name: name,
+        organization: org,
+        email: email,
+        phone: phone,
+        address: `${address}, ${city} - ${pincode}`,
+        notes: notes,
+        created_at: new Date().toISOString(),
+        items: cart.map(i => ({
+          productId: i.id,
+          title: i.title,
+          quantity: i.quantity,
+          unitPrice: i.price,
+          totalPrice: i.price * i.quantity
+        }))
+      };
+
+      orders.unshift(newOrder);
+      saveOrders(orders);
+      clearCart();
+
+      // Show success celebration & navigate to Profile Orders table
+      showToast(`Procurement Order ${orderRef} placed successfully!`, 'success');
+      setTimeout(() => {
+        window.location.hash = '#/profile';
+      }, 500);
+    };
+  }
 }
 
 // Profile Page Handler
@@ -1057,6 +1432,50 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
         header.classList.remove('scrolled');
       }
+    }
+  });
+
+  // Initialize E-Commerce Cart UI & Event Listeners
+  updateCartUI();
+
+  const navCartBtn = document.getElementById('nav-cart-btn');
+  if (navCartBtn) {
+    navCartBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleCartDrawer(true);
+    });
+  }
+
+  const cartCloseBtn = document.getElementById('cart-drawer-close');
+  if (cartCloseBtn) {
+    cartCloseBtn.addEventListener('click', () => toggleCartDrawer(false));
+  }
+
+  const cartContinueBtn = document.getElementById('cart-continue-btn');
+  if (cartContinueBtn) {
+    cartContinueBtn.addEventListener('click', () => toggleCartDrawer(false));
+  }
+
+  const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
+  if (cartCheckoutBtn) {
+    cartCheckoutBtn.addEventListener('click', () => {
+      toggleCartDrawer(false);
+      window.location.hash = '#/checkout';
+    });
+  }
+
+  const cartDrawerOverlay = document.getElementById('cart-drawer-overlay');
+  if (cartDrawerOverlay) {
+    cartDrawerOverlay.addEventListener('click', (e) => {
+      if (e.target === cartDrawerOverlay) {
+        toggleCartDrawer(false);
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      toggleCartDrawer(false);
     }
   });
 });
