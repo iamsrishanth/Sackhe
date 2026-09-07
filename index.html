@@ -10,6 +10,7 @@
   <meta name="keywords" content="waste management, sustainable solutions, incinerators, menstrual waste, solid waste, environmental technology, Sackhe Technologies">
   <link rel="icon" type="image/webp" href="sackhelogo.webp">
   <link rel="apple-touch-icon" href="sackhelogo.webp">
+  <link rel="preload" href="sackhelogo.webp" as="image" type="image/webp" fetchpriority="high">
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="index.css">
@@ -31,7 +32,7 @@
         <a href="#/services" class="nav-link">Services</a>
         <a href="#/initiatives" class="nav-link">Initiatives</a>
         <a href="#/contact" class="nav-link nav-contact-pill">Contact</a>
-        <a href="#/admin" class="nav-link nav-admin-pill" id="nav-admin-link">Admin</a>
+        <a href="#/admin" class="nav-link nav-admin-pill" id="nav-admin-link" style="display: none;">Admin</a>
 
         <div class="nav-social-group">
           <a href="https://www.linkedin.com/company/sackhetechnologies-pvtltd/" target="_blank" class="nav-social-btn" title="LinkedIn" aria-label="LinkedIn">
@@ -326,7 +327,7 @@
             <a href="#/about" class="footer-link">About Us</a>
             <a href="#/products" class="footer-link">Our Catalog</a>
             <a href="#/services" class="footer-link">Services</a>
-            <a href="#/admin" class="footer-link" style="color: #10b981; font-weight: 700;">Admin Console</a>
+            <a href="#/admin" class="footer-link" id="footer-admin-link" style="color: #10b981; font-weight: 700; display: none;">Admin Console</a>
             <a href="#/profile" class="footer-link">My Account</a>
           </div>
         </div>
