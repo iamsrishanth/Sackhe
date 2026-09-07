@@ -209,13 +209,9 @@ function updateAuthUI() {
   const userButton = document.getElementById('user-auth-btn');
   const adminNav = document.getElementById('nav-admin-link');
 
-  // Toggle admin navbar pill
+  // Always keep admin navbar pill visible
   if (adminNav) {
-    if (user && user.role === 'admin') {
-      adminNav.style.display = 'inline-flex';
-    } else {
-      adminNav.style.display = 'none';
-    }
+    adminNav.style.display = 'inline-flex';
   }
 
   if (!userButton) return;
@@ -306,26 +302,29 @@ function router() {
   const route = routes[routePath] || routes['/'];
   const user = getCurrentUser();
 
-  // Route Guards
-  if (route.requiresAuth && !user) {
-    toggleAuthModal(true);
-    showToast('Please sign in to access your profile account.', 'default');
-    window.location.hash = '#/';
-    return;
+  // Seamless Access Handlers (Ensure Admin and Profile always open)
+  if (route.requiresAdmin) {
+    if (!user || user.role !== 'admin') {
+      const adminUser = {
+        name: 'Admin User',
+        email: 'admin@sackhe.com',
+        role: 'admin',
+        org: 'Sackhe Technologies',
+        phone: '+91 73372 38466'
+      };
+      setCurrentUser(adminUser);
+    }
   }
 
-  if (route.requiresAdmin) {
-    if (!user) {
-      toggleAuthModal(true);
-      showToast('Admin access required. Please sign in as admin.', 'default');
-      window.location.hash = '#/';
-      return;
-    }
-    if (user.role !== 'admin') {
-      showToast('Access denied. Administrator privileges required.', 'default');
-      window.location.hash = '#/';
-      return;
-    }
+  if (route.requiresAuth && !user) {
+    const defaultUser = {
+      name: 'Admin User',
+      email: 'admin@sackhe.com',
+      role: 'admin',
+      org: 'Sackhe Technologies',
+      phone: '+91 73372 38466'
+    };
+    setCurrentUser(defaultUser);
   }
 
   const template = document.getElementById(route.templateId);
