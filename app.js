@@ -298,9 +298,11 @@ function router() {
     hash = '#/';
   }
   
-  const routePath = hash.substring(1);
+  const fullHash = hash.substring(1);
+  const [routePath, queryString] = fullHash.split('?');
   const route = routes[routePath] || routes['/'];
   const user = getCurrentUser();
+  const queryParams = new URLSearchParams(queryString || '');
 
   // Seamless Access Handlers (Ensure Admin and Profile always open)
   if (route.requiresAdmin) {
@@ -340,7 +342,8 @@ function router() {
   // Update nav active link
   document.querySelectorAll('.nav-link').forEach(link => {
     link.classList.remove('active');
-    if (link.getAttribute('href') === hash) {
+    const linkHref = link.getAttribute('href');
+    if (linkHref === hash || linkHref === `#${routePath}`) {
       link.classList.add('active');
     }
   });
@@ -380,12 +383,15 @@ function router() {
       setupHomePage();
     } else if (routePath === '/about') {
       setupAboutPage();
+    } else if (routePath === '/products') {
+      setupProductsPage();
     } else if (routePath === '/services') {
       setupServicesPage();
     } else if (routePath === '/initiatives') {
       setupInitiativesPage();
     } else if (routePath === '/contact') {
-      setupContactPage();
+      const selectedProduct = queryParams.get('product') || '';
+      setupContactPage(selectedProduct);
     } else if (routePath === '/profile') {
       setupProfilePage();
     } else if (routePath === '/admin') {
@@ -430,6 +436,20 @@ function setupAboutPage() {
   }
 }
 
+function setupProductsPage() {
+  // Ensure every product card's Order Now button directs to contact with the product parameter
+  const cards = document.querySelectorAll('.product-split-card');
+  cards.forEach(card => {
+    const titleEl = card.querySelector('.product-title');
+    if (!titleEl) return;
+    const prodName = titleEl.textContent.trim();
+    const actionLinks = card.querySelectorAll('.product-actions-group a');
+    actionLinks.forEach(link => {
+      link.href = `#/contact?product=${encodeURIComponent(prodName)}`;
+    });
+  });
+}
+
 function setupServicesPage() {
   // Support triggers
 }
@@ -459,8 +479,31 @@ function setupInitiativesPage() {
   });
 }
 
-function setupContactPage() {
+function setupContactPage(selectedProduct = '') {
+  // If not passed directly, parse from hash query string
+  if (!selectedProduct) {
+    const fullHash = (window.location.hash || '').substring(1);
+    const [, queryString] = fullHash.split('?');
+    if (queryString) {
+      const params = new URLSearchParams(queryString);
+      selectedProduct = params.get('product') || params.get('item') || '';
+    }
+  }
+
   const contactForm = document.getElementById('contact-inquiry-form');
+  const productInput = document.getElementById('contact-product');
+  const messageInput = document.getElementById('contact-message');
+
+  // Pre-fill product and message if selected
+  if (selectedProduct) {
+    if (productInput) {
+      productInput.value = selectedProduct;
+    }
+    if (messageInput && !messageInput.value) {
+      messageInput.value = `I am interested in ordering / inquiring about the "${selectedProduct}". Please provide detailed pricing, availability, and delivery timelines.`;
+    }
+  }
+
   if (!contactForm) return;
 
   contactForm.addEventListener('submit', (e) => {
@@ -472,7 +515,9 @@ function setupContactPage() {
     const nameInput = document.getElementById('contact-name');
     const emailInput = document.getElementById('contact-email');
     const phoneInput = document.getElementById('contact-phone');
-    const messageInput = document.getElementById('contact-message');
+    const orgInput = document.getElementById('contact-org');
+    const prodVal = productInput?.value.trim() || selectedProduct || 'General Inquiry';
+    const msgVal = messageInput?.value.trim() || 'Inquiry regarding Sackhe waste solutions.';
     
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -493,15 +538,18 @@ function setupContactPage() {
         name: nameInput?.value || 'Interested Client',
         email: emailInput?.value || 'client@example.com',
         phone: phoneInput?.value || '+91 73372 38466',
-        organization: 'Direct Contact Portal',
-        message: messageInput?.value || 'Inquiry regarding Sackhe waste solutions.',
+        organization: orgInput?.value || (prodVal ? `Inquiry: ${prodVal}` : 'Direct Contact Portal'),
+        message: prodVal && prodVal !== 'General Inquiry' ? `[Product: ${prodVal}]\n${msgVal}` : msgVal,
         created_at: new Date().toISOString()
       };
       leads.unshift(newLead);
       saveLeads(leads);
 
-      showToast('Thank you! Your message has been sent successfully. Our team will get in touch shortly.', 'success');
+      showToast(`Thank you! Your inquiry for ${prodVal} has been sent successfully.`, 'success');
       contactForm.reset();
+      if (productInput && selectedProduct) {
+        productInput.value = selectedProduct;
+      }
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalContent;
