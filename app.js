@@ -1,11 +1,23 @@
 // Sackhe Technologies - SPA Router & App Logic
 
+// HTML Entity Sanitizer (XSS Mitigation)
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Initial Users Store (Admin vs Normal User)
 const INITIAL_USERS = [
   {
     name: 'Admin User',
     email: 'admin@sackhe.com',
     role: 'admin',
+    password: 'admin123',
     org: 'Sackhe Technologies',
     phone: '+91 73372 38466'
   },
@@ -13,6 +25,7 @@ const INITIAL_USERS = [
     name: 'Standard User',
     email: 'user@example.com',
     role: 'user',
+    password: 'user123',
     org: 'Institutional Partner',
     phone: '+91 98765 43210'
   }
@@ -85,75 +98,9 @@ function setCurrentUser(user) {
   updateAuthUI();
 }
 
-// Initial Mock Data Sources
-const INITIAL_ORDERS = [
-  {
-    _id: 'ord-883921',
-    email: 'kavitha.reddy@hyderabadinstitutes.edu.in',
-    client_name: 'Kavitha Reddy (Principal)',
-    product_name: 'Dual-Chamber Eco Incinerator 1500W',
-    quantity: 2,
-    total_price: 129898,
-    user_bank_name: 'HDFC Bank - Current A/C',
-    transaction_ref: 'HDFC9088310023X',
-    status: 'pending',
-    created_at: new Date(Date.now() - 3600000 * 24 * 2).toISOString()
-  },
-  {
-    _id: 'ord-774019',
-    email: 'procurement@telanganahospital.gov.in',
-    client_name: 'Dr. R. V. Rao',
-    product_name: 'Biodegradable Sanitary Pads - 500pk Institutional Box',
-    quantity: 10,
-    total_price: 34500,
-    user_bank_name: 'State Bank of India',
-    transaction_ref: 'SBIIN7811902401',
-    status: 'verified',
-    created_at: new Date(Date.now() - 3600000 * 24 * 5).toISOString()
-  },
-  {
-    _id: 'ord-665201',
-    email: 'admin@sackhe.com',
-    client_name: 'Sackhe Operations Pilot',
-    product_name: 'Smart Automated Dispenser Model S-2',
-    quantity: 1,
-    total_price: 18500,
-    user_bank_name: 'ICICI Bank Corporate',
-    transaction_ref: 'ICIC00018829910',
-    status: 'verified',
-    created_at: new Date(Date.now() - 3600000 * 24 * 9).toISOString()
-  }
-];
-
-const INITIAL_LEADS = [
-  {
-    _id: 'lead-101',
-    name: 'Suresh Kumar',
-    email: 'suresh.k@greenindiafoundation.org',
-    phone: '+91 98490 11223',
-    organization: 'Green India Foundation',
-    message: 'We are interested in installing 12 emission-controlled incinerators across rural government residential colleges.',
-    created_at: new Date(Date.now() - 3600000 * 18).toISOString()
-  },
-  {
-    _id: 'lead-102',
-    name: 'Priya Sharma',
-    email: 'priya.s@delhiedu.org',
-    phone: '+91 98111 44556',
-    organization: 'Delhi Model Schools Network',
-    message: 'Seeking a formal quote for menstrual hygiene waste management demo & continuous servicing agreement.',
-    created_at: new Date(Date.now() - 3600000 * 42).toISOString()
-  },
-  {
-    _id: 'lead-103',
-    name: 'Ananya Deshmukh',
-    email: 'ananya@csr-reliance.com',
-    phone: '+91 97234 56789',
-    organization: 'Reliance Foundation CSR',
-    message: 'Looking to partner under the "Cycle of Change" initiative to sponsor 25 community dispensers in Telangana.',
-    created_at: new Date(Date.now() - 3600000 * 72).toISOString()
-  }
-];
+// Real Orders & Leads Data Stores (Initialized Empty to eliminate fabricated business data)
+const INITIAL_ORDERS = [];
+const INITIAL_LEADS = [];
 
 function getOrders() {
   try {
@@ -162,9 +109,10 @@ function getOrders() {
       localStorage.setItem('sackhe_orders', JSON.stringify(INITIAL_ORDERS));
       return INITIAL_ORDERS;
     }
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
-    return INITIAL_ORDERS;
+    return [];
   }
 }
 
@@ -179,9 +127,10 @@ function getLeads() {
       localStorage.setItem('sackhe_leads', JSON.stringify(INITIAL_LEADS));
       return INITIAL_LEADS;
     }
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
-    return INITIAL_LEADS;
+    return [];
   }
 }
 
@@ -319,27 +268,41 @@ function renderCartDrawer() {
   if (totalEl) totalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
 
   body.innerHTML = cart.map(item => `
-    <div class="cart-item-row" data-product-id="${item.id}">
-      <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+    <div class="cart-item-row" data-product-id="${escapeHtml(item.id)}">
+      <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" class="cart-item-img">
       <div class="cart-item-info">
         <div>
-          <div class="cart-item-title">${item.title}</div>
-          <div class="cart-item-unit-price font-mono">₹${(item.price || 0).toLocaleString('en-IN')} / unit</div>
+          <div class="cart-item-title">${escapeHtml(item.title)}</div>
+          <div class="cart-item-unit-price font-mono">₹${(Number(item.price) || 0).toLocaleString('en-IN')} / unit</div>
         </div>
         <div class="cart-item-bottom-bar">
           <div class="cart-qty-inline">
-            <button class="cart-qty-btn" onclick="updateCartItemQty('${item.id}', -1)" aria-label="Decrease">&minus;</button>
-            <span class="cart-qty-val font-mono">${item.quantity}</span>
-            <button class="cart-qty-btn" onclick="updateCartItemQty('${item.id}', 1)" aria-label="Increase">+</button>
+            <button class="cart-qty-btn" data-cart-action="dec" data-cart-id="${escapeHtml(item.id)}" aria-label="Decrease">&minus;</button>
+            <span class="cart-qty-val font-mono">${escapeHtml(item.quantity)}</span>
+            <button class="cart-qty-btn" data-cart-action="inc" data-cart-id="${escapeHtml(item.id)}" aria-label="Increase">+</button>
           </div>
-          <div class="cart-item-subtotal font-mono">₹${((item.price || 0) * item.quantity).toLocaleString('en-IN')}</div>
-          <button class="cart-item-remove-btn" onclick="removeCartItem('${item.id}')" title="Remove item" aria-label="Remove item">
+          <div class="cart-item-subtotal font-mono">₹${((Number(item.price) || 0) * item.quantity).toLocaleString('en-IN')}</div>
+          <button class="cart-item-remove-btn" data-cart-action="remove" data-cart-id="${escapeHtml(item.id)}" title="Remove item" aria-label="Remove item">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
           </button>
         </div>
       </div>
     </div>
   `).join('');
+
+  if (!body._cartEventsBound) {
+    body.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cart-action]');
+      if (!btn) return;
+      const action = btn.getAttribute('data-cart-action');
+      const id = btn.getAttribute('data-cart-id');
+      if (!id) return;
+      if (action === 'dec') updateCartItemQty(id, -1);
+      else if (action === 'inc') updateCartItemQty(id, 1);
+      else if (action === 'remove') removeCartItem(id);
+    });
+    body._cartEventsBound = true;
+  }
 }
 window.updateCartItemQty = updateCartItemQty;
 window.removeCartItem = removeCartItem;
@@ -350,56 +313,56 @@ const routes = {
     templateId: 'page-home',
     title: 'Sackhe Technologies - Sustainable Waste Management Solutions',
     description: 'Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.',
-    canonical: 'https://sackhetechnologies.com/'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/about': {
     templateId: 'page-about',
     title: 'About Us - Sackhe Technologies',
     description: 'Discover the team, mission, and environmental engineering vision powering Sackhe Technologies in zero-waste sustainability.',
-    canonical: 'https://sackhetechnologies.com/#/about'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/products': {
     templateId: 'page-products',
     title: 'Products & Hardware Catalog - Sackhe Technologies',
     description: 'Explore our zero-waste institutional hardware catalog: smokeless incinerators, automated sanitary dispensers, and biodegradable consumables.',
-    canonical: 'https://sackhetechnologies.com/#/products'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/services': {
     templateId: 'page-services',
     title: 'Services & Operations - Sackhe Technologies',
     description: 'End-to-end sustainable operations, institutional waste audits, continuous servicing agreements, and community awareness campaigns.',
-    canonical: 'https://sackhetechnologies.com/#/services'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/initiatives': {
     templateId: 'page-initiatives',
     title: 'Social Impact & Initiatives - Sackhe Technologies',
     description: 'Empowering communities through sustainable menstrual hygiene initiatives, rural school installations, and environmental stewardship.',
-    canonical: 'https://sackhetechnologies.com/#/initiatives'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/contact': {
     templateId: 'page-contact',
     title: 'Contact Us - Sackhe Technologies',
     description: 'Connect with Sackhe Technologies environmental experts for institutional procurement, pilot deployments, and advisory.',
-    canonical: 'https://sackhetechnologies.com/#/contact'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/checkout': {
     templateId: 'page-checkout',
     title: 'Procurement & Checkout - Sackhe Technologies',
     description: 'Complete institutional requisition and procurement orders securely with Sackhe Technologies.',
-    canonical: 'https://sackhetechnologies.com/#/checkout'
+    canonical: 'https://sackhe.srishanth.com/'
   },
   '/profile': {
     templateId: 'page-profile',
     title: 'My Account & History - Sackhe Technologies',
     description: 'Manage your organizational credentials, monitor recent orders, and oversee active deployments.',
-    canonical: 'https://sackhetechnologies.com/#/profile',
+    canonical: 'https://sackhe.srishanth.com/',
     requiresAuth: true
   },
   '/admin': {
     templateId: 'page-admin',
     title: 'Admin Operations Console - Sackhe Technologies',
     description: 'Oversee hardware procurements, process institutional orders, and review customer contact inquiries.',
-    canonical: 'https://sackhetechnologies.com/#/admin',
+    canonical: 'https://sackhe.srishanth.com/',
     requiresAdmin: true
   }
 };
@@ -419,7 +382,7 @@ function showToast(message, type = 'default') {
       ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`
       : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`);
 
-  toast.innerHTML = `${icon}<span>${message}</span>`;
+  toast.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -490,8 +453,8 @@ function updateAuthUI() {
     userButton.innerHTML = `
       <div style="display: flex; align-items: center; gap: 0.6rem;">
         <a href="#/profile" class="user-avatar-badge" title="View Profile">
-          <span class="user-avatar-circle">${initials}</span>
-          <span class="user-nav-name">${user.name}</span>
+          <span class="user-avatar-circle">${escapeHtml(initials)}</span>
+          <span class="user-nav-name">${escapeHtml(user.name)}</span>
         </a>
         <button id="signout-trigger" class="btn-signout" title="Sign Out">Sign Out</button>
       </div>
@@ -571,8 +534,16 @@ window.handleGoogleSignIn = handleGoogleSignIn;
 
 // SPA Router
 let initialRouteChecked = false;
+let routeTransitionTimer = null;
+let currentRouteToken = 0;
 
 function router() {
+  const thisRouteToken = ++currentRouteToken;
+  if (routeTransitionTimer) {
+    clearTimeout(routeTransitionTimer);
+    routeTransitionTimer = null;
+  }
+
   let hash = window.location.hash;
   
   if (!hash || hash === '#') {
@@ -664,6 +635,7 @@ function router() {
 
   // Render transition orchestrator
   const renderNewPage = () => {
+    if (thisRouteToken !== currentRouteToken) return;
     container.innerHTML = '';
     const clone = template.content.cloneNode(true);
     
@@ -707,7 +679,7 @@ function router() {
 
   if (currentView) {
     currentView.className = 'view-exit';
-    setTimeout(renderNewPage, 180);
+    routeTransitionTimer = setTimeout(renderNewPage, 180);
   } else {
     renderNewPage();
   }
@@ -887,7 +859,7 @@ function setupContactPage(selectedProduct = '') {
 
   if (!contactForm) return;
 
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const submitBtn = contactForm.querySelector('.contact-submit-button');
@@ -897,9 +869,19 @@ function setupContactPage(selectedProduct = '') {
     const emailInput = document.getElementById('contact-email');
     const phoneInput = document.getElementById('contact-phone');
     const orgInput = document.getElementById('contact-org');
+    
+    const nameVal = nameInput?.value.trim() || '';
+    const emailVal = emailInput?.value.trim() || '';
+    const phoneVal = phoneInput?.value.trim() || '';
+    const orgVal = orgInput?.value.trim() || '';
     const prodVal = productInput?.value.trim() || selectedProduct || 'General Inquiry';
     const msgVal = messageInput?.value.trim() || 'Inquiry regarding Sackhe waste solutions.';
     
+    if (!nameVal || !emailVal || !msgVal) {
+      showToast('Please fill in your name, email address, and message.', 'error');
+      return;
+    }
+
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
@@ -907,35 +889,61 @@ function setupContactPage(selectedProduct = '') {
           <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
           <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
         </svg>
-        <span>Sending...</span>
+        <span>Transmitting Inquiry...</span>
       `;
     }
 
-    setTimeout(() => {
-      // Store lead in admin leads list
-      const leads = getLeads();
-      const newLead = {
-        _id: 'lead-' + Date.now().toString().slice(-4),
-        name: nameInput?.value || 'Interested Client',
-        email: emailInput?.value || 'client@example.com',
-        phone: phoneInput?.value || '+91 73372 38466',
-        organization: orgInput?.value || (prodVal ? `Inquiry: ${prodVal}` : 'Direct Contact Portal'),
-        message: prodVal && prodVal !== 'General Inquiry' ? `[Product: ${prodVal}]\n${msgVal}` : msgVal,
-        created_at: new Date().toISOString()
-      };
-      leads.unshift(newLead);
-      saveLeads(leads);
+    const payload = {
+      name: nameVal,
+      email: emailVal,
+      phone: phoneVal,
+      organization: orgVal || 'Direct Contact Portal',
+      product: prodVal,
+      message: prodVal && prodVal !== 'General Inquiry' ? `[Product: ${prodVal}]\n${msgVal}` : msgVal
+    };
 
-      showToast(`Thank you! Your inquiry for ${prodVal} has been sent successfully.`, 'success');
-      contactForm.reset();
-      if (productInput && selectedProduct) {
-        productInput.value = selectedProduct;
+    let transmitted = false;
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (response.ok) {
+        transmitted = true;
       }
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalContent;
-      }
-    }, 900);
+    } catch (err) {
+      console.warn('Direct API transmission offline/fallback:', err);
+    }
+
+    // Record inquiry locally so administrative demonstration reflects submission
+    const leads = getLeads();
+    const newLead = {
+      _id: 'inq-' + Date.now().toString().slice(-4),
+      name: nameVal,
+      email: emailVal,
+      phone: phoneVal || 'N/A',
+      organization: orgVal || 'Direct Contact Portal',
+      message: payload.message,
+      created_at: new Date().toISOString()
+    };
+    leads.unshift(newLead);
+    saveLeads(leads);
+
+    if (transmitted) {
+      showToast(`Thank you, ${nameVal}! Your inquiry has been transmitted successfully.`, 'success');
+    } else {
+      showToast(`Inquiry registered. Our advisory desk at info@sackhetechnologies.com will follow up shortly.`, 'success');
+    }
+
+    contactForm.reset();
+    if (productInput && selectedProduct) {
+      productInput.value = selectedProduct;
+    }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalContent;
+    }
   });
 }
 
@@ -992,32 +1000,32 @@ function setupCheckoutPage() {
   if (checkoutItemsContainer) {
     checkoutItemsContainer.innerHTML = cart.map(item => `
       <div class="checkout-item-row">
-        <img src="${item.image}" alt="${item.title}" class="checkout-item-thumb">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" class="checkout-item-thumb">
         <div class="checkout-item-details">
-          <div class="checkout-item-name">${item.title}</div>
-          <div class="checkout-item-qty font-mono">Qty: ${item.quantity} × ₹${(item.price || 0).toLocaleString('en-IN')}</div>
+          <div class="checkout-item-name">${escapeHtml(item.title)}</div>
+          <div class="checkout-item-qty font-mono">Qty: ${escapeHtml(item.quantity)} × ₹${(Number(item.price) || 0).toLocaleString('en-IN')}</div>
         </div>
-        <div class="checkout-item-price font-mono">₹${((item.price || 0) * item.quantity).toLocaleString('en-IN')}</div>
+        <div class="checkout-item-price font-mono">₹${((Number(item.price) || 0) * item.quantity).toLocaleString('en-IN')}</div>
       </div>
     `).join('');
   }
 
   // Wire Payment Tabs
-  let activePaymentTab = 'upi';
+  let activePaymentTab = 'po';
   const paymentTabButtons = document.querySelectorAll('.payment-tab-btn');
   paymentTabButtons.forEach(btn => {
     btn.onclick = () => {
       paymentTabButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activePaymentTab = btn.getAttribute('data-payment-tab');
+      activePaymentTab = btn.getAttribute('data-payment-tab') || 'po';
 
-      const upiPanel = document.getElementById('payment-content-upi');
-      const bankPanel = document.getElementById('payment-content-bank');
       const poPanel = document.getElementById('payment-content-po');
+      const bankPanel = document.getElementById('payment-content-bank');
+      const upiPanel = document.getElementById('payment-content-upi');
 
-      if (upiPanel) upiPanel.style.display = activePaymentTab === 'upi' ? 'block' : 'none';
-      if (bankPanel) bankPanel.style.display = activePaymentTab === 'bank' ? 'block' : 'none';
       if (poPanel) poPanel.style.display = activePaymentTab === 'po' ? 'block' : 'none';
+      if (bankPanel) bankPanel.style.display = activePaymentTab === 'bank' ? 'block' : 'none';
+      if (upiPanel) upiPanel.style.display = activePaymentTab === 'upi' ? 'block' : 'none';
     };
   });
 
@@ -1026,7 +1034,7 @@ function setupCheckoutPage() {
     placeOrderBtn.disabled = false;
     placeOrderBtn.style.opacity = '1';
 
-    placeOrderBtn.onclick = () => {
+    placeOrderBtn.onclick = async () => {
       const name = document.getElementById('checkout-name')?.value.trim();
       const org = document.getElementById('checkout-org')?.value.trim();
       const email = document.getElementById('checkout-email')?.value.trim();
@@ -1037,59 +1045,100 @@ function setupCheckoutPage() {
       const notes = document.getElementById('checkout-notes')?.value.trim();
 
       if (!name || !org || !email || !phone || !address || !city || !pincode) {
-        showToast('Please fill in all required delivery and contact fields.', 'default');
+        showToast('Please fill in all required institutional contact and delivery fields.', 'default');
         return;
       }
 
       let paymentRef = '';
-      if (activePaymentTab === 'upi') {
-        paymentRef = document.getElementById('checkout-upi-utr')?.value.trim() || 'UPI-REF-' + Date.now().toString().slice(-6);
+      if (activePaymentTab === 'po') {
+        const poNum = document.getElementById('checkout-po-number')?.value.trim();
+        paymentRef = poNum ? `PO: ${poNum}` : 'Indent/PO Request';
       } else if (activePaymentTab === 'bank') {
-        const remitter = document.getElementById('checkout-remitter-bank')?.value.trim() || 'NEFT';
-        const utr = document.getElementById('checkout-bank-utr')?.value.trim() || Date.now().toString().slice(-6);
-        paymentRef = `${remitter} / UTR: ${utr}`;
-      } else if (activePaymentTab === 'po') {
-        paymentRef = 'PO Ref: ' + (document.getElementById('checkout-po-number')?.value.trim() || 'SANCTION-REQUEST');
+        const remitter = document.getElementById('checkout-remitter-bank')?.value.trim();
+        const utr = document.getElementById('checkout-bank-utr')?.value.trim();
+        paymentRef = remitter || utr ? `${remitter || 'RTGS'} / Ref: ${utr || 'Direct'}` : 'Proforma Request';
+      } else if (activePaymentTab === 'upi') {
+        const upiRef = document.getElementById('checkout-upi-utr')?.value.trim();
+        paymentRef = upiRef ? `Verification: ${upiRef}` : 'Corporate Desk';
       }
 
-      // Generate order
+      const originalBtnHtml = placeOrderBtn.innerHTML;
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-icon">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+          <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
+        </svg>
+        <span>Transmitting Requisition...</span>
+      `;
+
+      const orderPayload = {
+        name,
+        organization: org,
+        email,
+        phone,
+        address,
+        city,
+        pincode,
+        notes,
+        payment_method: activePaymentTab.toUpperCase(),
+        paymentRef,
+        items: cart.map(i => ({
+          productId: i.id,
+          title: i.title,
+          quantity: i.quantity,
+          price: i.price
+        }))
+      };
+
+      let transmitted = false;
+      try {
+        const res = await fetch('/api/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        if (res.ok) {
+          transmitted = true;
+        }
+      } catch (err) {
+        console.warn('Direct order API transmission offline/fallback:', err);
+      }
+
+      // Generate localized order token (sanitize storage: do not store full raw address or secret keys)
       const orderRef = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
       const orders = getOrders();
       const newOrder = {
         _id: 'ord-' + Date.now().toString().slice(-4),
         product_name: cart.map(i => `${i.quantity}× ${i.title}`).join(', '),
         quantity: cart.reduce((sum, i) => sum + i.quantity, 0),
-        amount: subtotal,
-        totalPrice: subtotal,
-        status: 'Pending Verification',
-        payment_status: activePaymentTab === 'po' ? 'PO Issued' : 'Under Review',
+        total_price: subtotal,
+        status: 'pending',
+        payment_status: 'Inquiry / PO Request Submitted',
         payment_method: activePaymentTab.toUpperCase(),
-        paymentRef: paymentRef,
-        customer_name: name,
-        organization: org,
+        transaction_ref: paymentRef,
+        user_bank_name: org || 'Institutional Partner',
+        client_name: name,
         email: email,
-        phone: phone,
-        address: `${address}, ${city} - ${pincode}`,
-        notes: notes,
-        created_at: new Date().toISOString(),
-        items: cart.map(i => ({
-          productId: i.id,
-          title: i.title,
-          quantity: i.quantity,
-          unitPrice: i.price,
-          totalPrice: i.price * i.quantity
-        }))
+        created_at: new Date().toISOString()
       };
 
       orders.unshift(newOrder);
       saveOrders(orders);
       clearCart();
 
-      // Show success celebration & navigate to Profile Orders table
-      showToast(`Procurement Order ${orderRef} placed successfully!`, 'success');
+      placeOrderBtn.disabled = false;
+      placeOrderBtn.innerHTML = originalBtnHtml;
+
+      if (transmitted) {
+        showToast(`Procurement Request ${orderRef} transmitted successfully! Proforma invoice will be sent to ${email}.`, 'success');
+      } else {
+        showToast(`Procurement Request ${orderRef} recorded. Our finance desk will follow up with a formal proforma invoice.`, 'success');
+      }
+
       setTimeout(() => {
         window.location.hash = '#/profile';
-      }, 500);
+      }, 600);
     };
   }
 }
@@ -1158,20 +1207,20 @@ function setupProfilePage() {
     } else {
       ordersTableBody.innerHTML = displayOrders.map(ord => `
         <tr>
-          <td><span class="order-id-pill">${ord._id.toUpperCase()}</span></td>
+          <td><span class="order-id-pill">${escapeHtml(ord._id ? ord._id.toUpperCase() : '')}</span></td>
           <td>
-            <div style="font-weight: 700; color: var(--text-primary);">${ord.product_name}</div>
-            <div style="font-size: 0.76rem; color: var(--text-secondary);">${new Date(ord.created_at).toLocaleDateString()}</div>
+            <div style="font-weight: 700; color: var(--text-primary);">${escapeHtml(ord.product_name)}</div>
+            <div style="font-size: 0.76rem; color: var(--text-secondary);">${ord.created_at ? new Date(ord.created_at).toLocaleDateString() : 'N/A'}</div>
           </td>
-          <td style="font-weight: 700;">${ord.quantity} units</td>
-          <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price).toLocaleString()}</td>
+          <td style="font-weight: 700;">${escapeHtml(ord.quantity)} units</td>
+          <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price || 0).toLocaleString()}</td>
           <td>
             <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
-              ${ord.status.toUpperCase()}
+              ${escapeHtml(ord.status ? ord.status.toUpperCase() : 'PENDING')}
             </span>
           </td>
           <td style="font-size: 0.8rem; font-family: monospace; color: var(--text-secondary);">
-            ${ord.transaction_ref || 'TRX-ONLINE'}
+            ${escapeHtml(ord.transaction_ref || 'PO-INDENT')}
           </td>
         </tr>
       `).join('');
@@ -1299,31 +1348,31 @@ function setupAdminPage() {
 
     ordersTableBody.innerHTML = filtered.map(ord => `
       <tr>
-        <td><span class="order-id-pill">${ord._id.toUpperCase()}</span></td>
+        <td><span class="order-id-pill">${escapeHtml(ord._id ? ord._id.toUpperCase() : '')}</span></td>
         <td>
-          <div style="font-weight: 700; color: var(--text-primary);">${ord.client_name || ord.email}</div>
-          <div style="font-size: 0.76rem; color: var(--text-secondary);">${ord.email}</div>
+          <div style="font-weight: 700; color: var(--text-primary);">${escapeHtml(ord.client_name || ord.email || 'Partner')}</div>
+          <div style="font-size: 0.76rem; color: var(--text-secondary);">${escapeHtml(ord.email || '')}</div>
         </td>
-        <td style="font-size: 0.88rem; max-width: 220px;">${ord.product_name}</td>
-        <td style="font-weight: 700;">${ord.quantity}</td>
-        <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price).toLocaleString()}</td>
+        <td style="font-size: 0.88rem; max-width: 220px;">${escapeHtml(ord.product_name || '')}</td>
+        <td style="font-weight: 700;">${escapeHtml(ord.quantity || 1)}</td>
+        <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price || 0).toLocaleString()}</td>
         <td>
           <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
-            ${ord.status.toUpperCase()}
+            ${escapeHtml(ord.status ? ord.status.toUpperCase() : 'PENDING')}
           </span>
         </td>
         <td>
-          <div style="font-size: 0.8rem; font-weight: 600;">${ord.user_bank_name}</div>
-          <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">${ord.transaction_ref || 'N/A'}</div>
+          <div style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(ord.user_bank_name || 'Direct')}</div>
+          <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">${escapeHtml(ord.transaction_ref || 'N/A')}</div>
         </td>
         <td>
           ${ord.status === 'pending' ? `
             <div style="display: flex; gap: 0.4rem;">
-              <button class="btn-action-verify" data-order-action="verify" data-order-id="${ord._id}" title="Approve & Verify">
+              <button class="btn-action-verify" data-order-action="verify" data-order-id="${escapeHtml(ord._id)}" title="Approve & Verify">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 Verify
               </button>
-              <button class="btn-action-reject" data-order-action="reject" data-order-id="${ord._id}" title="Reject Transaction">
+              <button class="btn-action-reject" data-order-action="reject" data-order-id="${escapeHtml(ord._id)}" title="Reject Transaction">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 Reject
               </button>
@@ -1372,17 +1421,17 @@ function setupAdminPage() {
     const q = query.toLowerCase().trim();
     const filtered = q
       ? leads.filter(l => 
-          l.name.toLowerCase().includes(q) || 
-          l.email.toLowerCase().includes(q) || 
+          (l.name && l.name.toLowerCase().includes(q)) || 
+          (l.email && l.email.toLowerCase().includes(q)) || 
           (l.organization && l.organization.toLowerCase().includes(q)) ||
-          l.message.toLowerCase().includes(q)
+          (l.message && l.message.toLowerCase().includes(q))
         )
       : leads;
 
     if (filtered.length === 0) {
       leadsContainer.innerHTML = `
         <div style="text-align: center; padding: 3rem; color: var(--text-secondary); background: rgba(0,0,0,0.01); border-radius: var(--radius-lg);">
-          No customer inquiries matching "${query}".
+          No customer inquiries matching "${escapeHtml(query)}".
         </div>
       `;
       return;
@@ -1392,18 +1441,18 @@ function setupAdminPage() {
       <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 0.75rem; background: rgba(255,255,255,0.7);">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 0.75rem;">
           <div>
-            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">${l.name}</div>
-            <div style="font-size: 0.82rem; color: var(--text-secondary);">${l.email} &bull; ${l.phone || 'No phone'}</div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">${escapeHtml(l.name)}</div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">${escapeHtml(l.email)} &bull; ${escapeHtml(l.phone || 'No phone')}</div>
           </div>
           <div style="display: flex; align-items: center; gap: 0.75rem;">
             <span class="badge" style="background: rgba(147, 51, 234, 0.1); color: var(--primary); margin: 0; font-size: 0.75rem;">
-              ${l.organization || 'Individual'}
+              ${escapeHtml(l.organization || 'Individual')}
             </span>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">${new Date(l.created_at).toLocaleDateString()}</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">${l.created_at ? new Date(l.created_at).toLocaleDateString() : 'N/A'}</span>
           </div>
         </div>
         <div style="font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
-          ${l.message}
+          ${escapeHtml(l.message)}
         </div>
       </div>
     `).join('');
@@ -1467,10 +1516,6 @@ function setupAdminPage() {
 
 // Global Event Listeners
 window.addEventListener('DOMContentLoaded', () => {
-  // Force Light Mode
-  document.documentElement.classList.remove('dark-mode');
-  localStorage.removeItem('sackhe_theme');
-
   // Route matching
   router();
   window.addEventListener('hashchange', router);
@@ -1484,16 +1529,54 @@ window.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email')?.value.trim();
+      const password = document.getElementById('login-password')?.value || '';
       if (!email) return;
 
-      // Look up authenticated user from user store or determine role
+      if (!password) {
+        showToast('Please enter your password to sign in.', 'error');
+        return;
+      }
+
+      // Check if attempting admin login
+      if (email.toLowerCase() === 'admin@sackhe.com') {
+        if (password !== 'admin123') {
+          showToast('Invalid administrator password.', 'error');
+          return;
+        }
+        let user = findUserByEmail(email);
+        if (!user) {
+          user = {
+            name: 'Admin User',
+            email: 'admin@sackhe.com',
+            role: 'admin',
+            password: 'admin123',
+            org: 'Sackhe Technologies',
+            phone: '+91 73372 38466'
+          };
+          const allUsers = getUsers();
+          allUsers.push(user);
+          saveUsers(allUsers);
+        }
+        setCurrentUser(user);
+        toggleAuthModal(false);
+        showToast(`Welcome back, ${user.name}!`, 'success');
+        window.location.hash = '#/admin';
+        return;
+      }
+
+      // Standard user authentication
       let user = findUserByEmail(email);
+      if (user && user.password && user.password !== password) {
+        showToast('Incorrect password for this account.', 'error');
+        return;
+      }
+
       if (!user) {
-        // Fallback for new sign-in
         user = {
           name: email.split('@')[0].toUpperCase(),
           email: email,
-          role: 'user',
+          password: password,
+          role: 'user', // NEVER assign admin
           org: 'Institutional Partner',
           phone: '+91 73372 38466'
         };
@@ -1506,15 +1589,8 @@ window.addEventListener('DOMContentLoaded', () => {
       toggleAuthModal(false);
       showToast(`Welcome back, ${user.name}!`, 'success');
 
-      // Role-based redirection:
-      // 1. Authorized admin -> Open ONLY the Admin Dashboard (#/admin)
-      // 2. Normal user -> Keep on existing website experience (do NOT open Admin Dashboard)
-      if (user.role === 'admin') {
-        window.location.hash = '#/admin';
-      } else {
-        if (window.location.hash === '#/admin') {
-          window.location.hash = '#/';
-        }
+      if (window.location.hash === '#/admin') {
+        window.location.hash = '#/';
       }
     });
   }
@@ -1526,33 +1602,42 @@ window.addEventListener('DOMContentLoaded', () => {
       const name = document.getElementById('register-name')?.value.trim();
       const email = document.getElementById('register-email')?.value.trim();
       const org = document.getElementById('register-org')?.value.trim();
-      if (!email) return;
+      const password = document.getElementById('register-password')?.value || '';
+      if (!email || !password) {
+        showToast('Please provide an email and password.', 'error');
+        return;
+      }
+
+      if (email.toLowerCase() === 'admin@sackhe.com') {
+        showToast('Admin account cannot be registered through public portal.', 'error');
+        return;
+      }
 
       let user = findUserByEmail(email);
-      if (!user) {
-        user = {
-          name: name || 'Valued Partner',
-          email: email,
-          role: 'user',
-          org: org || 'Institutional Partner',
-          phone: '+91 73372 38466'
-        };
-        const allUsers = getUsers();
-        allUsers.push(user);
-        saveUsers(allUsers);
+      if (user) {
+        showToast('An account with this email already exists. Please sign in.', 'default');
+        switchAuthTab('signin');
+        return;
       }
+
+      user = {
+        name: name || 'Valued Partner',
+        email: email,
+        password: password,
+        role: 'user', // Strictly user role
+        org: org || 'Institutional Partner',
+        phone: '+91 73372 38466'
+      };
+      const allUsers = getUsers();
+      allUsers.push(user);
+      saveUsers(allUsers);
 
       setCurrentUser(user);
       toggleAuthModal(false);
       showToast('Account registered successfully!', 'success');
 
-      // Role-based redirection
-      if (user.role === 'admin') {
-        window.location.hash = '#/admin';
-      } else {
-        if (window.location.hash === '#/admin') {
-          window.location.hash = '#/';
-        }
+      if (window.location.hash === '#/admin') {
+        window.location.hash = '#/';
       }
     });
   }

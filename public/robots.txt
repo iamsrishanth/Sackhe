@@ -1,4 +1,16 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sackhetechnologies.com/sitemap.xml
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://sackhe.srishanth.com/sitemap.xml
