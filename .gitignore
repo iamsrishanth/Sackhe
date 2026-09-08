@@ -13,8 +13,12 @@ yarn-error.log*
 lighthouse-*.html
 lighthouse-*.json
 lighthouse-summary.json
+localhost_*.json
 
-# Local test scripts & temporary screenshots
+# Scratch & development artifacts
+scratch/
+brain/
+extracted_content.md
 .orig_images/
 phone_*.jpg
 menu_alignment_check.png

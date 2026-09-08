@@ -31,89 +31,6 @@
   --max-width: 1280px;
 }
 
-:root.dark-mode {
-  --bg-base-dark: hsl(240, 15%, 3%);
-  --bg-surface: hsl(240, 10%, 6%);
-  --bg-glass: rgba(12, 10, 20, 0.6);
-  --border-glass: rgba(147, 51, 234, 0.15);
-  --border-glass-hover: rgba(147, 51, 234, 0.35);
-
-  --primary: hsl(271, 91%, 65%);
-  --primary-glow: rgba(147, 51, 234, 0.3);
-  --secondary: hsl(150, 84%, 57%);
-  --secondary-glow: rgba(16, 185, 129, 0.25);
-
-  --text-primary: hsl(0, 0%, 98%);
-  --text-secondary: hsl(240, 5%, 70%);
-  --text-muted: hsl(240, 4%, 48%);
-}
-
-/* Dark mode specific background and structural adjustments */
-html.dark-mode body {
-  background: radial-gradient(circle at 50% 0%, hsl(260, 40%, 10%) 0%, var(--bg-base-dark) 60%),
-    radial-gradient(circle at 0% 100%, hsl(160, 30%, 8%) 0%, var(--bg-base-dark) 50%);
-}
-
-html.dark-mode .header {
-  background: rgba(8, 7, 13, 0.4);
-  border-bottom-color: rgba(255, 255, 255, 0.03);
-}
-
-html.dark-mode .header.scrolled {
-  background: rgba(8, 7, 13, 0.85);
-  border-bottom-color: rgba(147, 51, 234, 0.15);
-}
-
-html.dark-mode .btn-secondary {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: var(--border-glass-hover);
-}
-
-html.dark-mode .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--text-primary);
-}
-
-html.dark-mode .form-input {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-html.dark-mode .form-input:focus {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-html.dark-mode .auth-overlay {
-  background: rgba(6, 4, 10, 0.85);
-}
-
-html.dark-mode .close-modal {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-html.dark-mode .close-modal:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-html.dark-mode .toast {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-}
-
-html.dark-mode .footer {
-  background: rgba(6, 4, 10, 0.95);
-  border-top-color: rgba(255, 255, 255, 0.03);
-}
-
-html.dark-mode .product-card-img-wrapper {
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.07) 0%, rgba(15, 12, 28, 0.7) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-html.dark-mode .product-render-box {
-  background: transparent;
-  border: none !important;
-  box-shadow: none !important;
-}
-
 /* Default Light Mode structural styles overriding default dark hardcodings */
 html .header {
   background: rgba(255, 255, 255, 0.45);
@@ -4641,3 +4558,13 @@ h6 {
     text-align: center;
   }
 }
+
+/* Accessibility: Support prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

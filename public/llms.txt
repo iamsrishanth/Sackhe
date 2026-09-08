@@ -18,10 +18,10 @@ To become India's most trusted name in sustainable waste management.
 Price: ₹64,949. Available now. An emission-controlled sanitary waste incinerator for menstrual hygiene waste disposal — clean, odorless, and dignified. Target sectors: schools & colleges, hospitals, corporate offices, public restrooms, hostels, malls.
 
 ### Solid Waste Management System
-Custom quote. Pre-order (launching soon). A modular solid waste management system for mixed municipal and institutional waste with automated segregation, composting integration, and real-time monitoring. Target sectors: municipalities, apartment complexes, campuses, industrial areas, commercial buildings.
+Price: Custom Engineering Quote. Available for Institutional Deployment. A modular solid waste management system for mixed municipal and institutional waste with automated segregation, composting integration, and real-time monitoring. Target sectors: municipalities, apartment complexes, campuses, industrial areas, commercial buildings.
 
 ### Eco-Friendly Biodegradable Sanitary Pad
-Pre-ordering. A 100% biodegradable sanitary pad made from natural materials including organic cotton. Decomposes naturally in 8–10 months (versus 500–800 years for plastic-based pads). Target sectors: school girls, women in rural areas, eco-conscious consumers, NGOs, institutions.
+Price: ₹249 (Pack of 10). Available now. A 100% biodegradable sanitary pad made from natural materials including organic cotton. Decomposes naturally in 8–10 months (versus 500–800 years for plastic-based pads). Target sectors: school girls, women in rural areas, eco-conscious consumers, NGOs, institutions.
 
 ## Services
 
@@ -69,7 +69,7 @@ Solutions target girls schools & colleges, local communities, municipal authorit
 - LinkedIn: [Sackhe Technologies on LinkedIn](https://www.linkedin.com/company/sackhetechnologies-pvtltd/)
 - Instagram: [@_sackhe_ on Instagram](https://www.instagram.com/_sackhe_)
 
-## Important URLS
+## Important URLs
 
 - Website: [https://sackhe.srishanth.com/](https://sackhe.srishanth.com/)
 - Home: [https://sackhe.srishanth.com/#/](https://sackhe.srishanth.com/#/)
@@ -78,5 +78,6 @@ Solutions target girls schools & colleges, local communities, municipal authorit
 - Services: [https://sackhe.srishanth.com/#/services](https://sackhe.srishanth.com/#/services)
 - Social impact & initiatives: [https://sackhe.srishanth.com/#/initiatives](https://sackhe.srishanth.com/#/initiatives)
 - Contact / inquiries: [https://sackhe.srishanth.com/#/contact](https://sackhe.srishanth.com/#/contact)
+- Institutional Procurement / Checkout: [https://sackhe.srishanth.com/#/checkout](https://sackhe.srishanth.com/#/checkout)
 
 _This website is a single-page application (SPA) using hash-based routing — all major pages are reachable from the routes listed above._

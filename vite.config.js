@@ -27,19 +27,6 @@ function inlineCssPlugin() {
   };
 }
 
-function devMinifyPlugin() {
-  return {
-    name: 'dev-minify',
-    apply: 'serve',
-    transform(code, id) {
-      if (id.endsWith('/app.js') || id.endsWith('\\app.js')) {
-        const res = transformSync(code, { loader: 'js', minify: true, sourcemap: false });
-        return { code: res.code, map: { mappings: '' } };
-      }
-    },
-  };
-}
-
 function serverCompressionPlugin() {
   return {
     name: 'server-compression',
@@ -66,7 +53,7 @@ export default defineConfig({
       }
     }
   },
-  plugins: [inlineCssPlugin(), devMinifyPlugin(), serverCompressionPlugin()],
+  plugins: [inlineCssPlugin(), serverCompressionPlugin()],
   server: {
     host: true,
     port: 5173
