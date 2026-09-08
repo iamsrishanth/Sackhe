@@ -20,7 +20,9 @@
   <meta property="og:url" content="https://sackhetechnologies.com/">
   <meta property="og:title" content="Sackhe Technologies - Sustainable Waste Management Solutions">
   <meta property="og:description" content="Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.">
-  <meta property="og:image" content="https://sackhetechnologies.com/sackhelogo.webp">
+  <meta property="og:image" content="https://sackhetechnologies.com/og_image_card.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Sackhe Technologies">
   <meta property="og:locale" content="en_US">
 
@@ -29,7 +31,7 @@
   <meta name="twitter:url" content="https://sackhetechnologies.com/">
   <meta name="twitter:title" content="Sackhe Technologies - Sustainable Waste Management Solutions">
   <meta name="twitter:description" content="Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems for menstrual and solid waste.">
-  <meta name="twitter:image" content="https://sackhetechnologies.com/sackhelogo.webp">
+  <meta name="twitter:image" content="https://sackhetechnologies.com/og_image_card.webp">
 
   <!-- Structured Data (Schema.org JSON-LD) -->
   <script type="application/ld+json">
@@ -50,15 +52,17 @@
         "description": "Leading provider of innovative sustainable waste management solutions including emission-controlled incinerators and eco-friendly systems.",
         "address": {
           "@type": "PostalAddress",
+          "streetAddress": "House No. 1-6-546, Near SV Prime, Ramalayam, Chaithanyapuri Colony, Saroornagar",
           "addressLocality": "Hyderabad",
           "addressRegion": "Telangana",
+          "postalCode": "500035",
           "addressCountry": "IN"
         },
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "+91 73372 38466",
           "contactType": "sales",
-          "email": "connect@sackhetechnologies.com",
+          "email": "info@sackhetechnologies.com",
           "availableLanguage": ["English", "Hindi", "Telugu"]
         },
         "sameAs": [
@@ -74,6 +78,48 @@
         "description": "Sustainable Waste Management Solutions",
         "publisher": {
           "@id": "https://sackhetechnologies.com/#organization"
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://sackhetechnologies.com/#product-incinerator",
+        "name": "Non-Toxic Emission Cycle – Menstrual Waste Incinerator",
+        "description": "Emission-controlled sanitary waste incinerator operating 100% smoke-free with zero-carbon profile for schools, hospitals, and offices.",
+        "image": "https://sackhetechnologies.com/home_view2.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Sackhe Technologies"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "64949",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://sackhetechnologies.com/#/products",
+          "seller": {
+            "@id": "https://sackhetechnologies.com/#organization"
+          }
+        }
+      },
+      {
+        "@type": "Product",
+        "@id": "https://sackhetechnologies.com/#product-eco-pads",
+        "name": "Eco-Friendly Biodegradable Sanitary Pads",
+        "description": "100% biodegradable sanitary pad made from organic cotton and natural plant fibers, decomposing in 8-10 months.",
+        "image": "https://sackhetechnologies.com/premium_pad.webp",
+        "brand": {
+          "@type": "Brand",
+          "name": "Sackhe Technologies"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "249",
+          "priceCurrency": "INR",
+          "availability": "https://schema.org/InStock",
+          "url": "https://sackhetechnologies.com/#/products",
+          "seller": {
+            "@id": "https://sackhetechnologies.com/#organization"
+          }
         }
       }
     ]
@@ -100,7 +146,6 @@
         <a href="#/services" class="nav-link">Services</a>
         <a href="#/initiatives" class="nav-link">Initiatives</a>
         <a href="#/contact" class="nav-link nav-contact-pill">Contact</a>
-        <a href="#/admin" class="nav-link nav-admin-pill" id="nav-admin-link" style="display: none;">Admin</a>
 
         <div class="nav-social-group">
           <a href="https://www.linkedin.com/company/sackhetechnologies-pvtltd/" target="_blank" class="nav-social-btn" title="LinkedIn" aria-label="LinkedIn">
@@ -109,10 +154,6 @@
           <a href="https://www.instagram.com/_sackhe_?igsh=NG9qYTN6emJxbmV6&utm_source=qr" target="_blank" class="nav-social-btn" title="Instagram" aria-label="Instagram">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </a>
-        </div>
-
-        <div id="user-auth-btn">
-          <!-- Auth action loaded dynamically -->
         </div>
 
         <!-- E-Commerce Cart Button -->
@@ -196,7 +237,7 @@
           THE PATH TO ZERO WASTE
         </div>
         <h1 class="hero-title">
-          Redefining the<br><span class="text-gradient">Cycle of Nature</span>
+          Redefining the <br><span class="text-gradient">Cycle of Nature</span>
         </h1>
         <p class="hero-desc" style="font-size: 1.15rem; line-height: 1.75; max-width: 620px; margin: 0 auto 2rem; color: var(--text-secondary); hyphens: none; text-wrap: balance; word-break: keep-all;">
           Sackhe Technologies is leading the transition to safe, clean, and sustainable waste lifecycle management through advanced emission-controlled incineration systems.
@@ -395,8 +436,7 @@
             <a href="#/about" class="footer-link">About Us</a>
             <a href="#/products" class="footer-link">Our Catalog</a>
             <a href="#/services" class="footer-link">Services</a>
-            <a href="#/admin" class="footer-link" id="footer-admin-link" style="color: #10b981; font-weight: 700; display: none;">Admin Console</a>
-            <a href="#/profile" class="footer-link">My Account</a>
+            <a href="#/admin" class="footer-link" style="color: var(--secondary); font-weight: 600;">Operations Demo</a>
           </div>
         </div>
         
@@ -437,7 +477,7 @@
         THE PATH TO ZERO WASTE
       </div>
       <h1 class="hero-title">
-        Redefining the<br><span class="text-gradient">Cycle of Nature</span>
+        Redefining the <br><span class="text-gradient">Cycle of Nature</span>
       </h1>
       <p class="hero-desc" style="font-size: 1.15rem; line-height: 1.75; max-width: 620px; margin: 0 auto 2rem; color: var(--text-secondary); hyphens: none; text-wrap: balance; word-break: keep-all;">
         Sackhe Technologies is leading the transition to safe, clean, and sustainable waste lifecycle management through advanced emission-controlled incineration systems.
@@ -905,7 +945,7 @@
               <img src="sandhya.webp" alt="Kolisetti Sandhya" loading="lazy" decoding="async" style="object-position: center 35%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">KS</div>
             </div>
-            <h3 class="team-name">Kolisetti Sandhya</h4>
+            <h3 class="team-name">Kolisetti Sandhya</h3>
             <p class="team-role">Managing Director & CMO</p>
             <div class="team-socials">
               <a href="https://www.linkedin.com/in/tuti-sandhya-179ab4a2" target="_blank" class="team-social-link">LinkedIn</a>
@@ -918,7 +958,7 @@
               <img src="varshitha.webp" alt="Venumula Varsitha Reddy" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">VR</div>
             </div>
-            <h3 class="team-name">Venumula Varsitha Reddy</h4>
+            <h3 class="team-name">Venumula Varsitha Reddy</h3>
             <p class="team-role">Director & CEO</p>
             <div class="team-socials">
               <a href="https://www.linkedin.com/in/varsitha-reddy" target="_blank" class="team-social-link">LinkedIn</a>
@@ -931,7 +971,7 @@
               <img src="rakesh.webp" alt="Appala Rakesh Goud" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">RG</div>
             </div>
-            <h3 class="team-name">Appala Rakesh Goud</h4>
+            <h3 class="team-name">Appala Rakesh Goud</h3>
             <p class="team-role">Executive Director & COO</p>
             <div class="team-socials">
               <a href="https://www.linkedin.com/in/rakesh-goud-appala-153641284" target="_blank" class="team-social-link">LinkedIn</a>
@@ -944,7 +984,7 @@
               <img src="jahnavi.webp" alt="Vanekari Jahnavi" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">VJ</div>
             </div>
-            <h3 class="team-name">Vanekari Jahnavi</h4>
+            <h3 class="team-name">Vanekari Jahnavi</h3>
             <p class="team-role">Director & CFO</p>
             <div class="team-socials">
               <a href="https://www.linkedin.com/in/v-jahnavi-284259226" target="_blank" class="team-social-link">LinkedIn</a>
@@ -957,7 +997,7 @@
               <img src="kedar.webp" alt="Sai Venkata Satya Kedar Illa" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="avatar-initials" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: var(--primary); background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);">SK</div>
             </div>
-            <h3 class="team-name">Sai Venkata Satya Kedar Illa</h4>
+            <h3 class="team-name">Sai Venkata Satya Kedar Illa</h3>
             <p class="team-role">Director</p>
             <div class="team-socials">
               <a href="https://www.linkedin.com/in/satya-illa" target="_blank" class="team-social-link">LinkedIn</a>
@@ -1033,7 +1073,7 @@
             <p class="product-description">
               A comprehensive, modular solid waste management system designed to handle mixed municipal and institutional waste. Equipped with automated segregation, composting integration, and real-time monitoring, this system transforms waste into resources.
             </p>
-            <h3 class="product-section-label">Target Sectors</h4>
+            <h3 class="product-section-label">Target Sectors</h3>
             <div class="sector-tags">
               <span class="sector-tag">Municipalities</span>
               <span class="sector-tag">Apartment Complexes</span>
@@ -1077,7 +1117,7 @@
             <p class="product-description">
               Our next-generation sanitary pad is crafted from 100% natural, biodegradable materials including cotton. Designed for comfort and sustainability, it decomposes naturally in 8–10 months — not 500–800 years like conventional plastic-based pads.
             </p>
-            <h3 class="product-section-label">Target Sectors</h4>
+            <h3 class="product-section-label">Target Sectors</h3>
             <div class="sector-tags">
               <span class="sector-tag">School Girls</span>
               <span class="sector-tag">Women in Rural Areas</span>
@@ -1547,8 +1587,8 @@
                   <input type="text" id="contact-name" class="contact-text-input" placeholder="Your full name" required>
                 </div>
                 <div class="form-input-field">
-                  <label for="contact-org" class="contact-field-label">Organization / Institute</label>
-                  <input type="text" id="contact-org" class="contact-text-input" placeholder="Organization name">
+                  <label for="contact-email" class="contact-field-label">Email Address <span class="asterisk-required">*</span></label>
+                  <input type="email" id="contact-email" class="contact-text-input" placeholder="name@organization.com" required>
                 </div>
               </div>
 
@@ -1558,9 +1598,14 @@
                   <input type="tel" id="contact-phone" class="contact-text-input" placeholder="+91 98765 43210" required>
                 </div>
                 <div class="form-input-field">
-                  <label for="contact-product" class="contact-field-label">Product</label>
-                  <input type="text" id="contact-product" class="contact-text-input" placeholder="Select or inquire about a product">
+                  <label for="contact-org" class="contact-field-label">Organization / Institute</label>
+                  <input type="text" id="contact-org" class="contact-text-input" placeholder="Organization name">
                 </div>
+              </div>
+
+              <div class="form-input-field">
+                <label for="contact-product" class="contact-field-label">Product / Scope of Inquiry</label>
+                <input type="text" id="contact-product" class="contact-text-input" placeholder="Select or inquire about a product">
               </div>
 
               <div class="form-input-field">
@@ -1874,144 +1919,23 @@
     </section>
   </template>
 
-  <!-- ================= PROFILE PAGE TEMPLATE ================= -->
-  <template id="page-profile">
-    <section class="profile-page-wrapper container">
-      <div class="section-header" style="max-width: 800px; margin-bottom: 4rem;">
-        <span class="badge">MY ACCOUNT</span>
-        <h1 class="hero-title text-gradient">Profile & History</h1>
-        <p class="section-desc" style="font-size: 1.15rem; line-height: 1.7; margin-top: 1rem;">
-          Manage your organizational credentials, monitor recent orders, and oversee your active sustainability deployments.
-        </p>
-      </div>
-
-      <div class="profile-layout-grid">
-        <!-- Profile Identity Card -->
-        <div class="glass-card profile-identity-card">
-          <div class="profile-avatar-large" id="profile-avatar-icon">AU</div>
-          <h2 id="profile-user-name" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Admin User</h2>
-          <p id="profile-user-email" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.75rem;">admin@sackhe.com</p>
-          <div id="profile-role-badge-container">
-            <span class="profile-role-pill profile-role-admin">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              Administrator
-            </span>
-          </div>
-
-          <div class="profile-field-list">
-            <div class="profile-field-row">
-              <span class="profile-field-name">Organization</span>
-              <span class="profile-field-value" id="profile-org-val">Sackhe Technologies</span>
-            </div>
-            <div class="profile-field-row">
-              <span class="profile-field-name">Contact Phone</span>
-              <span class="profile-field-value" id="profile-phone-val">+91 73372 38466</span>
-            </div>
-            <div class="profile-field-row">
-              <span class="profile-field-name">Account Status</span>
-              <span class="profile-field-value" style="color: #15803d; font-weight: 700;">Active & Verified</span>
-            </div>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <button id="open-edit-profile-btn" class="btn btn-secondary" style="width: 100%; border-radius: var(--radius-pill); font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              Edit Profile Details
-            </button>
-            <button id="profile-signout-btn" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-pill); font-size: 0.88rem; background: #ef4444; border-color: #ef4444;">
-              Sign Out
-            </button>
-          </div>
-        </div>
-
-        <!-- Orders & Procurement History -->
-        <div class="glass-card" style="padding: 2.5rem; border-radius: var(--radius-2xl);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-            <div>
-              <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Procurement & Order History</h2>
-              <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">Real-time tracking of institutional machine requests and recurring pad shipments.</p>
-            </div>
-            <a href="#/products" class="btn btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem; border-radius: var(--radius-pill);">+ New Order</a>
-          </div>
-
-          <div class="orders-table-wrapper">
-            <table class="orders-table">
-              <thead>
-                <tr>
-                  <th>Order Ref</th>
-                  <th>Product Details</th>
-                  <th>Units</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
-                  <th>Txn Reference</th>
-                </tr>
-              </thead>
-              <tbody id="user-orders-table-body">
-                <!-- Rendered via JavaScript -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Quick Navigation Actions -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 2.5rem;">
-            <div class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(0,0,0,0.02);">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem;">Explore Catalog</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Browse all incinerators and sanitary solutions.</p>
-              <a href="#/products" style="color: var(--primary); font-weight: 700; font-size: 0.85rem; text-decoration: none;">View Products &rarr;</a>
-            </div>
-
-            <div id="admin-quicklink-card" class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); display: none;">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem; color: #047857;">Admin Console</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Access orders approval and metrics panel.</p>
-              <a href="#/admin" style="color: #047857; font-weight: 800; font-size: 0.85rem; text-decoration: none;">Launch Dashboard &rarr;</a>
-            </div>
-
-            <div class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(0,0,0,0.02);">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem;">Direct Advisory</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Request on-site campus inspection or demo.</p>
-              <a href="#/contact" style="color: var(--primary); font-weight: 700; font-size: 0.85rem; text-decoration: none;">Contact Advisors &rarr;</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Profile Edit Modal -->
-    <div id="profile-edit-overlay" class="auth-overlay">
-      <div class="auth-modal">
-        <button id="close-profile-modal" class="auth-modal-close" aria-label="Close">&times;</button>
-        <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">Edit Profile</h3>
-        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">Update your account credentials and contact details.</p>
-        <form id="profile-edit-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Full Name</label>
-            <input type="text" id="edit-profile-name" class="auth-input" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Organization / Institution</label>
-            <input type="text" id="edit-profile-org" class="auth-input">
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Phone Number</label>
-            <input type="tel" id="edit-profile-phone" class="auth-input">
-          </div>
-          <button type="submit" class="auth-submit-btn" style="margin-top: 0.5rem;">Save Changes</button>
-        </form>
-      </div>
-    </div>
-  </template>
-
   <!-- ================= ADMIN PAGE TEMPLATE ================= -->
   <template id="page-admin">
     <section class="admin-page-wrapper container">
-      <div class="section-header" style="max-width: 900px; margin-bottom: 3.5rem;">
+      <!-- Demo Mode Banner -->
+      <div class="admin-demo-banner" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.08)); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.85rem 1.25rem; border-radius: var(--radius-lg); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <span style="background: #d97706; color: #fff; font-size: 0.72rem; font-weight: 800; padding: 0.2rem 0.5rem; border-radius: var(--radius-pill); text-transform: uppercase; letter-spacing: 0.05em;">Interactive Evaluation Preview</span>
+        <span style="font-size: 0.85rem; color: #92400e; line-height: 1.5;">This operations console provides an interactive demo view for testing requisition workflows. Live institutional purchase orders and payments are reconciled offline.</span>
+      </div>
+
+      <div class="section-header" style="max-width: 900px; margin-bottom: 2.5rem;">
         <div class="admin-header-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           ADMIN OPERATIONS CONSOLE
         </div>
         <h1 class="hero-title text-gradient">Executive Dashboard</h1>
         <p class="section-desc" style="font-size: 1.15rem; line-height: 1.7; margin-top: 1rem;">
-          Oversee hardware procurements, process institutional orders, review customer contact inquiries, and adjust platform settings.
+          Oversee hardware procurements, process institutional requisitions, review customer inquiries, and adjust platform settings.
         </p>
       </div>
 
@@ -2019,33 +1943,33 @@
       <div class="admin-kpi-grid">
         <div class="admin-kpi-card">
           <div class="kpi-label">Total Platform Revenue</div>
-          <div class="kpi-value" id="admin-stat-revenue">₹2,48,500</div>
-          <div class="kpi-sub">&uarr; 18.4% this quarter</div>
+          <div class="kpi-value" id="admin-stat-revenue">₹0</div>
+          <div class="kpi-sub" id="admin-stat-revenue-sub">Reconciled orders</div>
         </div>
 
         <div class="admin-kpi-card">
           <div class="kpi-label">Active Orders</div>
-          <div class="kpi-value" id="admin-stat-orders">14 Orders</div>
-          <div class="kpi-sub" style="color: #d97706;">3 Pending Verification</div>
+          <div class="kpi-value" id="admin-stat-orders">0 Orders</div>
+          <div class="kpi-sub" id="admin-stat-orders-sub" style="color: #d97706;">0 Pending Verification</div>
         </div>
 
         <div class="admin-kpi-card">
           <div class="kpi-label">Lead Submissions</div>
-          <div class="kpi-value" id="admin-stat-leads">42 Inquiries</div>
-          <div class="kpi-sub" style="color: var(--primary);">5 Unread Inquiries</div>
+          <div class="kpi-value" id="admin-stat-leads">0 Inquiries</div>
+          <div class="kpi-sub" id="admin-stat-leads-sub" style="color: var(--primary);">0 New Messages</div>
         </div>
 
         <div class="admin-kpi-card">
           <div class="kpi-label">Deployments & Units</div>
-          <div class="kpi-value" id="admin-stat-units">18 Units</div>
-          <div class="kpi-sub">&uarr; 4 Deployments this month</div>
+          <div class="kpi-value" id="admin-stat-units">0 Units</div>
+          <div class="kpi-sub" id="admin-stat-units-sub">Hardware units deployed</div>
         </div>
       </div>
 
       <!-- Tab Switcher -->
       <div class="admin-tabs-nav">
-        <button class="admin-nav-tab active" data-admin-tab="orders">Orders & Procurements (<span id="admin-orders-count">2</span>)</button>
-        <button class="admin-nav-tab" data-admin-tab="leads">Inquiries & Leads (<span id="admin-leads-count">3</span>)</button>
+        <button class="admin-nav-tab active" data-admin-tab="orders">Orders & Procurements (<span id="admin-orders-count">0</span>)</button>
+        <button class="admin-nav-tab" data-admin-tab="leads">Inquiries & Leads (<span id="admin-leads-count">0</span>)</button>
         <button class="admin-nav-tab" data-admin-tab="settings">System Configurations</button>
       </div>
 
@@ -2132,66 +2056,39 @@
     </section>
   </template>
 
-  <!-- ================= AUTHENTICATION MODAL ================= -->
-  <div id="auth-overlay" class="auth-overlay">
-    <div class="auth-modal">
-      <button class="auth-modal-close" onclick="toggleAuthModal(false)" aria-label="Close modal">&times;</button>
-      
-      <div class="auth-tabs">
-        <button class="auth-tab-btn active" id="tab-btn-signin" onclick="switchAuthTab('signin')">Sign In</button>
-        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">Register</button>
+  <!-- Transmission Confirmation & Direct Dispatch Modal -->
+  <div id="dispatch-modal-overlay" class="auth-overlay">
+    <div class="auth-modal" style="max-width: 580px;">
+      <button id="close-dispatch-modal" class="auth-modal-close" aria-label="Close modal">&times;</button>
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+        <div style="width: 38px; height: 38px; border-radius: 50%; background: rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: center; color: var(--secondary);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <h3 id="dispatch-modal-title" style="font-size: 1.25rem; font-weight: 800; margin: 0;">Inquiry Prepared</h3>
+          <p id="dispatch-modal-subtitle" style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Transmission draft ready for dispatch</p>
+        </div>
       </div>
-
-      <div id="auth-signin-pane">
-        <form id="auth-login-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Email Address</label>
-            <input type="email" id="login-email" class="auth-input" placeholder="admin@sackhe.com or user@example.com" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Password</label>
-            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required>
-          </div>
-          <button type="submit" class="auth-submit-btn" id="login-submit-btn">Sign In</button>
-        </form>
-        <p style="font-size: 0.76rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">
-          Tip: Enter <strong>admin@sackhe.com</strong> to unlock the Admin Dashboard!
-        </p>
+      <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1rem;">
+        Your message has been drafted. You can send it directly using your preferred email client or copy the formatted text below:
+      </p>
+      <div class="auth-input-group" style="margin-bottom: 1.25rem;">
+        <label class="auth-label" style="display: flex; justify-content: space-between; align-items: center;">
+          <span>Formatted Message Body</span>
+          <span id="dispatch-copy-feedback" style="font-size: 0.75rem; color: var(--secondary); font-weight: 700; display: none;">Copied to clipboard!</span>
+        </label>
+        <textarea id="dispatch-modal-body" class="contact-textarea font-mono" rows="8" readonly style="font-size: 0.82rem; line-height: 1.5; background: rgba(0,0,0,0.03); resize: none;"></textarea>
       </div>
-
-      <div id="auth-register-pane" style="display: none;">
-        <form id="auth-register-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Full Name</label>
-            <input type="text" id="register-name" class="auth-input" placeholder="Your Name" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Email Address</label>
-            <input type="email" id="register-email" class="auth-input" placeholder="name@organization.com" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Organization</label>
-            <input type="text" id="register-org" class="auth-input" placeholder="School, Hospital or Society">
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Password</label>
-            <input type="password" id="register-password" class="auth-input" placeholder="Create password" required>
-          </div>
-          <button type="submit" class="auth-submit-btn">Create Account</button>
-        </form>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a id="dispatch-mailto-btn" href="#" class="btn btn-primary" style="flex: 1; min-width: 180px; justify-content: center; text-decoration: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Open Email Client</span>
+        </a>
+        <button type="button" id="dispatch-copy-btn" class="btn btn-secondary" style="flex: 1; min-width: 160px; justify-content: center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span id="dispatch-copy-btn-text">Copy Body</span>
+        </button>
       </div>
-
-      <div class="auth-divider">OR</div>
-
-      <button id="google-signin-action" class="google-auth-btn" onclick="handleGoogleSignIn()">
-        <svg class="google-icon-svg" width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span>Sign in with Google</span>
-      </button>
     </div>
   </div>
 

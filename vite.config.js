@@ -2,7 +2,6 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import { readFileSync } from 'fs';
 import { transformSync } from 'esbuild';
-import compression from 'compression';
 
 // Inline the app CSS into <head> so first paint doesn't wait on a
 // render-blocking stylesheet request (big Speed Index / LCP win).
@@ -27,31 +26,6 @@ function inlineCssPlugin() {
   };
 }
 
-function devMinifyPlugin() {
-  return {
-    name: 'dev-minify',
-    apply: 'serve',
-    transform(code, id) {
-      if (id.endsWith('/app.js') || id.endsWith('\\app.js')) {
-        const res = transformSync(code, { loader: 'js', minify: true, sourcemap: false });
-        return { code: res.code, map: { mappings: '' } };
-      }
-    },
-  };
-}
-
-function serverCompressionPlugin() {
-  return {
-    name: 'server-compression',
-    configureServer(server) {
-      server.middlewares.use(compression());
-    },
-    configurePreviewServer(server) {
-      server.middlewares.use(compression());
-    }
-  };
-}
-
 export default defineConfig({
   root: '.',
   build: {
@@ -66,7 +40,7 @@ export default defineConfig({
       }
     }
   },
-  plugins: [inlineCssPlugin(), devMinifyPlugin(), serverCompressionPlugin()],
+  plugins: [inlineCssPlugin()],
   server: {
     host: true,
     port: 5173
