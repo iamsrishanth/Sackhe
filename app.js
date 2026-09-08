@@ -1,4 +1,4 @@
-// Sackhe Technologies - SPA Router & App Logic
+// Sackhe Technologies - SPA Router & Application Logic
 
 // HTML Escape Utility to Prevent XSS in all Dynamic Sinks
 function escapeHtml(str) {
@@ -9,61 +9,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-}
-
-// User Accounts Store
-function getUsers() {
-  try {
-    const raw = localStorage.getItem('sackhe_users');
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveUsers(users) {
-  try {
-    localStorage.setItem('sackhe_users', JSON.stringify(users));
-  } catch (e) {}
-}
-
-function findUserByEmail(email) {
-  if (!email) return null;
-  const users = getUsers();
-  return users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
-}
-
-// Current Auth State Helper Functions
-function getCurrentUser() {
-  try {
-    const raw = localStorage.getItem('sackhe_auth_user');
-    if (!raw) return null;
-    let parsed = null;
-    if (raw.startsWith('{')) {
-      parsed = JSON.parse(raw);
-    }
-    if (parsed && parsed.email) {
-      const matched = findUserByEmail(parsed.email);
-      if (matched) {
-        return { ...parsed, role: matched.role || 'user' };
-      }
-      return parsed;
-    }
-    return null;
-  } catch (e) {
-    return null;
-  }
-}
-
-function setCurrentUser(user) {
-  if (!user) {
-    localStorage.removeItem('sackhe_auth_user');
-  } else {
-    localStorage.setItem('sackhe_auth_user', JSON.stringify(user));
-  }
-  updateAuthUI();
 }
 
 // Real Orders & Leads Storage (Empty initialization by default - No fabricated seed data)
@@ -77,7 +22,9 @@ function getOrders() {
 }
 
 function saveOrders(orders) {
-  localStorage.setItem('sackhe_orders', JSON.stringify(orders));
+  try {
+    localStorage.setItem('sackhe_orders', JSON.stringify(orders));
+  } catch (e) {}
 }
 
 function getLeads() {
@@ -90,7 +37,9 @@ function getLeads() {
 }
 
 function saveLeads(leads) {
-  localStorage.setItem('sackhe_leads', JSON.stringify(leads));
+  try {
+    localStorage.setItem('sackhe_leads', JSON.stringify(leads));
+  } catch (e) {}
 }
 
 // E-Commerce Procurement Cart State System
@@ -104,7 +53,9 @@ function getCart() {
 }
 
 function saveCart(cart) {
-  localStorage.setItem('sackhe_cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('sackhe_cart', JSON.stringify(cart));
+  } catch (e) {}
   updateCartUI();
 }
 
@@ -212,7 +163,7 @@ function renderCartDrawer() {
     if (exploreBtn) {
       exploreBtn.addEventListener('click', () => {
         toggleCartDrawer(false);
-        window.location.hash = '#/products';
+        navigateTo('/products');
       });
     }
     if (footer) footer.style.display = 'none';
@@ -314,19 +265,11 @@ const routes = {
     description: 'Complete institutional requisition and procurement orders securely with Sackhe Technologies.',
     canonical: 'https://sackhetechnologies.com/checkout'
   },
-  '/profile': {
-    templateId: 'page-profile',
-    title: 'My Account & History - Sackhe Technologies',
-    description: 'Manage your organizational credentials, monitor recent orders, and oversee active deployments.',
-    canonical: 'https://sackhetechnologies.com/profile',
-    requiresAuth: true
-  },
   '/admin': {
     templateId: 'page-admin',
     title: 'Admin Operations Console - Sackhe Technologies',
     description: 'Oversee hardware procurements, process institutional orders, and review customer contact inquiries.',
-    canonical: 'https://sackhetechnologies.com/admin',
-    requiresAdmin: true
+    canonical: 'https://sackhetechnologies.com/admin'
   }
 };
 
@@ -358,144 +301,81 @@ function showToast(message, type = 'default') {
   setTimeout(() => {
     toast.style.animation = 'toast-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) reverse forwards';
     setTimeout(() => toast.remove(), 400);
-  }, 3200);
+  }, 3500);
 }
 
-// Open/Close Auth Modal
-function toggleAuthModal(show) {
-  const overlay = document.getElementById('auth-overlay');
+// Dedicated Transmission Confirmation & Direct Dispatch Modal
+function showDispatchModal(title, subtitle, bodyText, mailtoUrl) {
+  const overlay = document.getElementById('dispatch-modal-overlay');
+  const titleEl = document.getElementById('dispatch-modal-title');
+  const subEl = document.getElementById('dispatch-modal-subtitle');
+  const bodyEl = document.getElementById('dispatch-modal-body');
+  const mailtoBtn = document.getElementById('dispatch-mailto-btn');
+  const copyBtn = document.getElementById('dispatch-copy-btn');
+  const copyBtnText = document.getElementById('dispatch-copy-btn-text');
+  const copyFeedback = document.getElementById('dispatch-copy-feedback');
+  const closeBtn = document.getElementById('close-dispatch-modal');
+
   if (!overlay) return;
-  
-  if (show) {
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  } else {
+
+  if (titleEl) titleEl.textContent = title;
+  if (subEl) subEl.textContent = subtitle;
+  if (bodyEl) bodyEl.value = bodyText;
+  if (mailtoBtn) mailtoBtn.href = mailtoUrl;
+
+  const close = () => {
     overlay.classList.remove('active');
     document.body.style.overflow = '';
-  }
-}
-window.toggleAuthModal = toggleAuthModal;
+  };
 
-// Auth Tab Switching
-function switchAuthTab(tab) {
-  const signinBtn = document.getElementById('tab-btn-signin');
-  const regBtn = document.getElementById('tab-btn-register');
-  const signinPane = document.getElementById('auth-signin-pane');
-  const regPane = document.getElementById('auth-register-pane');
-  
-  if (tab === 'signin') {
-    signinBtn?.classList.add('active');
-    regBtn?.classList.remove('active');
-    if (signinPane) signinPane.style.display = 'block';
-    if (regPane) regPane.style.display = 'none';
+  if (closeBtn) closeBtn.onclick = close;
+  overlay.onclick = (e) => {
+    if (e.target === overlay) close();
+  };
+
+  if (copyBtn) {
+    copyBtn.onclick = async () => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(bodyText);
+        } else {
+          if (bodyEl) {
+            bodyEl.select();
+            document.execCommand('copy');
+          }
+        }
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        if (copyFeedback) copyFeedback.style.display = 'inline';
+        setTimeout(() => {
+          if (copyBtnText) copyBtnText.textContent = 'Copy Body';
+          if (copyFeedback) copyFeedback.style.display = 'none';
+        }, 2500);
+      } catch (err) {
+        if (bodyEl) {
+          bodyEl.select();
+          document.execCommand('copy');
+          if (copyBtnText) copyBtnText.textContent = 'Copied!';
+          setTimeout(() => {
+            if (copyBtnText) copyBtnText.textContent = 'Copy Body';
+          }, 2500);
+        }
+      }
+    };
+  }
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function navigateTo(path) {
+  if (window.location.hash) {
+    window.location.hash = `#${path.startsWith('/') ? path : '/' + path}`;
   } else {
-    regBtn?.classList.add('active');
-    signinBtn?.classList.remove('active');
-    if (signinPane) signinPane.style.display = 'none';
-    if (regPane) regPane.style.display = 'block';
-  }
-}
-window.switchAuthTab = switchAuthTab;
-
-// Update Auth UI Elements
-function updateAuthUI() {
-  const user = getCurrentUser();
-  const userButton = document.getElementById('user-auth-btn');
-  const adminNav = document.getElementById('nav-admin-link');
-  const footerAdmin = document.getElementById('footer-admin-link');
-
-  const isAdmin = Boolean(user && user.role === 'admin');
-  if (adminNav) {
-    adminNav.style.display = isAdmin ? 'inline-flex' : 'none';
-  }
-  if (footerAdmin) {
-    footerAdmin.style.display = isAdmin ? 'inline-block' : 'none';
-  }
-
-  if (!userButton) return;
-
-  if (user) {
-    const initials = user.name
-      ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-      : 'U';
-
-    userButton.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 0.6rem;">
-        <a href="#/profile" class="user-avatar-badge" title="View Profile">
-          <span class="user-avatar-circle">${escapeHtml(initials)}</span>
-          <span class="user-nav-name">${escapeHtml(user.name)}</span>
-        </a>
-        <button id="signout-trigger" class="btn-signout" title="Sign Out">Sign Out</button>
-      </div>
-    `;
-    
-    const signOutBtn = document.getElementById('signout-trigger');
-    if (signOutBtn) {
-      signOutBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        setCurrentUser(null);
-        showToast('Successfully signed out.', 'default');
-        window.location.hash = '#/';
-      });
-    }
-  } else {
-    userButton.innerHTML = `<button class="nav-signin-btn" id="header-signin-btn">Sign In</button>`;
-    const headerSignin = document.getElementById('header-signin-btn');
-    if (headerSignin) {
-      headerSignin.addEventListener('click', () => toggleAuthModal(true));
-    }
+    window.location.hash = `#${path.startsWith('/') ? path : '/' + path}`;
   }
 }
 
-// Google Auth Sign-In Logic
-function handleGoogleSignIn() {
-  const btn = document.getElementById('google-signin-action');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.5" class="spin-icon">
-        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-        <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
-      </svg>
-      <span>Signing in with Google...</span>
-    `;
-  }
-
-  setTimeout(() => {
-    let googleUser = findUserByEmail('partner@google.com');
-    if (!googleUser) {
-      googleUser = {
-        name: 'Partner Client',
-        email: 'partner@google.com',
-        role: 'user',
-        org: 'Institutional Partner',
-        phone: '+91 73372 38466'
-      };
-      const allUsers = getUsers();
-      allUsers.push(googleUser);
-      saveUsers(allUsers);
-    }
-    setCurrentUser(googleUser);
-    toggleAuthModal(false);
-    showToast('Signed in successfully with Google!', 'success');
-
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = `
-        <svg class="google-icon-svg" width="20" height="20" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span>Sign in with Google</span>
-      `;
-    }
-  }, 900);
-}
-window.handleGoogleSignIn = handleGoogleSignIn;
-
-// SPA Router with Transition Cancellation (Race-Proof)
+// Dual Router (Supports both Path Routing and Hash Routing seamlessly)
 let initialRouteChecked = false;
 let routerTransitionTimer = null;
 
@@ -505,34 +385,25 @@ function router() {
     routerTransitionTimer = null;
   }
 
-  let hash = window.location.hash;
-  if (!hash || hash === '#') {
-    hash = '#/';
+  // Dual resolution: Check hash first, then pathname
+  let routePath = '/';
+  let queryString = '';
+
+  const hash = window.location.hash;
+  const pathname = window.location.pathname;
+
+  if (hash && hash.length > 1) {
+    const cleanHash = hash.startsWith('#') ? hash.substring(1) : hash;
+    const [hPath, hQuery] = cleanHash.split('?');
+    routePath = hPath.startsWith('/') ? hPath : `/${hPath}`;
+    queryString = hQuery || '';
+  } else if (pathname && pathname !== '/' && pathname !== '/index.html') {
+    routePath = pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+    queryString = window.location.search ? window.location.search.substring(1) : '';
   }
-  
-  const fullHash = hash.substring(1);
-  const [routePath, queryString] = fullHash.split('?');
+
   const route = routes[routePath] || routes['/'];
-  const user = getCurrentUser();
   const queryParams = new URLSearchParams(queryString || '');
-
-  // Authorization and Authentication route guards
-  if (route.requiresAdmin) {
-    if (!user || user.role !== 'admin') {
-      showToast('Access denied. Administrator credentials required.', 'error');
-      window.location.hash = '#/';
-      return;
-    }
-  }
-
-  if (route.requiresAuth) {
-    if (!user) {
-      showToast('Please sign in to access your profile.', 'default');
-      toggleAuthModal(true);
-      window.location.hash = '#/';
-      return;
-    }
-  }
 
   const template = document.getElementById(route.templateId);
   const container = document.getElementById('app-view');
@@ -571,7 +442,9 @@ function router() {
   document.querySelectorAll('.nav-link').forEach(link => {
     link.classList.remove('active');
     const linkHref = link.getAttribute('href');
-    if (linkHref === hash || linkHref === `#${routePath}`) {
+    if (linkHref === `#/` && routePath === '/') {
+      link.classList.add('active');
+    } else if (linkHref === `#${routePath}` || linkHref === routePath) {
       link.classList.add('active');
     }
   });
@@ -622,8 +495,6 @@ function router() {
       setupContactPage(selectedProduct);
     } else if (routePath === '/checkout') {
       setupCheckoutPage();
-    } else if (routePath === '/profile') {
-      setupProfilePage();
     } else if (routePath === '/admin') {
       setupAdminPage();
     }
@@ -736,7 +607,7 @@ function setupProductsPage() {
       }
       
       addToCart({ id, title, price, image }, qty, false);
-      window.location.hash = '#/checkout';
+      navigateTo('/checkout');
     };
   });
 
@@ -787,7 +658,7 @@ function setupInitiativesPage() {
   });
 }
 
-// Contact Page Handler with Real Transmission & Form Feedback
+// Contact Page Handler with Transmission Confirmation & Direct Dispatch
 function setupContactPage(selectedProduct = '') {
   if (!selectedProduct) {
     const fullHash = (window.location.hash || '').substring(1);
@@ -845,12 +716,12 @@ function setupContactPage(selectedProduct = '') {
           <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
           <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
         </svg>
-        <span>Transmitting Inquiry...</span>
+        <span>Preparing Inquiry...</span>
       `;
     }
 
     setTimeout(() => {
-      // Store lead for administrative tracking
+      // Store lead for administrative tracking and interactive evaluation
       const leads = getLeads();
       const newLead = {
         _id: 'lead-' + Date.now().toString().slice(-4),
@@ -864,34 +735,31 @@ function setupContactPage(selectedProduct = '') {
       leads.unshift(newLead);
       saveLeads(leads);
 
-      // Trigger direct email dispatch draft addressed to info@sackhetechnologies.com
-      const mailtoSubject = encodeURIComponent(`[Website Inquiry] ${prodVal} - ${name} (${org})`);
-      const mailtoBody = encodeURIComponent(
-        `Dear Sackhe Technologies Team,\n\n` +
-        `I would like to submit an inquiry regarding ${prodVal}.\n\n` +
-        `Contact Details:\n` +
-        `- Name: ${name}\n` +
-        `- Email: ${email}\n` +
-        `- Phone: ${phone}\n` +
-        `- Organization: ${org}\n\n` +
-        `Requirement / Message:\n` +
-        `${msgVal}\n\n` +
-        `Best regards,\n` +
-        `${name}`
-      );
-      const mailtoUrl = `mailto:info@sackhetechnologies.com?subject=${mailtoSubject}&body=${mailtoBody}`;
-      
-      // Open mail client fallback
-      try {
-        const mailLink = document.createElement('a');
-        mailLink.href = mailtoUrl;
-        mailLink.style.display = 'none';
-        document.body.appendChild(mailLink);
-        mailLink.click();
-        document.body.removeChild(mailLink);
-      } catch (err) {}
+      // Drafted formatted text
+      const rawBody = 
+`Dear Sackhe Technologies Team,
 
-      showToast(`Thank you! Your inquiry for ${prodVal} has been recorded and an email draft to info@sackhetechnologies.com is prepared.`, 'success');
+I would like to submit an inquiry regarding: ${prodVal}
+
+Client Contact Details:
+- Name: ${name}
+- Email: ${email}
+- Phone: ${phone}
+- Organization: ${org}
+
+Requirement / Notes:
+${msgVal}
+
+Best regards,
+${name}`;
+
+      const mailtoSubject = encodeURIComponent(`[Website Inquiry] ${prodVal} - ${name} (${org})`);
+      const mailtoUrl = `mailto:info@sackhetechnologies.com?subject=${mailtoSubject}&body=${encodeURIComponent(rawBody)}`;
+
+      // Present dedicated transmission dialog
+      showDispatchModal('Inquiry Draft Ready', `Addressed to info@sackhetechnologies.com`, rawBody, mailtoUrl);
+      showToast('Inquiry draft prepared. Please send via your email client or copy details.', 'success');
+
       contactForm.reset();
       if (productInput && selectedProduct) {
         productInput.value = selectedProduct;
@@ -900,7 +768,7 @@ function setupContactPage(selectedProduct = '') {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalContent;
       }
-    }, 700);
+    }, 400);
   });
 }
 
@@ -911,19 +779,6 @@ function setupCheckoutPage() {
   const subtotalEl = document.getElementById('checkout-subtotal-val');
   const totalEl = document.getElementById('checkout-total-val');
   const placeOrderBtn = document.getElementById('checkout-place-order-btn');
-
-  // Pre-fill user information if logged in
-  const currentUser = getCurrentUser();
-  if (currentUser) {
-    const nameInput = document.getElementById('checkout-name');
-    const emailInput = document.getElementById('checkout-email');
-    const phoneInput = document.getElementById('checkout-phone');
-    const orgInput = document.getElementById('checkout-org');
-    if (nameInput && !nameInput.value) nameInput.value = currentUser.name || '';
-    if (emailInput && !emailInput.value) emailInput.value = currentUser.email || '';
-    if (phoneInput && !phoneInput.value) phoneInput.value = currentUser.phone || '';
-    if (orgInput && !orgInput.value) orgInput.value = currentUser.org || '';
-  }
 
   // If cart is empty
   if (cart.length === 0) {
@@ -1050,182 +905,47 @@ function setupCheckoutPage() {
       saveOrders(orders);
       clearCart();
 
-      // Trigger Email draft to Corporate Desk
-      const itemizedList = cart.map(i => `• ${i.quantity}× ${i.title} (₹${(i.price * i.quantity).toLocaleString('en-IN')})`).join('\n');
+      // Itemized requisition text
+      const itemizedList = newOrder.items.map(i => `• ${i.quantity}× ${i.title} (₹${(i.unitPrice * i.quantity).toLocaleString('en-IN')})`).join('\n');
+      const rawBody = 
+`Dear Sackhe Technologies Procurement Desk,
+
+A formal procurement requisition has been submitted:
+
+Requisition Reference: ${orderRef}
+Organization: ${org}
+Contact Person: ${name}
+Email: ${email}
+Phone: ${phone}
+Delivery Address: ${address}, ${city} - ${pincode}
+
+Procurement Items:
+${itemizedList}
+
+Total Estimated Requisition Value: ₹${subtotal.toLocaleString('en-IN')}
+Payment / Requisition Mode: ${activePaymentTab.toUpperCase()}
+Reference / Sanction Note: ${paymentRef}
+${notes ? `Special Instructions: ${notes}\n` : ''}
+Please issue a formal Proforma Invoice and dispatch timeline.
+
+Best regards,
+${name}`;
+
       const mailtoSubject = encodeURIComponent(`[Procurement Order ${orderRef}] ${org} - ${name}`);
-      const mailtoBody = encodeURIComponent(
-        `Dear Sackhe Technologies Procurement Desk,\n\n` +
-        `A formal procurement requisition has been submitted:\n\n` +
-        `Requisition Reference: ${orderRef}\n` +
-        `Organization: ${org}\n` +
-        `Contact Person: ${name}\n` +
-        `Email: ${email}\n` +
-        `Phone: ${phone}\n` +
-        `Delivery Coordinates: ${address}, ${city} - ${pincode}\n\n` +
-        `Procurement Items:\n${itemizedList}\n\n` +
-        `Total Estimated Requisition Value: ₹${subtotal.toLocaleString('en-IN')}\n` +
-        `Payment / Requisition Mode: ${activePaymentTab.toUpperCase()}\n` +
-        `Reference / Sanction Note: ${paymentRef}\n` +
-        (notes ? `Special Instructions: ${notes}\n\n` : '\n') +
-        `Please issue a formal Proforma Invoice and dispatch timeline.\n\n` +
-        `Best regards,\n${name}`
-      );
-      const mailtoUrl = `mailto:info@sackhetechnologies.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+      const mailtoUrl = `mailto:info@sackhetechnologies.com?subject=${mailtoSubject}&body=${encodeURIComponent(rawBody)}`;
 
-      try {
-        const mailLink = document.createElement('a');
-        mailLink.href = mailtoUrl;
-        mailLink.style.display = 'none';
-        document.body.appendChild(mailLink);
-        mailLink.click();
-        document.body.removeChild(mailLink);
-      } catch (err) {}
-
-      showToast(`Procurement Requisition ${orderRef} generated successfully! Our corporate desk will review and issue an invoice.`, 'success');
-      setTimeout(() => {
-        window.location.hash = '#/profile';
-      }, 600);
+      // Present dedicated transmission modal
+      showDispatchModal('Procurement Requisition Drafted', `Requisition Ref: ${orderRef}`, rawBody, mailtoUrl);
+      showToast(`Requisition ${orderRef} draft prepared. Please dispatch via email or copy details.`, 'success');
+      
+      // Re-render empty cart view
+      setupCheckoutPage();
     };
   }
 }
 
-// Profile Page Handler
-function setupProfilePage() {
-  const user = getCurrentUser();
-  if (!user) return;
-
-  const nameEl = document.getElementById('profile-user-name');
-  const emailEl = document.getElementById('profile-user-email');
-  const avatarEl = document.getElementById('profile-avatar-icon');
-  const orgEl = document.getElementById('profile-org-val');
-  const phoneEl = document.getElementById('profile-phone-val');
-  const roleBadgeContainer = document.getElementById('profile-role-badge-container');
-  const adminQuicklink = document.getElementById('admin-quicklink-card');
-
-  if (nameEl) nameEl.textContent = user.name;
-  if (emailEl) emailEl.textContent = user.email;
-  if (orgEl) orgEl.textContent = user.org || 'Institutional Partner';
-  if (phoneEl) phoneEl.textContent = user.phone || '+91 73372 38466';
-
-  const initials = user.name
-    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : 'U';
-  if (avatarEl) avatarEl.textContent = initials;
-
-  if (roleBadgeContainer) {
-    if (user.role === 'admin') {
-      roleBadgeContainer.innerHTML = `
-        <span class="profile-role-pill profile-role-admin">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Administrator
-        </span>
-      `;
-      if (adminQuicklink) adminQuicklink.style.display = 'block';
-    } else {
-      roleBadgeContainer.innerHTML = `
-        <span class="profile-role-pill profile-role-user">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-          Partner Client
-        </span>
-      `;
-      if (adminQuicklink) adminQuicklink.style.display = 'none';
-    }
-  }
-
-  // Render Orders Table Safely
-  const ordersTableBody = document.getElementById('user-orders-table-body');
-  if (ordersTableBody) {
-    const allOrders = getOrders();
-    const displayOrders = user.role === 'admin' 
-      ? allOrders 
-      : allOrders.filter(o => o.email && o.email.toLowerCase() === user.email.toLowerCase());
-
-    if (displayOrders.length === 0) {
-      ordersTableBody.innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
-            No procurement requisitions found. Explore our <a href="#/products" style="color: var(--primary); font-weight: 700;">Products catalog</a> to make an initial requisition.
-          </td>
-        </tr>
-      `;
-    } else {
-      ordersTableBody.innerHTML = displayOrders.map(ord => `
-        <tr>
-          <td><span class="order-id-pill">${escapeHtml((ord._id || '').toUpperCase())}</span></td>
-          <td>
-            <div style="font-weight: 700; color: var(--text-primary);">${escapeHtml(ord.product_name)}</div>
-            <div style="font-size: 0.76rem; color: var(--text-secondary);">${new Date(ord.created_at).toLocaleDateString()}</div>
-          </td>
-          <td style="font-weight: 700;">${Number(ord.quantity) || 1} units</td>
-          <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price || 0).toLocaleString('en-IN')}</td>
-          <td>
-            <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
-              ${escapeHtml((ord.status || 'pending').toUpperCase())}
-            </span>
-          </td>
-          <td style="font-size: 0.8rem; font-family: monospace; color: var(--text-secondary);">
-            ${escapeHtml(ord.transaction_ref || 'OFFLINE-PO')}
-          </td>
-        </tr>
-      `).join('');
-    }
-  }
-
-  // Profile Edit Modal bindings
-  const editOverlay = document.getElementById('profile-edit-overlay');
-  const openEditBtn = document.getElementById('open-edit-profile-btn');
-  const closeEditBtn = document.getElementById('close-profile-modal');
-  const editForm = document.getElementById('profile-edit-form');
-  const editNameInput = document.getElementById('edit-profile-name');
-  const editOrgInput = document.getElementById('edit-profile-org');
-  const editPhoneInput = document.getElementById('edit-profile-phone');
-
-  if (openEditBtn && editOverlay) {
-    openEditBtn.addEventListener('click', () => {
-      if (editNameInput) editNameInput.value = user.name || '';
-      if (editOrgInput) editOrgInput.value = user.org || '';
-      if (editPhoneInput) editPhoneInput.value = user.phone || '';
-      editOverlay.classList.add('active');
-    });
-  }
-
-  if (closeEditBtn && editOverlay) {
-    closeEditBtn.addEventListener('click', () => {
-      editOverlay.classList.remove('active');
-    });
-  }
-
-  if (editForm && editOverlay) {
-    editForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const updatedUser = {
-        ...user,
-        name: editNameInput?.value.trim() || user.name,
-        org: editOrgInput?.value.trim() || user.org,
-        phone: editPhoneInput?.value.trim() || user.phone
-      };
-      setCurrentUser(updatedUser);
-      editOverlay.classList.remove('active');
-      showToast('Profile information updated successfully!', 'success');
-      setupProfilePage();
-    });
-  }
-
-  const signOutBtn = document.getElementById('profile-signout-btn');
-  if (signOutBtn) {
-    signOutBtn.addEventListener('click', () => {
-      setCurrentUser(null);
-      showToast('Successfully signed out.', 'default');
-      window.location.hash = '#/';
-    });
-  }
-}
-
-// Admin Page Handler
+// Admin Page Handler (Interactive Demo Mode Preview)
 function setupAdminPage() {
-  const user = getCurrentUser();
-  if (!user || user.role !== 'admin') return;
-
   const tabs = document.querySelectorAll('.admin-nav-tab');
   const ordersTab = document.getElementById('admin-tab-content-orders');
   const leadsTab = document.getElementById('admin-tab-content-leads');
@@ -1459,90 +1179,10 @@ function setupAdminPage() {
 
 // Global Initialization
 window.addEventListener('DOMContentLoaded', () => {
-  // Route matching
+  // Route matching with hashchange and popstate support
   router();
   window.addEventListener('hashchange', router);
-  
-  // Auth system init
-  updateAuthUI();
-
-  // Wire up Auth Modal Forms
-  const loginForm = document.getElementById('auth-login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email')?.value.trim();
-      const password = document.getElementById('login-password')?.value.trim();
-      if (!email || !password) {
-        showToast('Please enter both email and password.', 'error');
-        return;
-      }
-
-      let user = findUserByEmail(email);
-      if (!user) {
-        // Register standard user upon initial login
-        user = {
-          name: email.split('@')[0],
-          email: email,
-          role: 'user',
-          org: 'Institutional Partner',
-          phone: '+91 73372 38466'
-        };
-        const allUsers = getUsers();
-        allUsers.push(user);
-        saveUsers(allUsers);
-      }
-
-      setCurrentUser(user);
-      toggleAuthModal(false);
-      showToast(`Welcome back, ${user.name}!`, 'success');
-
-      if (user.role === 'admin') {
-        window.location.hash = '#/admin';
-      } else {
-        if (window.location.hash === '#/admin') {
-          window.location.hash = '#/';
-        }
-      }
-    });
-  }
-
-  const registerForm = document.getElementById('auth-register-form');
-  if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('register-name')?.value.trim();
-      const email = document.getElementById('register-email')?.value.trim();
-      const org = document.getElementById('register-org')?.value.trim();
-      const password = document.getElementById('register-password')?.value.trim();
-      if (!email || !password) {
-        showToast('Please provide an email and password.', 'error');
-        return;
-      }
-
-      let user = findUserByEmail(email);
-      if (!user) {
-        user = {
-          name: name || email.split('@')[0],
-          email: email,
-          role: 'user',
-          org: org || 'Institutional Partner',
-          phone: '+91 73372 38466'
-        };
-        const allUsers = getUsers();
-        allUsers.push(user);
-        saveUsers(allUsers);
-      }
-
-      setCurrentUser(user);
-      toggleAuthModal(false);
-      showToast('Account registered successfully!', 'success');
-
-      if (window.location.hash === '#/admin') {
-        window.location.hash = '#/';
-      }
-    });
-  }
+  window.addEventListener('popstate', router);
 
   // Mobile nav toggler
   const menuToggle = document.getElementById('menu-toggle');
@@ -1613,7 +1253,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (cartCheckoutBtn) {
     cartCheckoutBtn.addEventListener('click', () => {
       toggleCartDrawer(false);
-      window.location.hash = '#/checkout';
+      navigateTo('/checkout');
     });
   }
 
@@ -1629,6 +1269,11 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       toggleCartDrawer(false);
+      const dispatchOverlay = document.getElementById('dispatch-modal-overlay');
+      if (dispatchOverlay && dispatchOverlay.classList.contains('active')) {
+        dispatchOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
     }
   });
 });
