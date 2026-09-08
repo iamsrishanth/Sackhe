@@ -1,32 +1,32 @@
 # Sackhe Technologies
 
-> Sustainable waste management solutions — emission-controlled incinerators, solid waste management systems, and eco-friendly biodegradable sanitary pads. "The Path to Zero Waste."
+> Sustainable waste management solutions — emission-controlled incinerators, modular solid waste management systems, and eco-friendly biodegradable sanitary pads. "The Path to Zero Waste."
 
 Sackhe Technologies Pvt Ltd is a Hyderabad-based (Telangana, India) sustainable waste management company founded in December 2023. The company designs, manufactures, and deploys emission-controlled incineration systems and waste lifecycle solutions for schools, hospitals, municipalities, corporate offices, and communities. Products are built on a proprietary thermal emission control cycle that operates 100% smoke-free with a zero-carbon footprint profile. Sackhe Technologies was incubated with support from KG Reddy College of Engineering & Technology, tested at KASE Innovation Cell, and funded under the DST NIDHI-Prayas program through SRIX Innovation Cell.
 
 ## Mission
 
-To provide eco-friendly incineration solutions that protect community health and the environment. The company redefines the cycle of nature through zero-carbon-footprint waste management and community hygiene empowerment.
+To provide eco-friendly incineration and waste management solutions that protect community health and the environment. The company redefines the cycle of nature through zero-carbon-footprint waste management and community hygiene empowerment.
 
 ## Vision
 
 To become India's most trusted name in sustainable waste management.
 
-## Products
+## Products & Hardware Catalog
 
 ### Non-Toxic Emission Cycle – Menstrual Waste Incinerator (Smokeless Cycle)
-Price: ₹64,949. Available now. An emission-controlled sanitary waste incinerator for menstrual hygiene waste disposal — clean, odorless, and dignified. Target sectors: schools & colleges, hospitals, corporate offices, public restrooms, hostels, malls.
+Price: ₹64,949 per unit. Available now. An emission-controlled sanitary waste incinerator for menstrual hygiene waste disposal — clean, odorless, and dignified. Operates smoke-free with intelligent heating cycle. Target sectors: schools & colleges, hospitals, corporate offices, public restrooms, hostels, malls.
 
 ### Solid Waste Management System
-Custom quote. Pre-order (launching soon). A modular solid waste management system for mixed municipal and institutional waste with automated segregation, composting integration, and real-time monitoring. Target sectors: municipalities, apartment complexes, campuses, industrial areas, commercial buildings.
+Custom Engineering Quote. Pre-order / Pilot Deployment. A modular solid waste management system for mixed municipal and institutional waste with automated segregation, composting integration, and real-time monitoring. Target sectors: municipalities, apartment complexes, campuses, industrial areas, commercial buildings.
 
 ### Eco-Friendly Biodegradable Sanitary Pad
-Pre-ordering. A 100% biodegradable sanitary pad made from natural materials including organic cotton. Decomposes naturally in 8–10 months (versus 500–800 years for plastic-based pads). Target sectors: school girls, women in rural areas, eco-conscious consumers, NGOs, institutions.
+Price: ₹249 (10-pad institutional pack) / Custom bulk crates available. A 100% biodegradable sanitary pad made from natural materials including organic cotton. Decomposes naturally in 8–10 months (versus 500–800 years for plastic-based pads). Target sectors: school girls, women in rural areas, eco-conscious consumers, NGOs, institutions.
 
-## Services
+## Services & Operations
 
-- **Maintenance Services** — regular inspections, preventive maintenance, and repair services to extend system lifecycle.
-- **Waste Management Advisory** — strategic planning, waste system implementation, and optimization guidance for compliance.
+- **Maintenance Services** — regular inspections, preventive maintenance, replacement parts, and emergency repair services to extend equipment lifecycle.
+- **Waste Management Advisory** — strategic planning, compliance auditing, zero-waste campus certification, and optimization guidance.
 
 ## Social Impact & Initiatives
 
@@ -39,6 +39,13 @@ Awareness and field programs include direct student outreach and pad distributio
 - 50+ Institutions
 - 25+ Communities
 - 1000+ Lives Impacted
+
+## Institutional Procurement & Checkout Workflow
+
+Organizations and institutional partners can request formal quotations, schedule pilot deployments, or generate procurement requisitions directly via the website:
+- **Product Catalog (`#/products`)**: Browse hardware specifications, select quantities, and add items to the procurement cart.
+- **Institutional Checkout (`#/checkout`)**: Submit institutional delivery coordinates, select procurement method (Purchase Order / Bank Transfer / UPI Institutional remittance), and generate formal procurement requisitions.
+- **Contact & Custom RFP (`#/contact`)**: Submit organizational requirements for site surveys, custom engineering quotes, or CSR partnerships.
 
 ## Company History & Milestones
 
@@ -61,22 +68,23 @@ Awareness and field programs include direct student outreach and pad distributio
 
 Solutions target girls schools & colleges, local communities, municipal authorities, environmental ecosystems, public health, and future generations — reducing open landfill pollution, microplastics leakage into soil and water, and toxic pathogens from exposed waste.
 
-## Contact
+## Contact Information
 
 - Email: [info@sackhetechnologies.com](mailto:info@sackhetechnologies.com)
 - Phone: [+91 73372 38466](tel:+917337238466)
 - Location: House No. 1-6-546, Near SV Prime, Ramalayam, Chaithanyapuri Colony, K.V. Rangareddy, Saroornagar, Telangana, India
 - LinkedIn: [Sackhe Technologies on LinkedIn](https://www.linkedin.com/company/sackhetechnologies-pvtltd/)
-- Instagram: [@_sackhe_ on Instagram](https://www.instagram.com/_sackhe_)
+- Instagram: [@_sackhe_ on Instagram](https://www.instagram.com/_sackhe_/)
 
-## Important URLS
+## Important URLs
 
-- Website: [https://sackhe.srishanth.com/](https://sackhe.srishanth.com/)
-- Home: [https://sackhe.srishanth.com/#/](https://sackhe.srishanth.com/#/)
-- About / Company story: [https://sackhe.srishanth.com/#/about](https://sackhe.srishanth.com/#/about)
-- Products catalog: [https://sackhe.srishanth.com/#/products](https://sackhe.srishanth.com/#/products)
-- Services: [https://sackhe.srishanth.com/#/services](https://sackhe.srishanth.com/#/services)
-- Social impact & initiatives: [https://sackhe.srishanth.com/#/initiatives](https://sackhe.srishanth.com/#/initiatives)
-- Contact / inquiries: [https://sackhe.srishanth.com/#/contact](https://sackhe.srishanth.com/#/contact)
+- Website: [https://sackhetechnologies.com/](https://sackhetechnologies.com/)
+- Home: [https://sackhetechnologies.com/#/](https://sackhetechnologies.com/#/)
+- About: [https://sackhetechnologies.com/#/about](https://sackhetechnologies.com/#/about)
+- Products Catalog: [https://sackhetechnologies.com/#/products](https://sackhetechnologies.com/#/products)
+- Services: [https://sackhetechnologies.com/#/services](https://sackhetechnologies.com/#/services)
+- Social Impact: [https://sackhetechnologies.com/#/initiatives](https://sackhetechnologies.com/#/initiatives)
+- Contact & Inquiries: [https://sackhetechnologies.com/#/contact](https://sackhetechnologies.com/#/contact)
+- Procurement & Checkout: [https://sackhetechnologies.com/#/checkout](https://sackhetechnologies.com/#/checkout)
 
-_This website is a single-page application (SPA) using hash-based routing — all major pages are reachable from the routes listed above._
+_This website is a single-page application (SPA) using hash-based routing — all major sections are reachable from the routes listed above._

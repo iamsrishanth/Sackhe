@@ -6,10 +6,17 @@ node_modules/
 # Production build
 dist/
 
+# Scratch & Temporary Analysis
+scratch/
+brain/
+localhost_5173-*.json
+extracted_content.md
+
 # Logs & audits
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 lighthouse-*.html
 lighthouse-*.json
 lighthouse-summary.json
@@ -23,7 +30,7 @@ run_lighthouse.mjs
 update_html.mjs
 verify_seamless.js
 
-# OS files
+# OS & Environment files
 .DS_Store
 Thumbs.db
 .vercel
