@@ -11,92 +11,48 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-// Initial Users Store (Admin vs Normal User)
-const INITIAL_USERS = [
-  {
-    name: 'Admin User',
-    email: 'admin@sackhe.com',
-    role: 'admin',
-    password: 'admin123',
-    org: 'Sackhe Technologies',
-    phone: '+91 73372 38466'
-  },
-  {
-    name: 'Standard User',
-    email: 'user@example.com',
-    role: 'user',
-    password: 'user123',
-    org: 'Institutional Partner',
-    phone: '+91 98765 43210'
+// Dispatch Confirmation Modal for Direct Requisition Transmission
+function openDispatchModal({ badge, title, desc, draft, mailtoUrl }) {
+  const modal = document.getElementById('dispatch-confirm-modal');
+  if (!modal) return;
+  if (badge) {
+    const b = document.getElementById('dispatch-modal-badge');
+    if (b) b.textContent = badge;
   }
-];
-
-function getUsers() {
-  try {
-    const raw = localStorage.getItem('sackhe_users');
-    if (!raw) {
-      localStorage.setItem('sackhe_users', JSON.stringify(INITIAL_USERS));
-      return INITIAL_USERS;
-    }
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_USERS;
-  } catch (e) {
-    return INITIAL_USERS;
+  if (title) {
+    const t = document.getElementById('dispatch-modal-title');
+    if (t) t.textContent = title;
   }
-}
-
-function saveUsers(users) {
-  try {
-    localStorage.setItem('sackhe_users', JSON.stringify(users));
-  } catch (e) {}
-}
-
-function findUserByEmail(email) {
-  if (!email) return null;
-  const users = getUsers();
-  return users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
-}
-
-// Initial Auth State Helper Functions
-function getCurrentUser() {
-  try {
-    const raw = localStorage.getItem('sackhe_auth_user');
-    if (!raw) return null;
-    let parsed = null;
-    if (raw.startsWith('{')) {
-      parsed = JSON.parse(raw);
-    }
-    if (parsed && parsed.email) {
-      // Re-verify against user store so stored role strictly reflects authoritative role
-      const matched = findUserByEmail(parsed.email);
-      if (matched) {
-        return { ...parsed, role: matched.role };
-      }
-      return parsed;
-    }
-    // Fallback if stored as simple email/string
-    const matched = findUserByEmail(raw);
-    if (matched) return matched;
-    return {
-      name: raw.includes('@') ? raw.split('@')[0] : raw,
-      email: raw.includes('@') ? raw : `${raw}@example.com`,
-      role: 'user',
-      org: 'Institutional Partner',
-      phone: ''
+  if (desc) {
+    const d = document.getElementById('dispatch-modal-desc');
+    if (d) d.innerHTML = desc;
+  }
+  const preview = document.getElementById('dispatch-modal-preview');
+  if (preview) preview.textContent = draft || '';
+  const mailtoLink = document.getElementById('dispatch-mailto-link');
+  if (mailtoLink && mailtoUrl) {
+    mailtoLink.href = mailtoUrl;
+  }
+  const copyBtn = document.getElementById('dispatch-copy-btn');
+  if (copyBtn) {
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(draft || '').then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = 'Copy Text'; }, 2000);
+      }).catch(() => {
+        showToast('Unable to copy to clipboard', 'error');
+      });
     };
-  } catch (e) {
-    return null;
   }
+  modal.style.display = 'flex';
 }
 
-function setCurrentUser(user) {
-  if (!user) {
-    localStorage.removeItem('sackhe_auth_user');
-  } else {
-    localStorage.setItem('sackhe_auth_user', JSON.stringify(user));
-  }
-  updateAuthUI();
+function closeDispatchModal() {
+  const modal = document.getElementById('dispatch-confirm-modal');
+  if (modal) modal.style.display = 'none';
 }
+window.closeDispatchModal = closeDispatchModal;
+window.openDispatchModal = openDispatchModal;
 
 // Real Orders & Leads Data Stores (Initialized Empty to eliminate fabricated business data)
 const INITIAL_ORDERS = [];
@@ -350,20 +306,6 @@ const routes = {
     title: 'Procurement & Checkout - Sackhe Technologies',
     description: 'Complete institutional requisition and procurement orders securely with Sackhe Technologies.',
     canonical: 'https://sackhe.srishanth.com/'
-  },
-  '/profile': {
-    templateId: 'page-profile',
-    title: 'My Account & History - Sackhe Technologies',
-    description: 'Manage your organizational credentials, monitor recent orders, and oversee active deployments.',
-    canonical: 'https://sackhe.srishanth.com/',
-    requiresAuth: true
-  },
-  '/admin': {
-    templateId: 'page-admin',
-    title: 'Admin Operations Console - Sackhe Technologies',
-    description: 'Oversee hardware procurements, process institutional orders, and review customer contact inquiries.',
-    canonical: 'https://sackhe.srishanth.com/',
-    requiresAdmin: true
   }
 };
 
@@ -391,147 +333,6 @@ function showToast(message, type = 'default') {
   }, 3200);
 }
 
-// Open/Close Auth Modal
-function toggleAuthModal(show) {
-  const overlay = document.getElementById('auth-overlay');
-  if (!overlay) return;
-  
-  if (show) {
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  } else {
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-}
-window.toggleAuthModal = toggleAuthModal;
-
-// Auth Tab Switching
-function switchAuthTab(tab) {
-  const signinBtn = document.getElementById('tab-btn-signin');
-  const regBtn = document.getElementById('tab-btn-register');
-  const signinPane = document.getElementById('auth-signin-pane');
-  const regPane = document.getElementById('auth-register-pane');
-  
-  if (tab === 'signin') {
-    signinBtn?.classList.add('active');
-    regBtn?.classList.remove('active');
-    if (signinPane) signinPane.style.display = 'block';
-    if (regPane) regPane.style.display = 'none';
-  } else {
-    regBtn?.classList.add('active');
-    signinBtn?.classList.remove('active');
-    if (signinPane) signinPane.style.display = 'none';
-    if (regPane) regPane.style.display = 'block';
-  }
-}
-window.switchAuthTab = switchAuthTab;
-
-// Update Auth UI Elements
-function updateAuthUI() {
-  const user = getCurrentUser();
-  const userButton = document.getElementById('user-auth-btn');
-  const adminNav = document.getElementById('nav-admin-link');
-  const footerAdmin = document.getElementById('footer-admin-link');
-
-  // Show admin links ONLY for authenticated users with role === 'admin'
-  const isAdmin = Boolean(user && user.role === 'admin');
-  if (adminNav) {
-    adminNav.style.display = isAdmin ? 'inline-flex' : 'none';
-  }
-  if (footerAdmin) {
-    footerAdmin.style.display = isAdmin ? 'inline-block' : 'none';
-  }
-
-  if (!userButton) return;
-
-  if (user) {
-    const initials = user.name
-      ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-      : 'U';
-
-    userButton.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 0.6rem;">
-        <a href="#/profile" class="user-avatar-badge" title="View Profile">
-          <span class="user-avatar-circle">${escapeHtml(initials)}</span>
-          <span class="user-nav-name">${escapeHtml(user.name)}</span>
-        </a>
-        <button id="signout-trigger" class="btn-signout" title="Sign Out">Sign Out</button>
-      </div>
-    `;
-    
-    // Bind sign out click
-    const signOutBtn = document.getElementById('signout-trigger');
-    if (signOutBtn) {
-      signOutBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        setCurrentUser(null);
-        showToast('Successfully signed out.', 'default');
-        window.location.hash = '#/';
-      });
-    }
-  } else {
-    userButton.innerHTML = `<button class="nav-signin-btn" onclick="toggleAuthModal(true)">Sign In</button>`;
-  }
-}
-
-// Google Auth Sign-In Logic
-function handleGoogleSignIn() {
-  const btn = document.getElementById('google-signin-action');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2.5" class="spin-icon">
-        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-        <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
-      </svg>
-      <span>Signing in with Google...</span>
-    `;
-  }
-
-  setTimeout(() => {
-    let googleUser = findUserByEmail('user@gmail.com');
-    if (!googleUser) {
-      googleUser = {
-        name: 'Google User',
-        email: 'user@gmail.com',
-        role: 'user',
-        org: 'Institutional Partner',
-        phone: '+91 98765 43210'
-      };
-      const allUsers = getUsers();
-      allUsers.push(googleUser);
-      saveUsers(allUsers);
-    }
-    setCurrentUser(googleUser);
-    toggleAuthModal(false);
-    showToast('Signed in successfully with Google!', 'success');
-    
-    // Role-based redirect
-    if (googleUser.role === 'admin') {
-      window.location.hash = '#/admin';
-    } else {
-      if (window.location.hash === '#/admin') {
-        window.location.hash = '#/';
-      }
-    }
-
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = `
-        <svg class="google-icon-svg" width="20" height="20" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span>Sign in with Google</span>
-      `;
-    }
-  }, 900);
-}
-window.handleGoogleSignIn = handleGoogleSignIn;
-
 // SPA Router
 let initialRouteChecked = false;
 let routeTransitionTimer = null;
@@ -553,26 +354,7 @@ function router() {
   const fullHash = hash.substring(1);
   const [routePath, queryString] = fullHash.split('?');
   const route = routes[routePath] || routes['/'];
-  const user = getCurrentUser();
   const queryParams = new URLSearchParams(queryString || '');
-
-  // Authorization and Authentication route guards
-  if (route.requiresAdmin) {
-    if (!user || user.role !== 'admin') {
-      showToast('Access denied. Administrator privileges required.', 'error');
-      window.location.hash = '#/';
-      return;
-    }
-  }
-
-  if (route.requiresAuth) {
-    if (!user) {
-      showToast('Please sign in to access this page.', 'default');
-      toggleAuthModal(true);
-      window.location.hash = '#/';
-      return;
-    }
-  }
 
   const template = document.getElementById(route.templateId);
   const container = document.getElementById('app-view');
@@ -663,10 +445,6 @@ function router() {
       setupContactPage(selectedProduct);
     } else if (routePath === '/checkout') {
       setupCheckoutPage();
-    } else if (routePath === '/profile') {
-      setupProfilePage();
-    } else if (routePath === '/admin') {
-      setupAdminPage();
     }
   };
 
@@ -902,7 +680,7 @@ function setupContactPage(selectedProduct = '') {
       message: prodVal && prodVal !== 'General Inquiry' ? `[Product: ${prodVal}]\n${msgVal}` : msgVal
     };
 
-    let transmitted = false;
+    let apiResult = null;
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -910,32 +688,40 @@ function setupContactPage(selectedProduct = '') {
         body: JSON.stringify(payload)
       });
       if (response.ok) {
-        transmitted = true;
+        apiResult = await response.json();
       }
     } catch (err) {
       console.warn('Direct API transmission offline/fallback:', err);
     }
 
-    // Record inquiry locally so administrative demonstration reflects submission
-    const leads = getLeads();
-    const newLead = {
-      _id: 'inq-' + Date.now().toString().slice(-4),
-      name: nameVal,
-      email: emailVal,
-      phone: phoneVal || 'N/A',
-      organization: orgVal || 'Direct Contact Portal',
-      message: payload.message,
-      created_at: new Date().toISOString()
-    };
-    leads.unshift(newLead);
-    saveLeads(leads);
+    const inquiryId = apiResult?.inquiryId || `INQ-${Date.now().toString().slice(-6)}`;
+    const formattedDraft = apiResult?.formattedDraft || [
+      'Sackhe Technologies - Contact & Inquiry Requisition',
+      '====================================================',
+      `Reference ID : ${inquiryId}`,
+      `Timestamp    : ${new Date().toISOString()}`,
+      `Contact Name : ${nameVal}`,
+      `Email        : ${emailVal}`,
+      `Phone        : ${phoneVal || 'Not provided'}`,
+      `Organization : ${orgVal || 'Not provided'}`,
+      `Interest     : ${prodVal || 'General Inquiry'}`,
+      '',
+      'Message:',
+      payload.message,
+      '===================================================='
+    ].join('\n');
 
-    if (transmitted) {
-      showToast(`Thank you, ${nameVal}! Your inquiry has been transmitted successfully.`, 'success');
-    } else {
-      showToast(`Inquiry registered. Our advisory desk at info@sackhetechnologies.com will follow up shortly.`, 'success');
-    }
+    const mailtoUrl = apiResult?.mailtoUrl || `mailto:info@sackhetechnologies.com?subject=${encodeURIComponent(`[Inquiry ${inquiryId}] ${prodVal || 'Inquiry'} - ${nameVal}`)}&body=${encodeURIComponent(formattedDraft)}`;
 
+    openDispatchModal({
+      badge: 'Inquiry Draft Prepared',
+      title: 'Inquiry Ready for Direct Dispatch',
+      desc: `Your inquiry has been formatted with Reference ID <strong>${escapeHtml(inquiryId)}</strong>. Click below to send directly to <strong>info@sackhetechnologies.com</strong>.`,
+      draft: formattedDraft,
+      mailtoUrl: mailtoUrl
+    });
+
+    showToast(`Inquiry ${inquiryId} prepared! Please send email or copy details.`, 'info');
     contactForm.reset();
     if (productInput && selectedProduct) {
       productInput.value = selectedProduct;
@@ -1091,7 +877,7 @@ function setupCheckoutPage() {
         }))
       };
 
-      let transmitted = false;
+      let apiResult = null;
       try {
         const res = await fetch('/api/order', {
           method: 'POST',
@@ -1099,419 +885,57 @@ function setupCheckoutPage() {
           body: JSON.stringify(orderPayload)
         });
         if (res.ok) {
-          transmitted = true;
+          apiResult = await res.json();
         }
       } catch (err) {
         console.warn('Direct order API transmission offline/fallback:', err);
       }
 
-      // Generate localized order token (sanitize storage: do not store full raw address or secret keys)
-      const orderRef = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
-      const orders = getOrders();
-      const newOrder = {
-        _id: 'ord-' + Date.now().toString().slice(-4),
-        product_name: cart.map(i => `${i.quantity}× ${i.title}`).join(', '),
-        quantity: cart.reduce((sum, i) => sum + i.quantity, 0),
-        total_price: subtotal,
-        status: 'pending',
-        payment_status: 'Inquiry / PO Request Submitted',
-        payment_method: activePaymentTab.toUpperCase(),
-        transaction_ref: paymentRef,
-        user_bank_name: org || 'Institutional Partner',
-        client_name: name,
-        email: email,
-        created_at: new Date().toISOString()
-      };
+      const orderId = apiResult?.orderId || `ORD-${Date.now().toString().slice(-6)}`;
+      const totalAmount = cart.reduce((sum, it) => sum + (it.price * it.quantity), 0);
+      const formattedTotal = totalAmount > 0 ? `₹${totalAmount.toLocaleString('en-IN')}` : 'Custom Engineering Quote';
+      const itemsSummary = cart.map(it => `- ${it.title} x ${it.quantity} (₹${((it.price || 0) * it.quantity).toLocaleString('en-IN')})`).join('\n');
 
-      orders.unshift(newOrder);
-      saveOrders(orders);
+      const formattedDraft = apiResult?.formattedDraft || [
+        'Sackhe Technologies - Institutional Procurement Requisition',
+        '============================================================',
+        `Requisition ID : ${orderId}`,
+        `Timestamp      : ${new Date().toISOString()}`,
+        `Organization   : ${org || 'Individual / Enterprise'}`,
+        `Primary Contact: ${name}`,
+        `Contact Email  : ${email}`,
+        `Contact Phone  : ${phone}`,
+        `Delivery Site  : ${address ? `${address}, ${city} - ${pincode}` : 'To be coordinated'}`,
+        `Billing Method : ${orderPayload.payment_method}`,
+        '',
+        'Requisition Items:',
+        itemsSummary,
+        `Estimated Total: ${formattedTotal}`,
+        '',
+        'Procurement Notes:',
+        notes || 'None provided',
+        '============================================================',
+        'Notice: This document constitutes a formal procurement inquiry and RFQ commitment.',
+        'An official proforma invoice and technical schedule will be issued upon desk review.'
+      ].join('\n');
+
+      const mailtoUrl = apiResult?.mailtoUrl || `mailto:info@sackhetechnologies.com?subject=${encodeURIComponent(`[Procurement Requisition ${orderId}] ${org || name} - ${formattedTotal}`)}&body=${encodeURIComponent(formattedDraft)}`;
+
       clearCart();
-
       placeOrderBtn.disabled = false;
       placeOrderBtn.innerHTML = originalBtnHtml;
 
-      if (transmitted) {
-        showToast(`Procurement Request ${orderRef} transmitted successfully! Proforma invoice will be sent to ${email}.`, 'success');
-      } else {
-        showToast(`Procurement Request ${orderRef} recorded. Our finance desk will follow up with a formal proforma invoice.`, 'success');
-      }
+      openDispatchModal({
+        badge: 'Procurement Requisition Prepared',
+        title: 'Requisition Ready for Direct Dispatch',
+        desc: `Your institutional procurement order <strong>${escapeHtml(orderId)}</strong> has been prepared. Click below to send your formal commitment directly to <strong>info@sackhetechnologies.com</strong>.`,
+        draft: formattedDraft,
+        mailtoUrl: mailtoUrl
+      });
 
-      setTimeout(() => {
-        window.location.hash = '#/profile';
-      }, 600);
+      showToast(`Procurement requisition ${orderId} prepared! Please send email or copy details.`, 'info');
     };
   }
-}
-
-// Profile Page Handler
-function setupProfilePage() {
-  const user = getCurrentUser();
-  if (!user) return;
-
-  // Identity Elements
-  const nameEl = document.getElementById('profile-user-name');
-  const emailEl = document.getElementById('profile-user-email');
-  const avatarEl = document.getElementById('profile-avatar-icon');
-  const orgEl = document.getElementById('profile-org-val');
-  const phoneEl = document.getElementById('profile-phone-val');
-  const roleBadgeContainer = document.getElementById('profile-role-badge-container');
-  const adminQuicklink = document.getElementById('admin-quicklink-card');
-
-  if (nameEl) nameEl.textContent = user.name;
-  if (emailEl) emailEl.textContent = user.email;
-  if (orgEl) orgEl.textContent = user.org || 'Institutional Partner';
-  if (phoneEl) phoneEl.textContent = user.phone || '+91 73372 38466';
-
-  const initials = user.name
-    ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-    : 'U';
-  if (avatarEl) avatarEl.textContent = initials;
-
-  if (roleBadgeContainer) {
-    if (user.role === 'admin') {
-      roleBadgeContainer.innerHTML = `
-        <span class="profile-role-pill profile-role-admin">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Administrator
-        </span>
-      `;
-      if (adminQuicklink) adminQuicklink.style.display = 'block';
-    } else {
-      roleBadgeContainer.innerHTML = `
-        <span class="profile-role-pill profile-role-user">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-          Partner Client
-        </span>
-      `;
-      if (adminQuicklink) adminQuicklink.style.display = 'none';
-    }
-  }
-
-  // Render Orders Table
-  const ordersTableBody = document.getElementById('user-orders-table-body');
-  if (ordersTableBody) {
-    const allOrders = getOrders();
-    // Show orders matching user's email, or all orders if admin
-    const displayOrders = user.role === 'admin' 
-      ? allOrders 
-      : allOrders.filter(o => o.email.toLowerCase() === user.email.toLowerCase());
-
-    if (displayOrders.length === 0) {
-      ordersTableBody.innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
-            No procurement orders found. Explore our <a href="#/products" style="color: var(--primary); font-weight: 700;">Products catalog</a> to make an initial requisition.
-          </td>
-        </tr>
-      `;
-    } else {
-      ordersTableBody.innerHTML = displayOrders.map(ord => `
-        <tr>
-          <td><span class="order-id-pill">${escapeHtml(ord._id ? ord._id.toUpperCase() : '')}</span></td>
-          <td>
-            <div style="font-weight: 700; color: var(--text-primary);">${escapeHtml(ord.product_name)}</div>
-            <div style="font-size: 0.76rem; color: var(--text-secondary);">${ord.created_at ? new Date(ord.created_at).toLocaleDateString() : 'N/A'}</div>
-          </td>
-          <td style="font-weight: 700;">${escapeHtml(ord.quantity)} units</td>
-          <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price || 0).toLocaleString()}</td>
-          <td>
-            <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
-              ${escapeHtml(ord.status ? ord.status.toUpperCase() : 'PENDING')}
-            </span>
-          </td>
-          <td style="font-size: 0.8rem; font-family: monospace; color: var(--text-secondary);">
-            ${escapeHtml(ord.transaction_ref || 'PO-INDENT')}
-          </td>
-        </tr>
-      `).join('');
-    }
-  }
-
-  // Profile Edit Modal bindings
-  const editOverlay = document.getElementById('profile-edit-overlay');
-  const openEditBtn = document.getElementById('open-edit-profile-btn');
-  const closeEditBtn = document.getElementById('close-profile-modal');
-  const editForm = document.getElementById('profile-edit-form');
-  const editNameInput = document.getElementById('edit-profile-name');
-  const editOrgInput = document.getElementById('edit-profile-org');
-  const editPhoneInput = document.getElementById('edit-profile-phone');
-
-  if (openEditBtn && editOverlay) {
-    openEditBtn.addEventListener('click', () => {
-      if (editNameInput) editNameInput.value = user.name || '';
-      if (editOrgInput) editOrgInput.value = user.org || '';
-      if (editPhoneInput) editPhoneInput.value = user.phone || '';
-      editOverlay.classList.add('active');
-    });
-  }
-
-  if (closeEditBtn && editOverlay) {
-    closeEditBtn.addEventListener('click', () => {
-      editOverlay.classList.remove('active');
-    });
-  }
-
-  if (editForm && editOverlay) {
-    editForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const updatedUser = {
-        ...user,
-        name: editNameInput?.value.trim() || user.name,
-        org: editOrgInput?.value.trim() || user.org,
-        phone: editPhoneInput?.value.trim() || user.phone
-      };
-      setCurrentUser(updatedUser);
-      editOverlay.classList.remove('active');
-      showToast('Profile information updated successfully!', 'success');
-      setupProfilePage();
-    });
-  }
-
-  // Sign out button
-  const signOutBtn = document.getElementById('profile-signout-btn');
-  if (signOutBtn) {
-    signOutBtn.addEventListener('click', () => {
-      setCurrentUser(null);
-      showToast('Successfully signed out.', 'default');
-      window.location.hash = '#/';
-    });
-  }
-}
-
-// Admin Page Handler
-function setupAdminPage() {
-  const user = getCurrentUser();
-  if (!user || user.role !== 'admin') return;
-
-  // Tabs
-  const tabs = document.querySelectorAll('.admin-nav-tab');
-  const ordersTab = document.getElementById('admin-tab-content-orders');
-  const leadsTab = document.getElementById('admin-tab-content-leads');
-  const settingsTab = document.getElementById('admin-tab-content-settings');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const target = tab.getAttribute('data-admin-tab');
-
-      if (ordersTab) ordersTab.style.display = target === 'orders' ? 'block' : 'none';
-      if (leadsTab) leadsTab.style.display = target === 'leads' ? 'block' : 'none';
-      if (settingsTab) settingsTab.style.display = target === 'settings' ? 'block' : 'none';
-    });
-  });
-
-  // Refresh KPI and counters
-  function refreshKPIs() {
-    const orders = getOrders();
-    const leads = getLeads();
-
-    const verifiedOrders = orders.filter(o => o.status === 'verified');
-    const pendingOrders = orders.filter(o => o.status === 'pending');
-    const totalRev = verifiedOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
-
-    const revEl = document.getElementById('admin-stat-revenue');
-    const ordersEl = document.getElementById('admin-stat-orders');
-    const leadsEl = document.getElementById('admin-stat-leads');
-    const ordersCountEl = document.getElementById('admin-orders-count');
-    const leadsCountEl = document.getElementById('admin-leads-count');
-
-    if (revEl) revEl.textContent = `₹${totalRev.toLocaleString()}`;
-    if (ordersEl) ordersEl.textContent = `${orders.length} Orders`;
-    if (leadsEl) leadsEl.textContent = `${leads.length} Inquiries`;
-    if (ordersCountEl) ordersCountEl.textContent = orders.length;
-    if (leadsCountEl) leadsCountEl.textContent = leads.length;
-  }
-
-  // Render Orders Table
-  let currentOrderFilter = 'all';
-
-  function renderAdminOrders() {
-    const ordersTableBody = document.getElementById('admin-orders-table-body');
-    if (!ordersTableBody) return;
-
-    const orders = getOrders();
-    const filtered = currentOrderFilter === 'all'
-      ? orders
-      : orders.filter(o => o.status === currentOrderFilter);
-
-    if (filtered.length === 0) {
-      ordersTableBody.innerHTML = `
-        <tr>
-          <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-secondary);">
-            No purchase records found matching filter "${currentOrderFilter}".
-          </td>
-        </tr>
-      `;
-      return;
-    }
-
-    ordersTableBody.innerHTML = filtered.map(ord => `
-      <tr>
-        <td><span class="order-id-pill">${escapeHtml(ord._id ? ord._id.toUpperCase() : '')}</span></td>
-        <td>
-          <div style="font-weight: 700; color: var(--text-primary);">${escapeHtml(ord.client_name || ord.email || 'Partner')}</div>
-          <div style="font-size: 0.76rem; color: var(--text-secondary);">${escapeHtml(ord.email || '')}</div>
-        </td>
-        <td style="font-size: 0.88rem; max-width: 220px;">${escapeHtml(ord.product_name || '')}</td>
-        <td style="font-weight: 700;">${escapeHtml(ord.quantity || 1)}</td>
-        <td style="font-weight: 800; color: var(--secondary);">₹${Number(ord.total_price || 0).toLocaleString()}</td>
-        <td>
-          <span class="badge-status ${ord.status === 'verified' ? 'badge-verified' : (ord.status === 'rejected' ? 'badge-rejected' : 'badge-pending')}">
-            ${escapeHtml(ord.status ? ord.status.toUpperCase() : 'PENDING')}
-          </span>
-        </td>
-        <td>
-          <div style="font-size: 0.8rem; font-weight: 600;">${escapeHtml(ord.user_bank_name || 'Direct')}</div>
-          <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-secondary);">${escapeHtml(ord.transaction_ref || 'N/A')}</div>
-        </td>
-        <td>
-          ${ord.status === 'pending' ? `
-            <div style="display: flex; gap: 0.4rem;">
-              <button class="btn-action-verify" data-order-action="verify" data-order-id="${escapeHtml(ord._id)}" title="Approve & Verify">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                Verify
-              </button>
-              <button class="btn-action-reject" data-order-action="reject" data-order-id="${escapeHtml(ord._id)}" title="Reject Transaction">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                Reject
-              </button>
-            </div>
-          ` : `
-            <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Action Locked</span>
-          `}
-        </td>
-      </tr>
-    `).join('');
-
-    // Bind action buttons
-    ordersTableBody.querySelectorAll('[data-order-action]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const action = btn.getAttribute('data-order-action');
-        const id = btn.getAttribute('data-order-id');
-        const all = getOrders();
-        const target = all.find(o => o._id === id);
-        if (target) {
-          target.status = action === 'verify' ? 'verified' : 'rejected';
-          saveOrders(all);
-          showToast(`Order ${id.toUpperCase()} marked as ${target.status}!`, 'success');
-          refreshKPIs();
-          renderAdminOrders();
-        }
-      });
-    });
-  }
-
-  // Filter Buttons
-  document.querySelectorAll('.order-filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.order-filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentOrderFilter = btn.getAttribute('data-order-filter');
-      renderAdminOrders();
-    });
-  });
-
-  // Render Leads
-  function renderAdminLeads(query = '') {
-    const leadsContainer = document.getElementById('admin-leads-list');
-    if (!leadsContainer) return;
-
-    const leads = getLeads();
-    const q = query.toLowerCase().trim();
-    const filtered = q
-      ? leads.filter(l => 
-          (l.name && l.name.toLowerCase().includes(q)) || 
-          (l.email && l.email.toLowerCase().includes(q)) || 
-          (l.organization && l.organization.toLowerCase().includes(q)) ||
-          (l.message && l.message.toLowerCase().includes(q))
-        )
-      : leads;
-
-    if (filtered.length === 0) {
-      leadsContainer.innerHTML = `
-        <div style="text-align: center; padding: 3rem; color: var(--text-secondary); background: rgba(0,0,0,0.01); border-radius: var(--radius-lg);">
-          No customer inquiries matching "${escapeHtml(query)}".
-        </div>
-      `;
-      return;
-    }
-
-    leadsContainer.innerHTML = filtered.map(l => `
-      <div class="glass-card" style="padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 0.75rem; background: rgba(255,255,255,0.7);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 0.75rem;">
-          <div>
-            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">${escapeHtml(l.name)}</div>
-            <div style="font-size: 0.82rem; color: var(--text-secondary);">${escapeHtml(l.email)} &bull; ${escapeHtml(l.phone || 'No phone')}</div>
-          </div>
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span class="badge" style="background: rgba(147, 51, 234, 0.1); color: var(--primary); margin: 0; font-size: 0.75rem;">
-              ${escapeHtml(l.organization || 'Individual')}
-            </span>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">${l.created_at ? new Date(l.created_at).toLocaleDateString() : 'N/A'}</span>
-          </div>
-        </div>
-        <div style="font-size: 0.92rem; line-height: 1.6; color: var(--text-secondary);">
-          ${escapeHtml(l.message)}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // Lead search listener
-  const leadSearchInput = document.getElementById('admin-lead-search');
-  if (leadSearchInput) {
-    leadSearchInput.addEventListener('input', (e) => {
-      renderAdminLeads(e.target.value);
-    });
-  }
-
-  // Export CSV
-  const exportBtn = document.getElementById('admin-export-leads-btn');
-  if (exportBtn) {
-    exportBtn.addEventListener('click', () => {
-      const leads = getLeads();
-      if (leads.length === 0) {
-        showToast('No inquiries available to export.', 'default');
-        return;
-      }
-      let csvContent = 'data:text/csv;charset=utf-8,ID,Name,Email,Phone,Organization,Date,Message\n';
-      leads.forEach(l => {
-        const row = [
-          `"${l._id}"`,
-          `"${l.name.replace(/"/g, '""')}"`,
-          `"${l.email.replace(/"/g, '""')}"`,
-          `"${l.phone || ''}"`,
-          `"${(l.organization || '').replace(/"/g, '""')}"`,
-          `"${new Date(l.created_at).toLocaleDateString()}"`,
-          `"${l.message.replace(/"/g, '""').replace(/\n/g, ' ')}"`
-        ].join(',');
-        csvContent += row + '\n';
-      });
-
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `sackhe_leads_export_${Date.now()}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast('Exported customer inquiries to CSV!', 'success');
-    });
-  }
-
-  // Settings form
-  const settingsForm = document.getElementById('admin-settings-form');
-  if (settingsForm) {
-    settingsForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      showToast('System and pricing configurations updated successfully!', 'success');
-    });
-  }
-
-  refreshKPIs();
-  renderAdminOrders();
-  renderAdminLeads();
 }
 
 // Global Event Listeners
@@ -1519,128 +943,6 @@ window.addEventListener('DOMContentLoaded', () => {
   // Route matching
   router();
   window.addEventListener('hashchange', router);
-  
-  // Auth system init
-  updateAuthUI();
-
-  // Wire up Auth Modal Forms
-  const loginForm = document.getElementById('auth-login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('login-email')?.value.trim();
-      const password = document.getElementById('login-password')?.value || '';
-      if (!email) return;
-
-      if (!password) {
-        showToast('Please enter your password to sign in.', 'error');
-        return;
-      }
-
-      // Check if attempting admin login
-      if (email.toLowerCase() === 'admin@sackhe.com') {
-        if (password !== 'admin123') {
-          showToast('Invalid administrator password.', 'error');
-          return;
-        }
-        let user = findUserByEmail(email);
-        if (!user) {
-          user = {
-            name: 'Admin User',
-            email: 'admin@sackhe.com',
-            role: 'admin',
-            password: 'admin123',
-            org: 'Sackhe Technologies',
-            phone: '+91 73372 38466'
-          };
-          const allUsers = getUsers();
-          allUsers.push(user);
-          saveUsers(allUsers);
-        }
-        setCurrentUser(user);
-        toggleAuthModal(false);
-        showToast(`Welcome back, ${user.name}!`, 'success');
-        window.location.hash = '#/admin';
-        return;
-      }
-
-      // Standard user authentication
-      let user = findUserByEmail(email);
-      if (user && user.password && user.password !== password) {
-        showToast('Incorrect password for this account.', 'error');
-        return;
-      }
-
-      if (!user) {
-        user = {
-          name: email.split('@')[0].toUpperCase(),
-          email: email,
-          password: password,
-          role: 'user', // NEVER assign admin
-          org: 'Institutional Partner',
-          phone: '+91 73372 38466'
-        };
-        const allUsers = getUsers();
-        allUsers.push(user);
-        saveUsers(allUsers);
-      }
-
-      setCurrentUser(user);
-      toggleAuthModal(false);
-      showToast(`Welcome back, ${user.name}!`, 'success');
-
-      if (window.location.hash === '#/admin') {
-        window.location.hash = '#/';
-      }
-    });
-  }
-
-  const registerForm = document.getElementById('auth-register-form');
-  if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('register-name')?.value.trim();
-      const email = document.getElementById('register-email')?.value.trim();
-      const org = document.getElementById('register-org')?.value.trim();
-      const password = document.getElementById('register-password')?.value || '';
-      if (!email || !password) {
-        showToast('Please provide an email and password.', 'error');
-        return;
-      }
-
-      if (email.toLowerCase() === 'admin@sackhe.com') {
-        showToast('Admin account cannot be registered through public portal.', 'error');
-        return;
-      }
-
-      let user = findUserByEmail(email);
-      if (user) {
-        showToast('An account with this email already exists. Please sign in.', 'default');
-        switchAuthTab('signin');
-        return;
-      }
-
-      user = {
-        name: name || 'Valued Partner',
-        email: email,
-        password: password,
-        role: 'user', // Strictly user role
-        org: org || 'Institutional Partner',
-        phone: '+91 73372 38466'
-      };
-      const allUsers = getUsers();
-      allUsers.push(user);
-      saveUsers(allUsers);
-
-      setCurrentUser(user);
-      toggleAuthModal(false);
-      showToast('Account registered successfully!', 'success');
-
-      if (window.location.hash === '#/admin') {
-        window.location.hash = '#/';
-      }
-    });
-  }
 
   // Mobile nav toggler
   const menuToggle = document.getElementById('menu-toggle');

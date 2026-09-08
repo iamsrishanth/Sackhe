@@ -159,21 +159,7 @@
         <a href="#/products" class="nav-link">Products</a>
         <a href="#/services" class="nav-link">Services</a>
         <a href="#/initiatives" class="nav-link">Initiatives</a>
-        <a href="#/contact" class="nav-link nav-contact-pill">Contact</a>
-        <a href="#/admin" class="nav-link nav-admin-pill" id="nav-admin-link" style="display: none;">Admin</a>
-
-        <div class="nav-social-group">
-          <a href="https://www.linkedin.com/company/sackhetechnologies-pvtltd/" target="_blank" class="nav-social-btn" title="LinkedIn" aria-label="LinkedIn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-          </a>
-          <a href="https://www.instagram.com/_sackhe_?igsh=NG9qYTN6emJxbmV6&utm_source=qr" target="_blank" class="nav-social-btn" title="Instagram" aria-label="Instagram">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          </a>
-        </div>
-
-        <div id="user-auth-btn">
-          <!-- Auth action loaded dynamically -->
-        </div>
+        <a href="#/contact" class="btn btn-primary nav-cta-btn" style="padding: 0.45rem 1rem; font-size: 0.85rem; border-radius: 9999px; text-decoration: none; font-weight: 700;">Request Quote</a>
 
         <!-- E-Commerce Cart Button -->
         <button id="nav-cart-btn" class="nav-cart-btn" aria-label="View Shopping Cart">
@@ -454,9 +440,7 @@
             <a href="#/" class="footer-link">Home</a>
             <a href="#/about" class="footer-link">About Us</a>
             <a href="#/products" class="footer-link">Our Catalog</a>
-            <a href="#/services" class="footer-link">Services</a>
-            <a href="#/admin" class="footer-link" id="footer-admin-link" style="color: #10b981; font-weight: 700; display: none;">Admin Console</a>
-            <a href="#/profile" class="footer-link">My Account</a>
+            <a href="#/contact" class="footer-link">Institutional Inquiry</a>
           </div>
         </div>
         
@@ -1914,332 +1898,45 @@
     </section>
   </template>
 
-  <!-- ================= PROFILE PAGE TEMPLATE ================= -->
-  <template id="page-profile">
-    <section class="profile-page-wrapper container">
-      <div class="section-header" style="max-width: 800px; margin-bottom: 4rem;">
-        <span class="badge">MY ACCOUNT</span>
-        <h1 class="hero-title text-gradient">Profile & History</h1>
-        <p class="section-desc" style="font-size: 1.15rem; line-height: 1.7; margin-top: 1rem;">
-          Manage your organizational credentials, monitor recent orders, and oversee your active sustainability deployments.
-        </p>
-      </div>
 
-      <div class="profile-layout-grid">
-        <!-- Profile Identity Card -->
-        <div class="glass-card profile-identity-card">
-          <div class="profile-avatar-large" id="profile-avatar-icon">AU</div>
-          <h2 id="profile-user-name" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Admin User</h2>
-          <p id="profile-user-email" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.75rem;">admin@sackhe.com</p>
-          <div id="profile-role-badge-container">
-            <span class="profile-role-pill profile-role-admin">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              Administrator
-            </span>
-          </div>
 
-          <div class="profile-field-list">
-            <div class="profile-field-row">
-              <span class="profile-field-name">Organization</span>
-              <span class="profile-field-value" id="profile-org-val">Sackhe Technologies</span>
-            </div>
-            <div class="profile-field-row">
-              <span class="profile-field-name">Contact Phone</span>
-              <span class="profile-field-value" id="profile-phone-val">+91 73372 38466</span>
-            </div>
-            <div class="profile-field-row">
-              <span class="profile-field-name">Account Status</span>
-              <span class="profile-field-value" style="color: #15803d; font-weight: 700;">Active & Verified</span>
-            </div>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <button id="open-edit-profile-btn" class="btn btn-secondary" style="width: 100%; border-radius: var(--radius-pill); font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              Edit Profile Details
-            </button>
-            <button id="profile-signout-btn" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-pill); font-size: 0.88rem; background: #ef4444; border-color: #ef4444;">
-              Sign Out
-            </button>
-          </div>
-        </div>
-
-        <!-- Orders & Procurement History -->
-        <div class="glass-card" style="padding: 2.5rem; border-radius: var(--radius-2xl);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-            <div>
-              <h2 style="font-size: 1.4rem; font-weight: 800; margin: 0;">Procurement & Order History</h2>
-              <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">Real-time tracking of institutional machine requests and recurring pad shipments.</p>
-            </div>
-            <a href="#/products" class="btn btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.85rem; border-radius: var(--radius-pill);">+ New Order</a>
-          </div>
-
-          <div class="orders-table-wrapper">
-            <table class="orders-table">
-              <thead>
-                <tr>
-                  <th>Order Ref</th>
-                  <th>Product Details</th>
-                  <th>Units</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
-                  <th>Txn Reference</th>
-                </tr>
-              </thead>
-              <tbody id="user-orders-table-body">
-                <!-- Rendered via JavaScript -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Quick Navigation Actions -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 2.5rem;">
-            <div class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(0,0,0,0.02);">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem;">Explore Catalog</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Browse all incinerators and sanitary solutions.</p>
-              <a href="#/products" style="color: var(--primary); font-weight: 700; font-size: 0.85rem; text-decoration: none;">View Products &rarr;</a>
-            </div>
-
-            <div id="admin-quicklink-card" class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); display: none;">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem; color: #047857;">Admin Console</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Access orders approval and metrics panel.</p>
-              <a href="#/admin" style="color: #047857; font-weight: 800; font-size: 0.85rem; text-decoration: none;">Launch Dashboard &rarr;</a>
-            </div>
-
-            <div class="glass-card" style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(0,0,0,0.02);">
-              <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.35rem;">Direct Advisory</h3>
-              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">Request on-site campus inspection or demo.</p>
-              <a href="#/contact" style="color: var(--primary); font-weight: 700; font-size: 0.85rem; text-decoration: none;">Contact Advisors &rarr;</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Profile Edit Modal -->
-    <div id="profile-edit-overlay" class="auth-overlay">
-      <div class="auth-modal">
-        <button id="close-profile-modal" class="auth-modal-close" aria-label="Close">&times;</button>
-        <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">Edit Profile</h3>
-        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">Update your account credentials and contact details.</p>
-        <form id="profile-edit-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Full Name</label>
-            <input type="text" id="edit-profile-name" class="auth-input" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Organization / Institution</label>
-            <input type="text" id="edit-profile-org" class="auth-input">
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Phone Number</label>
-            <input type="tel" id="edit-profile-phone" class="auth-input">
-          </div>
-          <button type="submit" class="auth-submit-btn" style="margin-top: 0.5rem;">Save Changes</button>
-        </form>
-      </div>
-    </div>
-  </template>
-
-  <!-- ================= ADMIN PAGE TEMPLATE ================= -->
-  <template id="page-admin">
-    <section class="admin-page-wrapper container">
-      <!-- Demonstration Console Banner -->
-      <div class="demo-console-banner" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 0.9rem 1.25rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.85rem; color: #b45309; font-size: 0.88rem; line-height: 1.5;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+  <!-- ================= SUBMISSION CONFIRMATION MODAL ================= -->
+  <div id="dispatch-confirm-modal" class="auth-overlay" style="display: none;">
+    <div class="auth-modal" style="max-width: 580px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
         <div>
-          <strong>Operational Simulation Console:</strong> This console is provided for workflow demonstration purposes. No live production database is linked; all orders and inquiries reflect client-side simulation.
+          <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: #ecfdf5; color: #047857; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 9999px; margin-bottom: 0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="dispatch-modal-badge">Requisition Draft Prepared</span>
+          </div>
+          <h3 id="dispatch-modal-title" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin: 0;">Inquiry Ready for Direct Dispatch</h3>
         </div>
+        <button class="auth-modal-close" onclick="window.closeDispatchModal()" aria-label="Close modal">&times;</button>
       </div>
 
-      <div class="section-header" style="max-width: 900px; margin-bottom: 3.5rem;">
-        <div class="admin-header-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          ADMIN OPERATIONS CONSOLE
-        </div>
-        <h1 class="hero-title text-gradient">Executive Dashboard</h1>
-        <p class="section-desc" style="font-size: 1.15rem; line-height: 1.7; margin-top: 1rem;">
-          Oversee hardware procurements, process institutional orders, review customer contact inquiries, and adjust platform settings.
-        </p>
-      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;" id="dispatch-modal-desc">
+        To ensure your message reaches our corporate desk directly without third-party delay, please click the button below to send your pre-composed email directly to <strong>info@sackhetechnologies.com</strong>.
+      </p>
 
-      <!-- KPI Metrics Grid -->
-      <div class="admin-kpi-grid">
-        <div class="admin-kpi-card">
-          <div class="kpi-label">Total Platform Revenue</div>
-          <div class="kpi-value" id="admin-stat-revenue">₹0</div>
-          <div class="kpi-sub">Verified orders</div>
-        </div>
-
-        <div class="admin-kpi-card">
-          <div class="kpi-label">Active Orders</div>
-          <div class="kpi-value" id="admin-stat-orders">0 Orders</div>
-          <div class="kpi-sub" style="color: #d97706;">0 Pending Verification</div>
-        </div>
-
-        <div class="admin-kpi-card">
-          <div class="kpi-label">Lead Submissions</div>
-          <div class="kpi-value" id="admin-stat-leads">0 Inquiries</div>
-          <div class="kpi-sub" style="color: var(--primary);">0 Unread Inquiries</div>
-        </div>
-
-        <div class="admin-kpi-card">
-          <div class="kpi-label">Deployments & Units</div>
-          <div class="kpi-value" id="admin-stat-units">0 Units</div>
-          <div class="kpi-sub">Hardware units deployed</div>
-        </div>
-      </div>
-
-      <!-- Tab Switcher -->
-      <div class="admin-tabs-nav">
-        <button class="admin-nav-tab active" data-admin-tab="orders">Orders & Procurements (<span id="admin-orders-count">0</span>)</button>
-        <button class="admin-nav-tab" data-admin-tab="leads">Inquiries & Leads (<span id="admin-leads-count">0</span>)</button>
-        <button class="admin-nav-tab" data-admin-tab="settings">System Configurations</button>
-      </div>
-
-      <!-- Section A: Orders Table -->
-      <div id="admin-tab-content-orders" class="glass-card" style="padding: 2rem; border-radius: var(--radius-2xl);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-          <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0;">Institutional Purchase Requests</h2>
-          <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-secondary order-filter-btn active" data-order-filter="all" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: var(--radius-pill);">All</button>
-            <button class="btn btn-secondary order-filter-btn" data-order-filter="pending" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: var(--radius-pill);">Pending</button>
-            <button class="btn btn-secondary order-filter-btn" data-order-filter="verified" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: var(--radius-pill);">Verified</button>
-          </div>
-        </div>
-
-        <div class="orders-table-wrapper">
-          <table class="orders-table">
-            <thead>
-              <tr>
-                <th>Order Ref</th>
-                <th>Client / Contact</th>
-                <th>Product</th>
-                <th>Units</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Payment Ref</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-orders-table-body">
-              <!-- Rendered via JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Section B: Lead Inquiries -->
-      <div id="admin-tab-content-leads" class="glass-card" style="padding: 2rem; border-radius: var(--radius-2xl); display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0;">Customer Contact Inquiries</h2>
-            <p style="color: var(--text-secondary); font-size: 0.88rem;">Direct lead messages submitted via the contact portal.</p>
-          </div>
-          <div style="display: flex; gap: 0.75rem; align-items: center;">
-            <input type="text" id="admin-lead-search" placeholder="Search inquiries..." class="auth-input" style="padding: 0.5rem 1rem; width: 220px; font-size: 0.88rem;">
-            <button id="admin-export-leads-btn" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: var(--radius-pill); display: flex; align-items: center; gap: 0.4rem;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Export CSV
-            </button>
-          </div>
-        </div>
-
-        <div id="admin-leads-list" style="display: flex; flex-direction: column; gap: 1rem;">
-          <!-- Rendered via JS -->
-        </div>
-      </div>
-
-      <!-- Section C: Settings -->
-      <div id="admin-tab-content-settings" class="glass-card" style="padding: 2rem; border-radius: var(--radius-2xl); display: none; max-width: 680px;">
-        <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem;">System & Pricing Configurations</h2>
-        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 2rem;">Adjust platform notification routing and base incinerator pricing.</p>
-
-        <form id="admin-settings-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Inquiry Notification Email</label>
-            <input type="email" id="setting-notify-email" class="auth-input" value="info@sackhetechnologies.com" required>
-          </div>
-
-          <div class="auth-input-group">
-            <label class="auth-label">Base Incinerator Unit Price (₹)</label>
-            <input type="number" id="setting-base-price" class="auth-input" value="64949" required>
-          </div>
-
-          <div class="auth-input-group">
-            <label class="auth-label">Emergency Helpline Number</label>
-            <input type="tel" id="setting-helpline" class="auth-input" value="+91 73372 38466" required>
-          </div>
-
-          <button type="submit" class="btn btn-primary" style="margin-top: 1rem; border-radius: var(--radius-pill);">
-            Save System Settings
+      <div style="background: var(--bg-tertiary, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: var(--radius-md, 8px); padding: 0.85rem; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Drafted Requisition Details</span>
+          <button type="button" id="dispatch-copy-btn" class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
+            Copy Text
           </button>
-        </form>
+        </div>
+        <pre id="dispatch-modal-preview" style="white-space: pre-wrap; font-family: monospace; font-size: 0.8rem; color: var(--text-primary); max-height: 180px; overflow-y: auto; background: var(--bg-primary, #ffffff); padding: 0.75rem; border-radius: 6px; border: 1px solid #e2e8f0; margin: 0;"></pre>
       </div>
 
-    </section>
-  </template>
-
-  <!-- ================= AUTHENTICATION MODAL ================= -->
-  <div id="auth-overlay" class="auth-overlay">
-    <div class="auth-modal">
-      <button class="auth-modal-close" onclick="toggleAuthModal(false)" aria-label="Close modal">&times;</button>
-      
-      <div class="auth-tabs">
-        <button class="auth-tab-btn active" id="tab-btn-signin" onclick="switchAuthTab('signin')">Sign In</button>
-        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">Register</button>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <a id="dispatch-mailto-link" href="#" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; padding: 0.85rem; font-weight: 700;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Open Email Client to Send (info@sackhetechnologies.com)</span>
+        </a>
+        <div style="text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Webmail user (Gmail/Outlook)? Use the "Copy Text" button above and paste into a new email to <strong>info@sackhetechnologies.com</strong>.</span>
+        </div>
       </div>
-
-      <div id="auth-signin-pane">
-        <form id="auth-login-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Email Address</label>
-            <input type="email" id="login-email" class="auth-input" placeholder="admin@sackhe.com or user@example.com" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Password</label>
-            <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required>
-          </div>
-          <button type="submit" class="auth-submit-btn" id="login-submit-btn">Sign In</button>
-        </form>
-        <p style="font-size: 0.76rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">
-          Tip: Enter <strong>admin@sackhe.com</strong> to unlock the Admin Dashboard!
-        </p>
-      </div>
-
-      <div id="auth-register-pane" style="display: none;">
-        <form id="auth-register-form">
-          <div class="auth-input-group">
-            <label class="auth-label">Full Name</label>
-            <input type="text" id="register-name" class="auth-input" placeholder="Your Name" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Email Address</label>
-            <input type="email" id="register-email" class="auth-input" placeholder="name@organization.com" required>
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Organization</label>
-            <input type="text" id="register-org" class="auth-input" placeholder="School, Hospital or Society">
-          </div>
-          <div class="auth-input-group">
-            <label class="auth-label">Password</label>
-            <input type="password" id="register-password" class="auth-input" placeholder="Create password" required>
-          </div>
-          <button type="submit" class="auth-submit-btn">Create Account</button>
-        </form>
-      </div>
-
-      <div class="auth-divider">OR</div>
-
-      <button id="google-signin-action" class="google-auth-btn" onclick="handleGoogleSignIn()">
-        <svg class="google-icon-svg" width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
-          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.37 7.31 24 12 24z"/>
-          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.97 0 12s.46 3.84 1.26 5.42l4.02-3.15z"/>
-          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.63 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-        </svg>
-        <span>Sign in with Google</span>
-      </button>
     </div>
   </div>
 

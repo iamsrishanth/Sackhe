@@ -1,26 +1,77 @@
+// Simple in-memory rate limiting map (per Vercel execution instance)
+const rateLimitMap = new Map();
+
+function isRateLimited(ip, limit = 5, windowMs = 60000) {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip) || { count: 0, firstReq: now };
+
+  if (now - record.firstReq > windowMs) {
+    rateLimitMap.set(ip, { count: 1, firstReq: now });
+    return false;
+  }
+
+  record.count += 1;
+  rateLimitMap.set(ip, record);
+  return record.count > limit;
+}
+
 export default async function handler(req, res) {
-  // Set CORS and JSON headers
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS Configuration: Restrict to allowed deployment origins and localhost
+  const allowedOrigins = [
+    'https://sackhe.srishanth.com',
+    'https://sackhetechnologies.com'
+  ];
+  const origin = req.headers.origin;
+  if (origin) {
+    const isAllowed = allowedOrigins.includes(origin) ||
+      origin.endsWith('.vercel.app') ||
+      /^http:\/\/localhost(:\d+)?$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin);
+    if (isAllowed) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method Not Allowed. Use POST.' });
   }
 
-  try {
-    const { name, email, phone, organization, address, city, pincode, items, payment_method, notes } = req.body || {};
+  // Enforce Payload Size Cap (10KB)
+  const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+  if (contentLength > 10240) {
+    return res.status(413).json({ ok: false, error: 'Payload Too Large. Maximum size is 10KB.' });
+  }
 
-    if (!name || !email || !phone || !items || !Array.isArray(items) || items.length === 0) {
+  // Enforce Rate Limiting (5 requests per minute per IP)
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (isRateLimited(clientIp)) {
+    res.setHeader('Retry-After', '60');
+    return res.status(429).json({ ok: false, error: 'Too Many Requests. Please wait 60 seconds.' });
+  }
+
+  try {
+    const body = req.body || {};
+    const name = String(body.name || '').trim().slice(0, 100);
+    const email = String(body.email || '').trim().slice(0, 100);
+    const phone = String(body.phone || '').trim().slice(0, 30);
+    const organization = String(body.organization || '').trim().slice(0, 120);
+    const address = String(body.address || '').trim().slice(0, 200);
+    const city = String(body.city || '').trim().slice(0, 50);
+    const pincode = String(body.pincode || '').trim().slice(0, 15);
+    const payment_method = String(body.payment_method || 'Offline Purchase Order (Institutional)').slice(0, 100);
+    const notes = String(body.notes || '').trim().slice(0, 2000);
+    const rawItems = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
+
+    if (!name || !email || !phone || rawItems.length === 0) {
       return res.status(400).json({
         ok: false,
-        error: 'Missing required order fields: name, email, phone, and valid items array are required.'
+        error: 'Missing required fields: name, email, phone, and items are required.'
       });
     }
 
@@ -33,17 +84,85 @@ export default async function handler(req, res) {
     }
 
     const orderId = `ORD-${Date.now().toString().slice(-6)}`;
-    const totalAmount = items.reduce((acc, it) => acc + (Number(it.price) || 0) * (Number(it.quantity) || 1), 0);
+    const items = rawItems.map(it => ({
+      name: String(it.name || 'Equipment / Supply').slice(0, 100),
+      price: Math.max(0, Number(it.price) || 0),
+      quantity: Math.max(1, Math.min(1000, Number(it.quantity) || 1))
+    }));
 
-    console.log(`[Institutional Order Received ${orderId}] Org: ${organization || 'Individual'}, Contact: ${name} <${email}>, Items: ${items.length}, Total: ₹${totalAmount}`);
+    const totalAmount = items.reduce((acc, it) => acc + (it.price * it.quantity), 0);
+    const formattedTotal = totalAmount > 0 ? `₹${totalAmount.toLocaleString('en-IN')}` : 'Custom Engineering Quote';
+
+    const itemsSummary = items.map(it => `- ${it.name} x ${it.quantity} (₹${(it.price * it.quantity).toLocaleString('en-IN')})`).join('\n');
+
+    // Build structured procurement draft
+    const formattedDraft = [
+      `Sackhe Technologies - Institutional Procurement Requisition`,
+      `============================================================`,
+      `Requisition ID : ${orderId}`,
+      `Timestamp      : ${new Date().toISOString()}`,
+      `Organization   : ${organization || 'Individual / Enterprise'}`,
+      `Primary Contact: ${name}`,
+      `Contact Email  : ${email}`,
+      `Contact Phone  : ${phone}`,
+      `Delivery Site  : ${address ? `${address}, ${city} - ${pincode}` : 'To be coordinated'}`,
+      `Billing Method : ${payment_method}`,
+      ``,
+      `Requisition Items:`,
+      `${itemsSummary}`,
+      `Estimated Total: ${formattedTotal}`,
+      ``,
+      `Procurement Notes:`,
+      `${notes || 'None provided'}`,
+      `============================================================`,
+      `Notice: This document constitutes a formal procurement inquiry and RFQ commitment.`,
+      `An official proforma invoice and technical schedule will be issued upon desk review.`
+    ].join('\n');
+
+    const mailtoSubject = encodeURIComponent(`[Procurement Requisition ${orderId}] ${organization || name} - ${formattedTotal}`);
+    const mailtoBody = encodeURIComponent(formattedDraft);
+    const mailtoUrl = `mailto:info@sackhetechnologies.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+    // Optional outbound webhook dispatch if configured in deployment environment
+    const webhookUrl = process.env.NOTIFICATION_WEBHOOK_URL || process.env.DISPATCH_WEBHOOK_URL;
+    let dispatched = false;
+    if (webhookUrl) {
+      try {
+        await fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'procurement_order',
+            orderId,
+            name,
+            email,
+            phone,
+            organization,
+            address,
+            city,
+            pincode,
+            payment_method,
+            items,
+            totalAmount,
+            notes,
+            timestamp: new Date().toISOString()
+          })
+        });
+        dispatched = true;
+      } catch (webhookErr) {
+        console.warn('Outbound webhook failed:', webhookErr.message);
+      }
+    }
 
     return res.status(200).json({
       ok: true,
       orderId,
+      dispatched,
       totalAmount,
       currency: 'INR',
-      status: 'Inquiry / PO Request Submitted',
-      message: `Procurement request ${orderId} registered. Our corporate desk will review your details and issue a proforma invoice.`,
+      mailtoUrl,
+      formattedDraft,
+      message: `Procurement requisition ${orderId} prepared. Please dispatch via email to info@sackhetechnologies.com.`,
       timestamp: new Date().toISOString()
     });
   } catch (err) {
