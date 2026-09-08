@@ -741,19 +741,6 @@ function setupCheckoutPage() {
   const totalEl = document.getElementById('checkout-total-val');
   const placeOrderBtn = document.getElementById('checkout-place-order-btn');
 
-  // Pre-fill user information if logged in
-  const currentUser = getCurrentUser();
-  if (currentUser) {
-    const nameInput = document.getElementById('checkout-name');
-    const emailInput = document.getElementById('checkout-email');
-    const phoneInput = document.getElementById('checkout-phone');
-    const orgInput = document.getElementById('checkout-org');
-    if (nameInput && !nameInput.value) nameInput.value = currentUser.name || '';
-    if (emailInput && !emailInput.value) emailInput.value = currentUser.email || '';
-    if (phoneInput && !phoneInput.value) phoneInput.value = currentUser.phone || '';
-    if (orgInput && !orgInput.value) orgInput.value = currentUser.org || '';
-  }
-
   // If cart is empty
   if (cart.length === 0) {
     if (checkoutItemsContainer) {

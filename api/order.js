@@ -1,8 +1,14 @@
-// Simple in-memory rate limiting map (per Vercel execution instance)
+// In-memory rate limiting map with bounded sweep (per Vercel instance)
 const rateLimitMap = new Map();
 
 function isRateLimited(ip, limit = 5, windowMs = 60000) {
   const now = Date.now();
+  if (rateLimitMap.size > 500) {
+    for (const [k, v] of rateLimitMap.entries()) {
+      if (now - v.firstReq > windowMs) rateLimitMap.delete(k);
+    }
+    if (rateLimitMap.size > 500) rateLimitMap.clear();
+  }
   const record = rateLimitMap.get(ip) || { count: 0, firstReq: now };
 
   if (now - record.firstReq > windowMs) {
@@ -16,15 +22,17 @@ function isRateLimited(ip, limit = 5, windowMs = 60000) {
 }
 
 export default async function handler(req, res) {
-  // CORS Configuration: Restrict to allowed deployment origins and localhost
+  // CORS Configuration: Restrict strictly to Sackhe deployment origins and localhost
   const allowedOrigins = [
     'https://sackhe.srishanth.com',
-    'https://sackhetechnologies.com'
+    'https://sackhetechnologies.com',
+    'https://sackhe.vercel.app'
   ];
   const origin = req.headers.origin;
   if (origin) {
     const isAllowed = allowedOrigins.includes(origin) ||
-      origin.endsWith('.vercel.app') ||
+      origin.endsWith('.srishanth.com') ||
+      (origin.includes('sackhe') && origin.endsWith('.vercel.app')) ||
       /^http:\/\/localhost(:\d+)?$/.test(origin) ||
       /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin);
     if (isAllowed) {
